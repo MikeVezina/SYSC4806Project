@@ -10,13 +10,23 @@ public class IndexControllerTest {
     private IndexController indexController;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         indexController = new IndexController();
     }
 
     @Test
-    public void index() throws Exception {
+    public void testIndex() {
         assertEquals("Ensure index template name is returned", "index", indexController.index());
+    }
+
+    @Test
+    public void testError() throws Exception {
+        assertEquals("Ensure index template name is returned", "error", indexController.error());
+    }
+
+    @Test
+    public void testGetErrorPath() throws Exception {
+        assertEquals("Ensure index template name is returned", IndexController.ERROR_PATH, indexController.getErrorPath());
     }
 
 }
