@@ -1,5 +1,11 @@
 package com.sysc4806.project.models;
 
+import com.sysc4806.project.enumeration.Category;
+import org.hibernate.validator.constraints.NotEmpty;
+//import javax.persistence.*;
+import javax.persistence.*;
+import java.util.*;
+
 /**
  * The Product class of the application.
  *
@@ -9,17 +15,17 @@ package com.sysc4806.project.models;
  * page.
  *
  */
-import com.sysc4806.project.enumeration.Category;
-//import javax.persistence.*;
-import java.util.*;
-
-
+@Entity
 public class Product {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @NotEmpty
     private String url = "/product"+id;
-    //OnetoMany
+
+    @OneToMany
     private List<Review> reviews;
 
     private int avgRating;
@@ -32,7 +38,7 @@ public class Product {
      * @param c - The category of the new product
      */
     public Product(Category c){
-        this.reviews = new ArrayList<Review>();
+        this.reviews = new ArrayList<>();
         this.avgRating = 0;
         this.category = c;
     }

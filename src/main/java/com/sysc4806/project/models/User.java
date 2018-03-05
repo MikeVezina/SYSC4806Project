@@ -1,5 +1,10 @@
 package com.sysc4806.project.models;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.persistence.*;
+import java.util.*;
+
 /**
  * The User class of the application.
  *
@@ -9,18 +14,17 @@ package com.sysc4806.project.models;
  * them.
  *
  */
-
-//import javax.persistence.*;
-import java.util.*;
-
-
+@Entity
 public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    //OnetoMany
+    @OneToMany
     private List<Review> reviews;
 
+    @NotEmpty
     private String username;
 
     private List<User> followers;
@@ -34,9 +38,9 @@ public class User {
      */
     public User(String n){
         this.username = n;
-        this.reviews = new ArrayList<Review>();
-        this.followers = new ArrayList<User>();
-        this.following = new ArrayList<User>();
+        this.reviews = new ArrayList<>();
+        this.followers = new ArrayList<>();
+        this.following = new ArrayList<>();
     }
 
 
