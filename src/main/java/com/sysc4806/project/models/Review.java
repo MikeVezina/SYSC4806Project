@@ -3,13 +3,26 @@ package com.sysc4806.project.models;
 //import javax.persistence.*;
 
 
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.persistence.*;
+
+@Entity
 public class Review {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    //ManytoOne
+
+    @ManyToOne
+    @NotEmpty
     private User author;
-    //ManytoOne
+
+    @ManyToOne
+    @NotEmpty
     private Product product;
+
+    @NotEmpty
     private int rating;
 
     /**

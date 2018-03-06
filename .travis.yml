@@ -1,3 +1,12 @@
 language: java
 sudo: false
+before_script:
+  - psql -c 'CREATE DATABASE travis_ci_test_database;' -U postgres
+  - psql -c "CREATE USER admin WITH PASSWORD 'admin';" -U postgres
+  - psql -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO admin;" -U postgres
+
 script: mvn clean verify
+services:
+  - postgresql
+env:
+  - JDBC_DATABASE_URL=jdbc:postgresql/localhost:5432/travis_ci_test_database?schema=public JDBC_DATABASE_USERNAME=admin JDBC_DATABASE_PASSWORD=admin
