@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.*;
 
 /**
- * The User class of the application.
+ * The UserEntity class of the application.
  *
  * A user has a username and an id. They can browse products, write reviews for
  * products, and view other user reviews. Users can follow other users to see the
@@ -15,32 +15,44 @@ import java.util.*;
  *
  */
 @Entity
-public class User {
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToMany
+    @OneToMany(targetEntity=Review.class, mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Review> reviews;
 
     @NotEmpty
     private String username;
 
-    private List<User> followers;
-    private List<User> following;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "user_relations",
+            joinColumns = @JoinColumn(name = "following_id"),
+            inverseJoinColumns = @JoinColumn(name = "follower_id"))
+    private List<UserEntity> followers;
+
+    @ManyToMany(mappedBy = "followers")
+    private List<UserEntity> following;
 
     /**
-
      * Constructor of a new user to be persisted in the
      * application.
      * @param n - The username of the new user
      */
-    public User(String n){
+    public UserEntity(String n){
         this.username = n;
         this.reviews = new ArrayList<>();
         this.followers = new ArrayList<>();
         this.following = new ArrayList<>();
+    }
+
+    /**
+     * default constructor for database.
+     */
+    public UserEntity(){
+        this("temp");
     }
 
 
@@ -70,39 +82,39 @@ public class User {
     public void setUsername(String username) { this.username = username; }
 
     /**
-     * Getter method for the User's reviews
-     * @return  - List of the User's reviews
+     * Getter method for the UserEntity's reviews
+     * @return  - List of the UserEntity's reviews
      */
     public List<Review> getReviews() { return reviews; }
 
     /**
-     * Setter method for the User's review list
-     * @param reviews - new User review list
+     * Setter method for the UserEntity's review list
+     * @param reviews - new UserEntity review list
      */
     public void setReviews(List<Review> reviews) { this.reviews = reviews; }
 
     /**
-     * Getter method for the User's followers
-     * @return  - List of the User's followers
+     * Getter method for the UserEntity's followers
+     * @return  - List of the UserEntity's followers
      */
-    public List<User> getFollowers() { return followers; }
+    public List<UserEntity> getFollowers() { return followers; }
 
     /**
-     * Setter method for the User's followers
-     * @param followers - new User follower list
+     * Setter method for the UserEntity's followers
+     * @param followers - new UserEntity follower list
      */
-    public void setFollowers(List<User> followers) { this.followers = followers; }
+    public void setFollowers(List<UserEntity> followers) { this.followers = followers; }
 
     /**
-     * Getter method for the User's following list
-     * @return - User's following list
+     * Getter method for the UserEntity's following list
+     * @return - UserEntity's following list
      */
-    public List<User> getFollowing() { return following; }
+    public List<UserEntity> getFollowing() { return following; }
 
     /**
      * Setter method for the product's category
      * @param following - product's new category
      */
-    public void setFollowing(List<User> following) { this.following = following; }
+    public void setFollowing(List<UserEntity> following) { this.following = following; }
 
 }

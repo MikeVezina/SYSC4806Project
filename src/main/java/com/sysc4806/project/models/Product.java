@@ -25,10 +25,11 @@ public class Product {
     @NotEmpty
     private String url = "/product"+id;
 
-    @OneToMany
+    @OneToMany(targetEntity=Review.class, mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Review> reviews;
 
     private int avgRating;
+
     private Category category;
 
     /**
@@ -44,7 +45,7 @@ public class Product {
     }
 
     /**
-     * Default constructor
+     * Default constructor for database.
      */
     public Product(){this(Category.DEFAULT);}
 
