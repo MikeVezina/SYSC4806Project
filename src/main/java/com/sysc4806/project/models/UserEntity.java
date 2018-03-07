@@ -1,5 +1,6 @@
 package com.sysc4806.project.models;
 
+import org.apache.catalina.User;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
@@ -56,6 +57,37 @@ public class UserEntity {
     }
 
 
+    /**
+     * A method for creating a new User Review
+     * @param product - The product the review is about
+     * @param rating - The rating of the product
+     */
+    public void writeReview(Product product,int rating)
+    {
+        Review newReview = new Review(product, rating);
+        newReview.setAuthor(this);
+        product.addUserReview(newReview);
+        reviews.add(newReview);
+    }
+
+    /**
+     * A method to allow users to follow eachother.
+     * @param user - the user to be followed
+     */
+    public void followUser(UserEntity user)
+    {
+        this.following.add(user);
+        user.addFollower(this);
+    }
+
+    /**
+     * A method to add a user to a User's list of followers
+     * @param user
+     */
+    public void addFollower(UserEntity user)
+    {
+        followers.add(user);
+    }
 
     /**
      * Getter method for the user id
@@ -116,5 +148,4 @@ public class UserEntity {
      * @param following - product's new category
      */
     public void setFollowing(List<UserEntity> following) { this.following = following; }
-
 }
