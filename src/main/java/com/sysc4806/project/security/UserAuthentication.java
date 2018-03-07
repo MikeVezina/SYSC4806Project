@@ -31,7 +31,7 @@ public class UserAuthentication implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity user = userRepo.findByUsername(username);
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority("login"));
+        grantedAuthorities.add(new SimpleGrantedAuthority("loggedIn"));
         return new User(user.getUsername(), user.getPassword(), grantedAuthorities);
     }
 }

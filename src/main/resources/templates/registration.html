@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Register an Account</title>
-</head>
 <body>
     <div>
-        <form method="POST" action="#" th:action="@{/registration}" th:object="${UserEntity}">
+        <form action="#" th:action="@{/registration}" th:object="${userEntity}" method="POST">
             <br/>Username:<br/>
             <input type="text" th:field="*{username}" placeholder="Username"/>
+            <p style="color:red;" th:if="${#fields.hasErrors('username')}" th:text="#{userForm.invalidSize}"> </p>
             <br/>Password:<br/>
             <input type="password" th:field="*{password}"/>
+            <p style="color:red;" th:if="${#fields.hasErrors('password')}" th:text="#{userForm.passwordTooSmall}"> </p>
+            <br/>
             <button type="submit" value="Submit" >Register</button>
         </form>
     </div>
