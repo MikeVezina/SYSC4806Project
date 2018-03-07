@@ -30,7 +30,6 @@ public class ReviewRepositoryTest {
         Review review = new Review(product,1);
         review.setAuthor(userEntity);
         userEntity.getReviews().add(review);
-        review.setProduct(product);
         product.getReviews().add(review);
 
         reviewRepo.save(review);
