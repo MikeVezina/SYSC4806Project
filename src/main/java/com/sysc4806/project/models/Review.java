@@ -1,10 +1,5 @@
 package com.sysc4806.project.models;
 
-//import javax.persistence.*;
-
-
-import org.hibernate.validator.constraints.NotEmpty;
-
 import javax.persistence.*;
 
 @Entity
@@ -15,14 +10,11 @@ public class Review {
     private Long id;
 
     @ManyToOne
-    @NotEmpty
-    private User author;
+    private UserEntity author;
 
     @ManyToOne
-    @NotEmpty
     private Product product;
 
-    @NotEmpty
     private int rating;
 
     /**
@@ -33,12 +25,18 @@ public class Review {
         this.rating = rating;
     }
 
+    /**
+     * Default Constructor for Database.
+     */
+    public Review(){
+        this(2);
+    }
 
     public Long getId() {
         return id;
     }
 
-    public User getAuthor() {
+    public UserEntity getAuthor() {
         return author;
     }
 
@@ -54,7 +52,7 @@ public class Review {
         this.id = id;
     }
 
-    public void setAuthor(User author) {
+    public void setAuthor(UserEntity author) {
         this.author = author;
     }
 
