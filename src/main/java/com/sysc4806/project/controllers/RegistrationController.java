@@ -25,17 +25,13 @@ public class RegistrationController {
     @GetMapping("/registration")
     public String registration(Model model) {
         model.addAttribute( "UserEntity", new UserEntity());
-        System.out.println("register page");
         return "registration";
     }
 
     @PostMapping("/registration")
     public String registration(@ModelAttribute UserEntity user, BindingResult bindingResult, Model model) {
-        System.out.println("here");
         userValidator.validate(user, bindingResult);
-
         if (bindingResult.hasErrors()) {
-            System.out.println("error");
             return "login";
         }
 
