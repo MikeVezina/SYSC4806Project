@@ -1,9 +1,8 @@
 package com.sysc4806.project.models;
 
-import org.apache.catalina.User;
 import org.hibernate.validator.constraints.NotEmpty;
-
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.*;
 
 /**
@@ -25,8 +24,12 @@ public class UserEntity {
     @OneToMany(targetEntity=Review.class, mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Review> reviews;
 
-    @NotEmpty
+    @Size(min=1, max=32)
+    @Column(unique = true)
     private String username;
+
+    @Size(min=8)
+    private String password;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "user_relations",
@@ -90,6 +93,7 @@ public class UserEntity {
     }
 
     /**
+
      * Getter method for the user id
      * @return  - user id
      */
@@ -148,4 +152,13 @@ public class UserEntity {
      * @param following - product's new category
      */
     public void setFollowing(List<UserEntity> following) { this.following = following; }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
 }
