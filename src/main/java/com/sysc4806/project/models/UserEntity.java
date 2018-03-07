@@ -1,5 +1,6 @@
 package com.sysc4806.project.models;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.*;
@@ -39,14 +40,6 @@ public class UserEntity {
     @ManyToMany(mappedBy = "followers")
     private List<UserEntity> following;
 
-
-    /**
-     * default constructor for database.
-     */
-    public UserEntity(){
-        this("test");
-    }
-
     /**
      * Constructor of a new user to be persisted in the
      * application.
@@ -60,6 +53,47 @@ public class UserEntity {
     }
 
     /**
+     * default constructor for database.
+     */
+    public UserEntity(){
+        this("temp");
+    }
+
+
+    /**
+     * A method for creating a new User Review
+     * @param product - The product the review is about
+     * @param rating - The rating of the product
+     */
+    public void writeReview(Product product,int rating)
+    {
+        Review newReview = new Review(product, rating);
+        newReview.setAuthor(this);
+        product.addUserReview(newReview);
+        reviews.add(newReview);
+    }
+
+    /**
+     * A method to allow users to follow eachother.
+     * @param user - the user to be followed
+     */
+    public void followUser(UserEntity user)
+    {
+        this.following.add(user);
+        user.addFollower(this);
+    }
+
+    /**
+     * A method to add a user to a User's list of followers
+     * @param user
+     */
+    public void addFollower(UserEntity user)
+    {
+        followers.add(user);
+    }
+
+    /**
+
      * Getter method for the user id
      * @return  - user id
      */
@@ -126,4 +160,5 @@ public class UserEntity {
     public void setPassword(String password) {
         this.password = password;
     }
+
 }

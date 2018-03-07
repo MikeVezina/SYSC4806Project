@@ -36,7 +36,7 @@ Milestones:
 ----------------------------
 | Milestone| Title| Description|
 |----------|------|------------|
-|    1     | Early prototype| An initial description of the app being built and the first feature to be developed.|
+|    1     | Early prototype| The application has a user login, and a registration page for new users to create an account (A user must have an account to login to the application). When logged in, users can see their account information, write reviews on products, and view any previous reviews they have written. They may also view a product page which displays User reviews written about it. |
 |    2     | Alpha Release|  |
 |    3     | Project complete|
 
