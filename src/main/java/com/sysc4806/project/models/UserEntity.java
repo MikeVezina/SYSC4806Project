@@ -27,6 +27,8 @@ public class UserEntity {
     @NotEmpty
     private String username;
 
+    private String password;
+
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "user_relations",
             joinColumns = @JoinColumn(name = "following_id"),
@@ -117,4 +119,11 @@ public class UserEntity {
      */
     public void setFollowing(List<UserEntity> following) { this.following = following; }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
