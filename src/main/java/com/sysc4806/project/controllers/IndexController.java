@@ -26,7 +26,7 @@ import java.io.IOException;
  * Controller for handling application index and error endpoints
  */
 @Controller
-public class IndexController implements ErrorController{
+public class IndexController implements ErrorController {
 
     public static final String ERROR_PATH = "/error";
     private static final String USER_PATH = "/users/{userId}";

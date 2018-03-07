@@ -20,6 +20,21 @@ public class IndexControllerTest {
     }
 
     @Test
+    public void testUsers() {
+        assertEquals("Ensure user template name is returned", "users", indexController.user());
+    }
+
+    @Test
+    public void testProducts() {
+        assertEquals("Ensure products template name is returned", "products", indexController.product());
+    }
+
+    @Test
+    public void testReviews() {
+        assertEquals("Ensure reviews template name is returned", "reviews", indexController.review());
+    }
+
+    @Test
     public void testError() throws Exception {
         assertEquals("Ensure index template name is returned", "error", indexController.error());
     }
