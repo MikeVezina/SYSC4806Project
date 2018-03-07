@@ -1,8 +1,7 @@
 package com.sysc4806.project.models;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.*;
 
 /**
@@ -24,8 +23,12 @@ public class UserEntity {
     @OneToMany(targetEntity=Review.class, mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Review> reviews;
 
-    @NotEmpty
+    @Size(min=1, max=32)
+    @Column(unique = true)
     private String username;
+
+    @Size(min=8)
+    private String password;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "user_relations",
@@ -35,6 +38,14 @@ public class UserEntity {
 
     @ManyToMany(mappedBy = "followers")
     private List<UserEntity> following;
+
+
+    /**
+     * default constructor for database.
+     */
+    public UserEntity(){
+        this("test");
+    }
 
     /**
      * Constructor of a new user to be persisted in the
@@ -47,15 +58,6 @@ public class UserEntity {
         this.followers = new ArrayList<>();
         this.following = new ArrayList<>();
     }
-
-    /**
-     * default constructor for database.
-     */
-    public UserEntity(){
-        this("temp");
-    }
-
-
 
     /**
      * Getter method for the user id
@@ -117,4 +119,11 @@ public class UserEntity {
      */
     public void setFollowing(List<UserEntity> following) { this.following = following; }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
