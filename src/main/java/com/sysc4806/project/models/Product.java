@@ -23,7 +23,7 @@ public class Product {
     private long id;
 
     @NotEmpty
-    private String url = "/product"+id;
+    private String url = "/product/" + id;
 
     @OneToMany(targetEntity=Review.class, mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Review> reviews;

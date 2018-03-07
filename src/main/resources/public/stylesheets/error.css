@@ -5,3 +5,8 @@ h1, h4 {
 h4 {
     color: gray;
 }
+
+#errorMessage {
+    text-align: center;
+    color: lightcoral;
+}
