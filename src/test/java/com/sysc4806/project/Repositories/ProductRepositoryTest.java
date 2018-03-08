@@ -17,7 +17,7 @@ public class ProductRepositoryTest {
 
     @Test
     public void myTest() throws Exception {
-        Product product = new Product(Category.BOOKS);
+        Product product = new Product(Category.BOOKS, "TestURL");
         product.setAvgRating(2);
         repo.save(product);
     }

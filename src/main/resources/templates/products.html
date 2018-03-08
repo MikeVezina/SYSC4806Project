@@ -24,7 +24,7 @@
         </tr>
         <tr>
             <td><span th:text="${product.id}"/></td>
-            <td><span th:text="${product.url}"/></td>
+            <td><a th:href="${'http://' + product.url}" th:text="${product.url}"/></td>
             <td><span th:text="${product.category}"/></td>
         </tr>
     </table>
@@ -48,7 +48,7 @@
                 <tr th:each="review : ${product.reviews}">
                     <td th:text="${review.id}"></td>
                     <td th:text="${review.rating}"></td>
-                    <td><a th:href="${'/users/' + review.author.id}" th:text="${review.author.username}"></a></td>
+                    <td><a th:href="${'/user/' + review.author.id}" th:text="${review.author.username}"></a></td>
                 </tr>
             </table>
         </div>

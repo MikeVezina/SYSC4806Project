@@ -8,8 +8,10 @@
 </head>
 <body>
 <h1>
-    Current User
+    User Profile
 </h1>
+
+<h3 th:if="${!user.equals(loggedInUser) AND !user.followers.contains(loggedInUser)}"><a th:href="${'/user/' + user.id + '/follow'}">Follow</a></h3>
 <div th:if="${user}">
     <!-- Current User Info -->
     <table>
@@ -36,17 +38,19 @@
             <br/>
             <table>
                 <tr>
-                    <th colspan="3">Reviews <span th:text="${'Total: ' + user.reviews.size()}"/></th>
+                    <th colspan="4">Reviews <span th:text="${'Total: ' + user.reviews.size()}"/></th>
                 </tr>
                 <tr>
                     <th>Rating ID</th>
                     <th>Rating (/5)</th>
+                    <th>Product ID</th>
                     <th>Product URL</th>
                 </tr>
                 <tr th:each="review : ${user.reviews}">
                     <td th:text="${review.id}"></td>
                     <td th:text="${review.rating}"></td>
-                    <td th:text="${review.product.url}"></td>
+                    <td><a th:href="${'/products/' + review.product.id}" th:text="${review.product.id}"></a></td>
+                    <td><a th:href="'http://' + ${review.product.url}" th:text="${review.product.url}"></a></td>
                 </tr>
             </table>
         </div>
@@ -67,7 +71,7 @@
                     <th>Username</th>
                 </tr>
                 <tr th:each="user : ${user.followers}">
-                    <td><a th:href="${'/users/' + user.id}" th:text="${user.id}"></a></td>
+                    <td><a th:href="${'/user/' + user.id}" th:text="${user.id}"></a></td>
                     <td th:text="${user.username}"></td>
                 </tr>
             </table>
@@ -90,7 +94,7 @@
                     <th>Username</th>
                 </tr>
                 <tr th:each="user : ${user.following}">
-                    <td><a th:href="${'/users/' + user.id}" th:text="${user.id}"></a></td>
+                    <td><a th:href="${'/user/' + user.id}" th:text="${user.id}"></a></td>
                     <td th:text="${user.username}"></td>
                 </tr>
             </table>

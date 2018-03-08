@@ -23,7 +23,7 @@ public class Product {
     private long id;
 
     @NotEmpty
-    private String url = "/product/" + id;
+    private String url;
 
     @OneToMany(targetEntity=Review.class, mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Review> reviews;
@@ -36,12 +36,12 @@ public class Product {
     private Category category;
 
     /**
-
      * Constructor of a new product to be persisted in the
      * application.
      * @param c - The category of the new product
      */
-    public Product(Category c){
+    public Product(Category c, String url){
+        this.url = url;
         this.reviews = new ArrayList<>();
         this.ratingTotal = 0;
         this.numberOfRatings = 0;
@@ -52,7 +52,7 @@ public class Product {
     /**
      * Default constructor for database.
      */
-    public Product(){this(Category.DEFAULT);}
+    public Product(){this(Category.DEFAULT, "");}
 
     public void addUserReview(Review review)
     {

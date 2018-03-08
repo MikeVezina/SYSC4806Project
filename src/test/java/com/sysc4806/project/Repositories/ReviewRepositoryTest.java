@@ -25,7 +25,7 @@ public class ReviewRepositoryTest {
 
     @Test
     public void myTest() throws Exception {
-        Product product = new Product(Category.BOOKS);
+        Product product = new Product(Category.BOOKS, "");
         UserEntity userEntity = new UserEntity("test");
         Review review = new Review(product,1);
         review.setAuthor(userEntity);

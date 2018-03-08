@@ -1,6 +1,5 @@
 package com.sysc4806.project.controllers;
 
-import com.mitchellbosecke.pebble.error.PebbleException;
 import com.sysc4806.project.Repositories.ProductRepository;
 import com.sysc4806.project.Repositories.ReviewRepository;
 import com.sysc4806.project.Repositories.UserEntityRepository;
@@ -10,17 +9,12 @@ import com.sysc4806.project.models.Review;
 import com.sysc4806.project.models.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ErrorController;
-import org.springframework.http.MediaType;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.io.IOException;
 
 /**
  * Controller for handling application index and error endpoints
@@ -29,7 +23,6 @@ import java.io.IOException;
 public class IndexController implements ErrorController {
 
     public static final String ERROR_PATH = "/error";
-    private static final String USER_PATH = "/users/{userId}";
     private static final String PRODUCT_PATH = "/products/{productId}";
     private static final String REVIEW_PATH = "/reviews";
 
@@ -51,23 +44,7 @@ public class IndexController implements ErrorController {
         return "index";
     }
 
-    /**
-     * @return The Application user template html
-     */
-    @RequestMapping(USER_PATH)
-    public String user(@PathVariable Long userId, Model model) throws PebbleException, IOException
-    {
-        UserEntity userEntity = userRepo.findOne(userId);
 
-        if(userEntity == null)
-        {
-            model.addAttribute("errorMessage", "The User with ID: " + userId + " could not be found.");
-            return "404-error";
-        }
-
-        model.addAttribute("user", userEntity);
-        return "user";
-    }
 
     /**
      * @return The product index template html
@@ -91,19 +68,27 @@ public class IndexController implements ErrorController {
 
     @RequestMapping(value = "/generate")
     @ResponseBody
-    public String generate()
+    public String generate(BCryptPasswordEncoder bCryptPasswordEncoder)
     {
+        if(userRepo.findByUsername("Michael") != null && userRepo.findByUsername("Reid") != null)
+            return "Data Already Generated.";
+
+
         UserEntity userEntityMichael = new UserEntity("Michael");
         UserEntity userEntityAlex = new UserEntity("Alex");
         UserEntity userEntityReid = new UserEntity("Reid");
+
+        userEntityMichael.setPassword(bCryptPasswordEncoder.encode("michael15"));
+        userEntityAlex.setPassword(bCryptPasswordEncoder.encode("michael15"));
+        userEntityReid.setPassword(bCryptPasswordEncoder.encode("michael15"));
 
         userRepo.save(userEntityAlex);
         userRepo.save(userEntityMichael);
         userRepo.save(userEntityReid);
 
-        Product productMonitor = new Product(Category.MONITORS);
-        Product productTool = new Product(Category.TOOLS);
-        Product productNintendoSwitch = new Product(Category.ELECTRONICS);
+        Product productMonitor = new Product(Category.MONITORS, "Monitors.com");
+        Product productTool = new Product(Category.TOOLS, "Tools.com");
+        Product productNintendoSwitch = new Product(Category.ELECTRONICS, "Electronics.com");
 
         productRepo.save(productMonitor);
         productRepo.save(productTool);
@@ -126,9 +111,8 @@ public class IndexController implements ErrorController {
 
     private void addReview(UserEntity entity, Product product, int rating)
     {
-        Review review = new Review(rating);
+        Review review = new Review(product, rating);
         review.setAuthor(entity);
-        review.setProduct(product);
         reviewRepo.save(review);
     }
 
