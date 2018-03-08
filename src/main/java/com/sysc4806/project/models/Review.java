@@ -5,7 +5,6 @@ import javax.persistence.*;
 @Entity
 public class Review {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,12 +19,21 @@ public class Review {
 
     /**
      * Constructor of a review
+     * @param product - The product to review
      * @param rating - the rating of the product
      */
     public Review(Product product, int rating){
 
         this.product = product;
         this.rating = rating;
+    }
+
+    /**
+     * Constructor of a review
+     * @param rating - the rating of the product
+     */
+    public Review(int rating){
+        this(null, rating);
     }
 
     /**
