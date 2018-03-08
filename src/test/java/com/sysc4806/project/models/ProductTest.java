@@ -8,9 +8,9 @@ import static org.junit.Assert.*;
 public class ProductTest
 {
     //Test Variables
-    Product testProduct;
-    Product testProduct2;
-    UserEntity testUserEntity;
+    private Product testProduct;
+    private Product testProduct2;
+    private UserEntity testUserEntity;
     @Before
     public void setup() {
         testProduct = new Product();
