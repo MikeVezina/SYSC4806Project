@@ -79,6 +79,9 @@ public class UserEntity {
      */
     public void followUser(UserEntity user)
     {
+        if(this.following.contains(user))
+            return;
+
         this.following.add(user);
         user.addFollower(this);
     }
@@ -89,6 +92,9 @@ public class UserEntity {
      */
     public void addFollower(UserEntity user)
     {
+        if(this.followers.contains(user))
+            return;
+
         followers.add(user);
     }
 

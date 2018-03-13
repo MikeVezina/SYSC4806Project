@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Users</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/users.css"/>
+</head>
+<body>
+<h1>
+    User Profile
+</h1>
+
+<h3 th:if="${!user.equals(loggedInUser) AND !user.followers.contains(loggedInUser)}"><a th:href="${'/user/' + user.id + '/follow'}">Follow</a></h3>
+<div th:if="${user}">
+    <!-- Current User Info -->
+    <table>
+        <tr>
+            <th colspan="2">User Information</th>
+        </tr>
+        <tr>
+            <th>User ID</th>
+            <th>Name</th>
+        </tr>
+        <tr>
+            <td><span th:text="${user.id}"/></td>
+            <td><span th:text="${user.username}"/></td>
+        </tr>
+    </table>
+
+
+    <!-- Table of Reviews -->
+
+    <div id="userReviews" th:switch="${user.reviews.size()}">
+        <p th:case="${0}"><b>No Reviews</b></p>
+
+        <div th:case="*">
+            <br/>
+            <table>
+                <tr>
+                    <th colspan="4">Reviews <span th:text="${'Total: ' + user.reviews.size()}"/></th>
+                </tr>
+                <tr>
+                    <th>Rating ID</th>
+                    <th>Rating (/5)</th>
+                    <th>Product ID</th>
+                    <th>Product URL</th>
+                </tr>
+                <tr th:each="review : ${user.reviews}">
+                    <td th:text="${review.id}"></td>
+                    <td th:text="${review.rating}"></td>
+                    <td><a th:href="${'/products/' + review.product.id}" th:text="${review.product.id}"></a></td>
+                    <td><a th:href="'http://' + ${review.product.url}" th:text="${review.product.url}"></a></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- User Followers -->
+    <div id="userFollowers" th:switch="${user.followers.size()}">
+        <p th:case="${0}"><b>No Followers</b></p>
+
+        <div th:case="*">
+            <br/>
+            <table>
+                <tr>
+                    <th colspan="2">Followers <span th:text="${'Total: ' + user.followers.size()}"/></th>
+                </tr>
+                <tr>
+                    <th>User ID</th>
+                    <th>Username</th>
+                </tr>
+                <tr th:each="user : ${user.followers}">
+                    <td><a th:href="${'/user/' + user.id}" th:text="${user.id}"></a></td>
+                    <td th:text="${user.username}"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+    <!-- User Following -->
+    <div id="userFollowing" th:switch="${user.following.size()}">
+        <p th:case="${0}"><b>Not Following Anybody</b></p>
+
+        <div th:case="*">
+            <br/>
+            <table>
+                <tr>
+                    <th colspan="2">Following <span th:text="${'Total: ' + user.following.size()}"/></th>
+                </tr>
+                <tr>
+                    <th>User ID</th>
+                    <th>Username</th>
+                </tr>
+                <tr th:each="user : ${user.following}">
+                    <td><a th:href="${'/user/' + user.id}" th:text="${user.id}"></a></td>
+                    <td th:text="${user.username}"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+
+
+</html>
