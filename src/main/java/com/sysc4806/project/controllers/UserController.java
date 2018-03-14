@@ -7,9 +7,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.*;
 
 @Controller
 public class UserController {
@@ -17,6 +19,7 @@ public class UserController {
     private static final String USER_PATH = "/user";
     private static final String USER_ID_PATH = "/user/{userId}";
     private static final String USER_FOLLOW_PATH = "/user/{currentUserId}/follow";
+    private static final String USER_SEARCH_PATH = "/searchUser";
 
     @Autowired
     private UserEntityRepository userRepo;
@@ -89,5 +92,25 @@ public class UserController {
         model.addAttribute("user", userEntity);
         model.addAttribute("loggedInUser", loggedInUser);
         return "redirect:/user/" + userEntity.getId();
+    }
+
+    /**
+     * Application template used to display all users
+     * @param model
+     * @return The application Search User template
+     */
+    @RequestMapping(value=USER_SEARCH_PATH, method= RequestMethod.GET)
+    public String getAllUsers(Model model)
+    {
+        Iterator<UserEntity> usrs = userRepo.findAll().iterator();
+        List<UserEntity> users = new ArrayList<>();
+        while (usrs.hasNext())
+        {
+            users.add(usrs.next());
+        }
+        Collections.sort(users);
+        model.addAttribute("userEntities",users);
+        return "searchUser";
+
     }
 }
