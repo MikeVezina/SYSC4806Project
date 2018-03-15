@@ -16,7 +16,7 @@ import java.util.*;
  *
  */
 @Entity
-public class Product {
+public class Product implements Comparable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -122,4 +122,14 @@ public class Product {
      */
     public void setCategory(Category category) { this.category = category; }
 
+    /**
+     * Override method to all Products to be sorted by Average Rating
+     * @param compareprd Product being compared to THIS
+     * @return Sorted Product ratings
+     */
+    @Override
+    public int compareTo(Object compareprd) {
+        int comparerating=((Product)compareprd).getAvgRating();
+        return comparerating-this.averageRating;
+    }
 }

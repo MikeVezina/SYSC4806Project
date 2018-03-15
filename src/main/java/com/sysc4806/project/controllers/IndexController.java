@@ -14,7 +14,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Controller for handling application index and error endpoints
@@ -25,6 +31,7 @@ public class IndexController implements ErrorController {
     public static final String ERROR_PATH = "/error";
     private static final String PRODUCT_PATH = "/products/{productId}";
     private static final String REVIEW_PATH = "/reviews";
+    private static final String HOMEPAGE_PATH = "/home";
 
     @Autowired
     private UserEntityRepository userRepo;
@@ -129,11 +136,24 @@ public class IndexController implements ErrorController {
         return "Successfully Generated Test Data";
     }
 
-    private void addReview(UserEntity entity, Product product, int rating)
+    /**
+     * Application template used to display all users
+     * @param model
+     * @return The application Search User template
+     */
+    @RequestMapping(value=HOMEPAGE_PATH, method= RequestMethod.GET)
+    public String getAllProducts(Model model)
     {
-        Review review = new Review(product, rating);
-        review.setAuthor(entity);
-        reviewRepo.save(review);
+        Iterator<Product> prds = productRepo.findAll().iterator();
+        List<Product> products = new ArrayList<>();
+        while (prds.hasNext())
+        {
+            products.add(prds.next());
+        }
+        Collections.sort(products);
+        model.addAttribute("products",products);
+        return "home";
+
     }
 
     /**
