@@ -31,7 +31,6 @@ public class Product {
     //Global variables used to calculate the average rating of the product
     private int numberOfRatings;
     private int ratingTotal;
-    private int averageRating;
 
     private Category category;
 
@@ -45,7 +44,6 @@ public class Product {
         this.reviews = new ArrayList<>();
         this.ratingTotal = 0;
         this.numberOfRatings = 0;
-        this.averageRating = 0;
         this.category = c;
     }
 
@@ -59,7 +57,6 @@ public class Product {
         reviews.add(review);
         ratingTotal += review.getRating();
         numberOfRatings++;
-        setAvgRating((ratingTotal/numberOfRatings));
     }
 
     /**
@@ -102,13 +99,10 @@ public class Product {
      * Getter method for the product's Average rating
      * @return - products average rating
      */
-    public int getAvgRating() { return averageRating; }
-
-    /**
-     * Setter method for the product's average rating
-     * @param avgRating - product's new average rating
-     */
-    public void setAvgRating(int avgRating) { this.averageRating = avgRating; }
+    public int getAvgRating() {
+        if(reviews.isEmpty()) return 0;
+        return reviews.stream().mapToInt(Review::getRating).sum() / reviews.size();
+    }
 
     /**
      * Getter method for the product's category
