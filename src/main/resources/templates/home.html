@@ -7,25 +7,5 @@
     <script src="/scripts/index.js"></script>
     <link rel="stylesheet" type="text/css" href="/stylesheets/index.css"/>
 </head>
-<body>
-<form action="#" th:action="@{/user}">
-    <input class="home_button" type="submit" value="Account"/>
-</form>
-<!-- Table of Popular Products -->
-<div th:if="${not #lists.isEmpty(userEntities)}">
-    <h1>Top Products:</h1>
-    <table>
-        <tr>
-            <th>Name</th><th>Id</th><th>Number of Followers</th>
-        </tr>
-        <tr th:each="userEntity : ${userEntities}">
-            <td th:text="${userEntity.username}"></td>
-            <td th:text="${userEntity.id}"></td>
-            <td th:text="${userEntity.followers.size()}"></td>
 
-        </tr>
-
-    </table>
-</div>
-</body>
 </html>

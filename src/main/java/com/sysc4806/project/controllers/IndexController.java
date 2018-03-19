@@ -46,8 +46,16 @@ public class IndexController implements ErrorController {
      * @return The Application index template html
      */
     @RequestMapping("/")
-    public String index()
+    public String index(Model model)
     {
+        Iterator<Product> prds = productRepo.findAll().iterator();
+        List<Product> products = new ArrayList<>();
+        while (prds.hasNext())
+        {
+            products.add(prds.next());
+        }
+        Collections.sort(products);
+        model.addAttribute("products",products);
         return "index";
     }
 
@@ -67,7 +75,7 @@ public class IndexController implements ErrorController {
             return "404-error";
         }
 
-        model.addAttribute("product", product);
+        model.addAttribute("products", product);
 
         return "products";
     }
@@ -152,7 +160,7 @@ public class IndexController implements ErrorController {
         }
         Collections.sort(products);
         model.addAttribute("products",products);
-        return "home";
+        return "index";
 
     }
 

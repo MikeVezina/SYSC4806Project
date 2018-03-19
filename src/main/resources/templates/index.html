@@ -13,6 +13,29 @@
 <div> Created by: <div class="appInfo" id="authorsDiv"></div></div>
 <br/>
 <div> Current Project Version: <div class="appInfo" id="versionDiv"/></div>
+
+<!-- Button navigating to user profile -->
+<form action="#" th:action="@{/user}">
+    <input class="home_button" type="submit" value="Account"/>
+</form>
+
+<!-- Table of Popular Products -->
+<div th:if="${not #lists.isEmpty(products)}">
+    <h1>Top Products:</h1>
+    <table>
+        <tr>
+            <th>URL</th><th>Id</th><th>Average Rating</th>
+        </tr>
+        <tr th:each="product : ${products}">
+            <td th:text="${product.url}"></td>
+            <td th:text="${product.id}"></td>
+            <td th:text="${product.getAvgRating()}"></td>
+
+        </tr>
+
+    </table>
+</div>
+
 </body>
 
 
