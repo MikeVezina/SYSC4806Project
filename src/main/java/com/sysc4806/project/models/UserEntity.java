@@ -15,7 +15,7 @@ import java.util.*;
  *
  */
 @Entity
-public class UserEntity {
+public class UserEntity implements Comparable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -167,4 +167,10 @@ public class UserEntity {
         this.password = password;
     }
 
+
+    @Override
+    public int compareTo(Object compareuser) {
+        int comparefollowers=((UserEntity)compareuser).getFollowers().size();
+        return comparefollowers-this.followers.size();
+    }
 }

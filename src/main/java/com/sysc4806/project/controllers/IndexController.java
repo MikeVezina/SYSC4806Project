@@ -82,6 +82,14 @@ public class IndexController implements ErrorController {
         userEntityAlex.setPassword(bCryptPasswordEncoder.encode("michael15"));
         userEntityReid.setPassword(bCryptPasswordEncoder.encode("michael15"));
 
+        userEntityAlex.followUser(userEntityMichael);
+        userEntityAlex.followUser(userEntityReid);
+
+        userEntityMichael.followUser(userEntityReid);
+
+        userEntityReid.followUser(userEntityAlex);
+        userEntityReid.followUser(userEntityMichael);
+
         userRepo.save(userEntityAlex);
         userRepo.save(userEntityMichael);
         userRepo.save(userEntityReid);
@@ -94,17 +102,29 @@ public class IndexController implements ErrorController {
         productRepo.save(productTool);
         productRepo.save(productNintendoSwitch);
 
-        addReview(userEntityAlex, productMonitor, 2);
-        addReview(userEntityMichael, productMonitor, 3);
-        addReview(userEntityReid, productMonitor, 4);
+        userEntityAlex.writeReview(productMonitor,2);
+        userEntityMichael.writeReview(productMonitor,3);
+        userEntityReid.writeReview(productMonitor,4);
 
-        addReview(userEntityAlex, productTool, 1);
-        addReview(userEntityMichael, productTool, 1);
-        addReview(userEntityReid, productTool, 2);
+        userEntityAlex.writeReview(productTool,1);
+        userEntityMichael.writeReview(productTool,1);
+        userEntityReid.writeReview(productTool,3);
 
-        addReview(userEntityAlex, productNintendoSwitch, 5);
-        addReview(userEntityMichael, productNintendoSwitch, 5);
-        addReview(userEntityReid, productNintendoSwitch, 5);
+        userEntityAlex.writeReview(productNintendoSwitch,5);
+        userEntityMichael.writeReview(productNintendoSwitch,5);
+        userEntityReid.writeReview(productNintendoSwitch,5);
+
+        for(int i = 0; i  < userEntityAlex.getReviews().size(); i++){
+            reviewRepo.save(userEntityAlex.getReviews().get(i));
+        }
+
+        for(int i = 0; i  < userEntityMichael.getReviews().size(); i++){
+            reviewRepo.save(userEntityMichael.getReviews().get(i));
+        }
+
+        for(int i = 0; i  < userEntityReid.getReviews().size(); i++){
+            reviewRepo.save(userEntityReid.getReviews().get(i));
+        }
 
         return "Successfully Generated Test Data";
     }
