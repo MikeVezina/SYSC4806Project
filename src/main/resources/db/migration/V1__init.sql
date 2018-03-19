@@ -11,9 +11,6 @@ CREATE TABLE product (
     url character varying(255) NOT NULL
 );
 
-
-ALTER TABLE product OWNER TO admin;
-
 --
 -- Name: product_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
 --
@@ -24,9 +21,6 @@ CREATE SEQUENCE product_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
-
-
-ALTER TABLE product_id_seq OWNER TO admin;
 
 --
 -- Name: product_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
@@ -46,9 +40,6 @@ CREATE TABLE review (
     product_id bigint
 );
 
-
-ALTER TABLE review OWNER TO admin;
-
 --
 -- Name: review_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
 --
@@ -59,9 +50,6 @@ CREATE SEQUENCE review_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
-
-
-ALTER TABLE review_id_seq OWNER TO admin;
 
 --
 -- Name: review_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
@@ -79,9 +67,6 @@ CREATE TABLE user_entity (
     username character varying(32)
 );
 
-
-ALTER TABLE user_entity OWNER TO admin;
-
 --
 -- Name: user_entity_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
 --
@@ -92,10 +77,6 @@ CREATE SEQUENCE user_entity_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
-
-
-ALTER TABLE user_entity_id_seq OWNER TO admin;
-
 --
 -- Name: user_entity_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
 --
@@ -111,9 +92,6 @@ CREATE TABLE user_relations (
     following_id bigint NOT NULL,
     follower_id bigint NOT NULL
 );
-
-
-ALTER TABLE user_relations OWNER TO admin;
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: admin
