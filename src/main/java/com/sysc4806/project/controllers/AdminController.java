@@ -74,7 +74,6 @@ public class AdminController {
         return ADMIN_TEMPLATE_BASE_DIR + "users";
     }
 
-
     /**
      * Generate Fake Test Data
      * @param bCryptPasswordEncoder The password encoder. Generates salted + hashed passwords for fake accounts.
@@ -140,22 +139,22 @@ public class AdminController {
         productTool = addProduct(productTool);
         productNintendoSwitch = addProduct(productNintendoSwitch);
 
-        /* Add All Reviews */
-        addReview(userEntityAlex, productMonitor, 2);
-        addReview(userEntityMichael, productMonitor, 3);
-        addReview(userEntityReid, productMonitor, 4);
-        addReview(userEntityJustin, productMonitor, 5);
-        addReview(userEntityNoah, productMonitor, 2);
 
-        addReview(userEntityAlex, productTool, 1);
-        addReview(userEntityMichael, productTool, 1);
-        addReview(userEntityReid, productTool, 2);
-        addReview(userEntityNoah, productMonitor, 2);
+        userEntityAlex.writeReview(productMonitor,2);
+        userEntityMichael.writeReview(productMonitor,3);
+        userEntityReid.writeReview(productMonitor,4);
+        userEntityJustin.writeReview(productMonitor, 5);
+        userEntityNoah.writeReview(productMonitor, 2);
 
-        addReview(userEntityAlex, productNintendoSwitch, 5);
-        addReview(userEntityMichael, productNintendoSwitch, 5);
-        addReview(userEntityReid, productNintendoSwitch, 5);
-        addReview(userEntityAndrew, productMonitor, 2);
+        userEntityAlex.writeReview(productTool,1);
+        userEntityMichael.writeReview(productTool,1);
+        userEntityReid.writeReview(productTool,3);
+        userEntityNoah.writeReview(productMonitor, 2);
+
+        userEntityAlex.writeReview(productNintendoSwitch,5);
+        userEntityMichael.writeReview(productNintendoSwitch,5);
+        userEntityReid.writeReview(productNintendoSwitch,5);
+        userEntityAndrew.writeReview(productNintendoSwitch, 5);
 
 
         return "Generated Successfully!" +
@@ -163,32 +162,6 @@ public class AdminController {
                 "<br>Users: " + userRepo.count() +
                 "<br>Products: " + productRepo.count() +
                 "<br>Reviews: " + reviewRepo.count();
-    }
-
-    /**
-     * Adds a Review to the Repository, assuming the review doesn't already exist.
-     * @param entity The User Writing the review
-     * @param product The product that the review belongs to
-     * @param rating The rating for the product
-     */
-    private void addReview(UserEntity entity, Product product, int rating)
-    {
-        for(Review review : product.getReviews())
-        {
-            if(review.getAuthor().equals(entity) && review.getRating() == rating)
-            {
-                // Do not add a duplicate review
-                return;
-            }
-        }
-
-        // Create a new review & save it
-        Review review = new Review(rating);
-        review.setAuthor(entity);
-        product.addUserReview(review);
-
-        productRepo.save(product);
-        reviewRepo.save(review);
     }
 
     /**

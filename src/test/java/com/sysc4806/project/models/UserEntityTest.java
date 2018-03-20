@@ -8,6 +8,9 @@ import static org.junit.Assert.*;
 
 public class UserEntityTest {
 
+    public static final String USER_NAME_1 = "user1";
+    public static final String USER_NAME_2 = "user2";
+
     //Test variables
     private Product testProduct;
     private UserEntity testUserEntity1;
@@ -15,8 +18,8 @@ public class UserEntityTest {
     @Before
     public void  setup(){
         testProduct = new Product();
-        testUserEntity1 = new UserEntity();
-        testUserEntity2 = new UserEntity();
+        testUserEntity1 = new UserEntity(USER_NAME_1);
+        testUserEntity2 = new UserEntity(USER_NAME_2);
         testUserEntity1.writeReview(testProduct,3);
         testUserEntity2.followUser(testUserEntity1);
     }
