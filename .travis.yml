@@ -9,4 +9,4 @@ script: mvn clean verify
 services:
   - postgresql
 env:
-  - JDBC_DATABASE_URL=jdbc:postgresql/localhost:5432/travis_ci_test_database?schema=public JDBC_DATABASE_USERNAME=admin JDBC_DATABASE_PASSWORD=admin
+  - JDBC_DATABASE_URL=jdbc:postgresql://localhost:5432/travis_ci_test_database?schema=public JDBC_DATABASE_USERNAME=admin JDBC_DATABASE_PASSWORD=admin
