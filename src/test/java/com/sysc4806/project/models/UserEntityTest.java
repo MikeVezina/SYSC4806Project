@@ -67,7 +67,7 @@ public class UserEntityTest {
     @Test
     public void testUserReviews(){
         assertNotNull("A UserEntity should not have a null list of reviews", testUserEntity1.getReviews());
-        assertTrue("A user review should be added to their list of reviews", testUserEntity1.getReviews().size() == 1);
+        assertTrue("A user review should be added to their list of reviews", testUserEntity1.getReviews().size() > 0);
     }
 
     @Test
