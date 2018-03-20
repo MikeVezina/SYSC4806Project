@@ -64,7 +64,7 @@ ALTER SEQUENCE review_id_seq OWNED BY review.id;
 CREATE TABLE user_entity (
     id bigint NOT NULL,
     password character varying(255),
-    username character varying(32)
+    username character varying(32) UNIQUE 
 );
 
 --
