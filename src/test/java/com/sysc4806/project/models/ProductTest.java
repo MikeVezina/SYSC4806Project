@@ -42,9 +42,4 @@ public class ProductTest
         testUserEntity.writeReview(testProduct2,4);
         assertTrue("Product's average rating should be the average of it's review ratings", testProduct2.getAvgRating() == 3);
     }
-
-
-
-
-
 }

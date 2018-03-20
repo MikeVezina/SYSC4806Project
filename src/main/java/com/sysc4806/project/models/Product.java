@@ -28,10 +28,6 @@ public class Product {
     @OneToMany(targetEntity=Review.class, mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Review> reviews;
 
-    //Global variables used to calculate the average rating of the product
-    private int numberOfRatings;
-    private int ratingTotal;
-
     private Category category;
 
     /**
@@ -42,8 +38,6 @@ public class Product {
     public Product(Category c, String url){
         this.url = url;
         this.reviews = new ArrayList<>();
-        this.ratingTotal = 0;
-        this.numberOfRatings = 0;
         this.category = c;
     }
 
@@ -55,8 +49,6 @@ public class Product {
     public void addUserReview(Review review)
     {
         reviews.add(review);
-        ratingTotal += review.getRating();
-        numberOfRatings++;
     }
 
     /**
