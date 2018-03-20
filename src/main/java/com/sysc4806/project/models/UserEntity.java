@@ -15,7 +15,7 @@ import java.util.*;
  *
  */
 @Entity
-public class UserEntity {
+public class UserEntity implements Comparable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -236,16 +236,24 @@ public class UserEntity {
      * @return True if o is a user entity and shares the same id and username as this user
      */
     @Override
-    public boolean equals(Object o)
-    {
-        if(o == this)
+    public boolean equals(Object o) {
+        if (o == this)
             return true;
 
-        if(!(o instanceof UserEntity))
+        if (!(o instanceof UserEntity))
             return false;
 
         UserEntity other = (UserEntity) o;
 
-        return other.id == this.id && other.username.equals(this.username);
+        if(this.id > 0 && other.id > 0)
+            return other.id == this.id;
+
+        return other.username.equals(this.username);
+    }
+
+    @Override
+    public int compareTo(Object compareuser) {
+        int comparefollowers=((UserEntity)compareuser).getFollowers().size();
+        return comparefollowers-this.followers.size();
     }
 }

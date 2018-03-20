@@ -11,10 +11,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.security.Principal;
+import java.util.*;
 
 @Controller
 public class UserController {
@@ -23,6 +25,7 @@ public class UserController {
     private static final String USER_ID_PATH = "/user/{userId}";
     private static final String USER_FOLLOW_PATH = "/user/follow";
     private static final String USER_UNFOLLOW_PATH = "/user/unfollow";
+    private static final String USER_SEARCH_PATH = "/searchUser";
 
     @Autowired
     private UserEntityRepository userRepo;
@@ -164,4 +167,23 @@ public class UserController {
         return loggedInUser;
     }
 
+    /**
+     * Application template used to display all users
+     * @param model
+     * @return The application Search User template
+     */
+    @RequestMapping(value=USER_SEARCH_PATH, method= RequestMethod.GET)
+    public String getAllUsers(Model model)
+    {
+        Iterator<UserEntity> usrs = userRepo.findAll().iterator();
+        List<UserEntity> users = new ArrayList<>();
+        while (usrs.hasNext())
+        {
+            users.add(usrs.next());
+        }
+        Collections.sort(users);
+        model.addAttribute("userEntities",users);
+        return "searchUser";
+
+    }
 }
