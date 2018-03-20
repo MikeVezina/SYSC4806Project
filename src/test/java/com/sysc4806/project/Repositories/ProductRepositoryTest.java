@@ -25,7 +25,7 @@ public class ProductRepositoryTest {
     ProductRepository repo;
 
     @Test
-    public void myTest() throws Exception {
+    public void testSaveProductToRepo() throws Exception {
         Product product = new Product(Category.BOOKS, "TestURL");
         product.setAvgRating(2);
         repo.save(product);

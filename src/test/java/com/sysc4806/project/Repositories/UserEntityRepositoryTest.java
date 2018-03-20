@@ -24,7 +24,7 @@ public class UserEntityRepositoryTest {
     UserEntityRepository repo;
 
     @Test
-    public void myTest() throws Exception {
+    public void testSaveUserToRepo() throws Exception {
         UserEntity userEntity = new UserEntity("test");
         repo.save(userEntity);
     }

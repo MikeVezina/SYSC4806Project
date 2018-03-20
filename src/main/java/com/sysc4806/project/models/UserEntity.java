@@ -48,18 +48,18 @@ public class UserEntity implements Comparable{
      * @param n - The username of the new user
      */
     public UserEntity(String n){
+        this();
         this.username = n;
-        this.reviews = new ArrayList<>();
-        this.followers = new ArrayList<>();
-        this.following = new ArrayList<>();
-        this.authorizationRole = UserRole.MEMBER;
     }
 
     /**
      * default constructor for database.
      */
     public UserEntity(){
-        this("temp");
+        this.reviews = new ArrayList<>();
+        this.followers = new ArrayList<>();
+        this.following = new ArrayList<>();
+        this.authorizationRole = UserRole.MEMBER;
     }
 
 

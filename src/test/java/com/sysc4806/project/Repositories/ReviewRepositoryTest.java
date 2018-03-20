@@ -34,7 +34,7 @@ public class ReviewRepositoryTest {
 
 
     @Test
-    public void myTest() throws Exception {
+    public void testSaveReviewToRepo() throws Exception {
         Product product = new Product(Category.BOOKS, "myUrl");
         UserEntity userEntity = new UserEntity("test");
         Review review = new Review(product,1);

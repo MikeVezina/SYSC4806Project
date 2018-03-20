@@ -1,18 +1,30 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/login.css"/>
+</head>
 <body>
-    <div>
+<div class="container">
+    <table>
         <!--/*@thymesVar id="userEntity" type="com.sysc4806.project.models.UserEntity"*/-->
         <form action="#" th:action="@{/registration}" th:object="${userEntity}" method="POST">
-            <br/>Username:<br/>
-            <input type="text" th:field="*{username}" placeholder="Username"/>
-            <p style="color:red;" th:if="${#fields.hasErrors('username')}" th:text="#{userForm.invalidSize}"> </p>
-            <br/>Password:<br/>
-            <input type="password" th:field="*{password}"/>
-            <p style="color:red;" th:if="${#fields.hasErrors('password')}" th:text="#{userForm.passwordTooSmall}"> </p>
-            <br/>
-            <button type="submit" value="Submit" >Register</button>
+
+            <tr>
+                <td><label for="username">Username</label>:</td>
+                <td><input id="username" type="text" th:field="*{username}" placeholder="Username"/></td>
+                <td><span style="color:red;" th:if="${#fields.hasErrors('username')}" th:text="#{userForm.invalidSize}"></span></td>
+            </tr>
+
+            <tr>
+                <td><label for="password">Password</label>:</td>
+                <td><input id="password" type="password" placeholder="**********" th:field="*{password}"/></td>
+                <td><span style="color:red;" th:if="${#fields.hasErrors('password')}" th:text="#{userForm.passwordTooSmall}"></span></td>
+            </tr>
+            <tr>
+                <td colspan="2"><button id="registerButton" type="submit" value="Submit" >Register</button></td>
+            </tr>
         </form>
-    </div>
+    </table>
+</div>
 </body>
 </html>
