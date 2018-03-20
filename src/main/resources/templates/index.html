@@ -1,4 +1,4 @@
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>SYSC 4806 Project</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -13,6 +13,9 @@
 <div> Created by: <div class="appInfo" id="authorsDiv"></div></div>
 <br/>
 <div> Current Project Version: <div class="appInfo" id="versionDiv"/></div>
+<br/>
+<!--/*@thymesVar id="user" type="com.sysc4806.project.models.UserEntity"*/-->
+<div th:if="${user}" th:text="${'Currently Logged in as: ' + user.username + ' (Role: ' + user.authorizationRole + ')'}"/>
 </body>
 
 

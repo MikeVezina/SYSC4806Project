@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
     <div>
+        <!--/*@thymesVar id="userEntity" type="com.sysc4806.project.models.UserEntity"*/-->
         <form action="#" th:action="@{/registration}" th:object="${userEntity}" method="POST">
             <br/>Username:<br/>
             <input type="text" th:field="*{username}" placeholder="Username"/>

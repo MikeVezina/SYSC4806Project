@@ -56,6 +56,10 @@ public class Product {
 
     public void addUserReview(Review review)
     {
+        if(reviews.contains(review))
+            return;
+
+        review.setProduct(this);
         reviews.add(review);
         ratingTotal += review.getRating();
         numberOfRatings++;

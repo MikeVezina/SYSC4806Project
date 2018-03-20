@@ -31,14 +31,16 @@ public class UserEntity {
     @Size(min=8)
     private String password;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "user_relations",
             joinColumns = @JoinColumn(name = "following_id"),
             inverseJoinColumns = @JoinColumn(name = "follower_id"))
     private List<UserEntity> followers;
 
-    @ManyToMany(mappedBy = "followers")
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER,  mappedBy = "followers")
     private List<UserEntity> following;
+
+    private UserRole authorizationRole;
 
     /**
      * Constructor of a new user to be persisted in the
@@ -50,6 +52,7 @@ public class UserEntity {
         this.reviews = new ArrayList<>();
         this.followers = new ArrayList<>();
         this.following = new ArrayList<>();
+        this.authorizationRole = UserRole.MEMBER;
     }
 
     /**
@@ -79,7 +82,7 @@ public class UserEntity {
      */
     public void followUser(UserEntity user)
     {
-        if(this.following.contains(user))
+        if(this.following.contains(user) || this.equals(user))
             return;
 
         this.following.add(user);
@@ -87,12 +90,55 @@ public class UserEntity {
     }
 
     /**
+     * A method to allow users to follow eachother.
+     * @param user - the user to be followed
+     */
+    public void unfollowUser(UserEntity user)
+    {
+        if(!this.following.contains(user) || this.equals(user))
+            return;
+
+        this.following.remove(user);
+        user.removeFollower(this);
+    }
+
+    /**
+     * @param user The user to check if they are a follower
+     * @return True if the specified user is following this user
+     */
+    public boolean isFollower(UserEntity user)
+    {
+        return this.followers.contains(user);
+    }
+
+    /**
+     * @param user The user to check if they are being followed
+     * @return True if the specified this user is following the specified user
+     */
+    public boolean isFollowing(UserEntity user)
+    {
+        return this.following.contains(user);
+    }
+
+    /**
+     * Removes a Follower
+     * @param userEntity The user to remove from followers
+     */
+    private void removeFollower(UserEntity userEntity)
+    {
+        if(!this.followers.contains(userEntity) || this.equals(userEntity))
+            return;
+
+        this.followers.remove(userEntity);
+    }
+
+    /**
      * A method to add a user to a User's list of followers
      * @param user
      */
-    public void addFollower(UserEntity user)
+    private void addFollower(UserEntity user)
     {
-        if(this.followers.contains(user))
+        if(this.followers.contains(user) || this.equals(user))
             return;
 
         followers.add(user);
@@ -167,4 +213,39 @@ public class UserEntity {
         this.password = password;
     }
 
+
+    /**
+     * Get the authorization role of the user
+     * @return The authorization role
+     */
+    public UserRole getAuthorizationRole() {
+        return authorizationRole;
+    }
+
+    /**
+     * Set the authorization role of the user
+     * @param authorizationRole
+     */
+    public void setAuthorizationRole(UserRole authorizationRole) {
+        this.authorizationRole = authorizationRole;
+    }
+
+    /**
+     * Checks to see if two UserEntity Objects are equal
+     * @param o The object to compare
+     * @return True if o is a user entity and shares the same id and username as this user
+     */
+    @Override
+    public boolean equals(Object o)
+    {
+        if(o == this)
+            return true;
+
+        if(!(o instanceof UserEntity))
+            return false;
+
+        UserEntity other = (UserEntity) o;
+
+        return other.id == this.id && other.username.equals(this.username);
+    }
 }
