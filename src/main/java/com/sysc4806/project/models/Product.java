@@ -50,6 +50,15 @@ public class Product {
     }
 
     /**
+     * Constructor of a new product to be persisted in the
+     * application.
+     * @param url - The url of the new product
+     */
+    public Product(String url){
+        this(Category.DEFAULT, url);
+    }
+
+    /**
      * Default constructor for database.
      */
     public Product(){this(Category.DEFAULT, "");}

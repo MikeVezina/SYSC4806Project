@@ -1,6 +1,5 @@
 package com.sysc4806.project.models;
 
-import org.hibernate.validator.constraints.NotEmpty;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.*;
@@ -87,6 +86,35 @@ public class UserEntity implements Comparable{
 
         this.following.add(user);
         user.addFollower(this);
+    }
+
+    /**
+     * Calculates the Jaccard index of similar reviews between two users
+     * @param otherUser The other user
+     * @return The Jaccard Coefficient/index (A value between 0 and 1).
+     */
+    private double calculateJaccardIndex(UserEntity otherUser)
+    {
+        // Total of all reviews
+        long unionSize = otherUser.reviews.size() + this.reviews.size();
+        long intersectionSize = 0;
+
+        // Filter all reviews that are for the same product and are the same rating
+        for(Review otherReview : otherUser.reviews)
+            intersectionSize += this.reviews.stream().filter(review -> review.getProduct().equals(otherReview.getProduct()) && review.getRating() == otherReview.getRating()).count();
+
+        // Will return between 0 and 1
+        return ((double)intersectionSize / (double)unionSize);
+    }
+
+    /**
+     * Calculates the Jaccard distance of similar reviews between two users
+     * @param otherUser The other user
+     * @return A value between 0 and 1. 1 being the furthest possible distance
+     */
+    public double calculateJaccardDistance(UserEntity otherUser)
+    {
+        return 1 - calculateJaccardIndex(otherUser);
     }
 
     /**
