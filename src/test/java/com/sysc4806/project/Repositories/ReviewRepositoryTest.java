@@ -18,12 +18,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
-@RunWith(SpringRunner.class)
-@Rollback
-@TestExecutionListeners({DependencyInjectionTestExecutionListener.class, FlywayTestExecutionListener.class})
-@FlywayTest
-@SpringBootTest(classes = App.class)
-@TestPropertySource(locations = "classpath:test.properties")
+@databaseTest
 public class ReviewRepositoryTest {
 
     @Autowired
