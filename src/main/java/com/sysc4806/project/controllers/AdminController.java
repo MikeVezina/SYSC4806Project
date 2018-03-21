@@ -7,7 +7,6 @@ import com.sysc4806.project.Repositories.UserEntityRepository;
 import com.sysc4806.project.controllers.exceptions.HttpErrorException;
 import com.sysc4806.project.enumeration.Category;
 import com.sysc4806.project.models.Product;
-import com.sysc4806.project.models.Review;
 import com.sysc4806.project.models.UserEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,19 +61,6 @@ public class AdminController {
     }
 
     /**
-     * Gets the admin control panel page
-     * @param token The current (logged in) user's token
-     * @return The template that will be displayed for the user
-     */
-    @RequestMapping(value = "/admin/users")
-    @AdministratorEndpoint
-    public String allUsers(UsernamePasswordAuthenticationToken token, Model model, HttpServletResponse servletResponse)
-    {
-        model.addAttribute("users", userRepo.findAll());
-        return ADMIN_TEMPLATE_BASE_DIR + "users";
-    }
-
-    /**
      * Generate Fake Test Data
      * @param bCryptPasswordEncoder The password encoder. Generates salted + hashed passwords for fake accounts.
      * @param token The current (logged in) user's token.
@@ -85,15 +71,25 @@ public class AdminController {
     @AdministratorEndpoint
     public String generate(BCryptPasswordEncoder bCryptPasswordEncoder, UsernamePasswordAuthenticationToken token, Model model, HttpServletResponse servletResponse)
     {
+
         LOG.info("Generating Data");
 
         /* Add All User Entities */
         UserEntity userEntityMichael = userRepo.findByUsernameIgnoreCase("michael");
         UserEntity userEntityAlex = userRepo.findByUsernameIgnoreCase("alex");
         UserEntity userEntityReid = userRepo.findByUsernameIgnoreCase("reid");
+
+        if(reviewRepo.count() > 0 && productRepo.count() > 0)
+            return "No Information Generated. Information already exists";
+
         UserEntity userEntityJustin = new UserEntity("Justin");
         UserEntity userEntityAndrew = new UserEntity("Andrew");
         UserEntity userEntityNoah = new UserEntity("Noah");
+
+        /* Add User to DB */
+        userEntityJustin = userRepo.saveAndFlush(userEntityJustin);
+        userEntityAndrew = userRepo.saveAndFlush(userEntityAndrew);
+        userEntityNoah = userRepo.saveAndFlush(userEntityNoah);
 
         /* Set User Passwords */
         userEntityJustin.setPassword(bCryptPasswordEncoder.encode("password"));
@@ -123,78 +119,49 @@ public class AdminController {
         userEntityNoah.followUser(userEntityAlex);
 
         /* Add User to DB */
-        userEntityMichael = addUser(userEntityMichael);
-        userEntityAlex = addUser(userEntityAlex);
-        userEntityReid = addUser(userEntityReid);
-        userEntityJustin = addUser(userEntityJustin);
-        userEntityAndrew = addUser(userEntityAndrew);
-        userEntityNoah = addUser(userEntityNoah);
+        userEntityMichael = userRepo.saveAndFlush(userEntityMichael);
+        userEntityAlex = userRepo.saveAndFlush(userEntityAlex);
+        userEntityReid = userRepo.saveAndFlush(userEntityReid);
+        userEntityJustin = userRepo.saveAndFlush(userEntityJustin);
+        userEntityAndrew = userRepo.saveAndFlush(userEntityAndrew);
+        userEntityNoah = userRepo.saveAndFlush(userEntityNoah);
 
         /* Add All Products */
         Product productMonitor = new Product(Category.MONITORS, "Monitors.com");
         Product productTool = new Product(Category.TOOLS, "Tools.com");
         Product productNintendoSwitch = new Product(Category.ELECTRONICS, "Electronics.com");
 
-        productMonitor = addProduct(productMonitor);
-        productTool = addProduct(productTool);
-        productNintendoSwitch = addProduct(productNintendoSwitch);
 
+        reviewRepo.saveAndFlush(userEntityAlex.writeReview(productMonitor,2));
+        reviewRepo.saveAndFlush(userEntityMichael.writeReview(productMonitor,3));
+        reviewRepo.saveAndFlush(userEntityReid.writeReview(productMonitor,4));
+        reviewRepo.saveAndFlush(userEntityJustin.writeReview(productMonitor, 5));
+        reviewRepo.saveAndFlush(userEntityNoah.writeReview(productMonitor, 2));
 
-        userEntityAlex.writeReview(productMonitor,2);
-        userEntityMichael.writeReview(productMonitor,3);
-        userEntityReid.writeReview(productMonitor,4);
-        userEntityJustin.writeReview(productMonitor, 5);
-        userEntityNoah.writeReview(productMonitor, 2);
+        reviewRepo.saveAndFlush(userEntityAlex.writeReview(productTool,1));
+        reviewRepo.saveAndFlush(userEntityMichael.writeReview(productTool,1));
+        reviewRepo.saveAndFlush(userEntityReid.writeReview(productTool,3));
 
-        userEntityAlex.writeReview(productTool,1);
-        userEntityMichael.writeReview(productTool,1);
-        userEntityReid.writeReview(productTool,3);
-        userEntityNoah.writeReview(productMonitor, 2);
+        reviewRepo.saveAndFlush(userEntityAlex.writeReview(productNintendoSwitch,5));
+        reviewRepo.saveAndFlush(userEntityMichael.writeReview(productNintendoSwitch,5));
+        reviewRepo.saveAndFlush(userEntityReid.writeReview(productNintendoSwitch,5));
+        reviewRepo.saveAndFlush(userEntityAndrew.writeReview(productNintendoSwitch, 5));
 
-        userEntityAlex.writeReview(productNintendoSwitch,5);
-        userEntityMichael.writeReview(productNintendoSwitch,5);
-        userEntityReid.writeReview(productNintendoSwitch,5);
-        userEntityAndrew.writeReview(productNintendoSwitch, 5);
+        productRepo.saveAndFlush(productMonitor);
+        productRepo.saveAndFlush(productTool);
+        productRepo.saveAndFlush(productNintendoSwitch);
 
+        userRepo.saveAndFlush(userEntityMichael);
+        userRepo.saveAndFlush(userEntityAlex);
+        userRepo.saveAndFlush(userEntityReid);
+        userRepo.saveAndFlush(userEntityAndrew);
+        userRepo.saveAndFlush(userEntityNoah);
+        userRepo.saveAndFlush(userEntityJustin);
 
         return "Generated Successfully!" +
                 "<br>Stats:" +
                 "<br>Users: " + userRepo.count() +
                 "<br>Products: " + productRepo.count() +
                 "<br>Reviews: " + reviewRepo.count();
-    }
-
-    /**
-     * Add a user, or if the username already exists retrieve the current user.
-     * Only used for data generation
-     * @param entity The user to add (or retrieve)
-     * @return The UserEntitiy added/retrieved.
-     */
-    private UserEntity addUser(UserEntity entity)
-    {
-        UserEntity foundUser = userRepo.findByUsernameIgnoreCase(entity.getUsername());
-        if(foundUser == null)
-        {
-            foundUser = entity;
-        }
-
-        return foundUser;
-    }
-
-    /**
-     * Add a product, or if the product URL already exists retrieve the current product.
-     * Only used for data generation
-     * @param entity The product to add (or retrieve)
-     * @return The product added/retrieved.
-     */
-    private Product addProduct(Product entity)
-    {
-        Product foundProd = productRepo.findByUrlIgnoreCase(entity.getUrl());
-        if(foundProd == null)
-        {
-            foundProd = entity;
-        }
-
-        return foundProd;
     }
 }

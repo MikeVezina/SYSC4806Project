@@ -26,12 +26,7 @@ public class Product {
     private String url;
 
     @OneToMany(targetEntity=Review.class, mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Review> reviews;
-
-    //Global variables used to calculate the average rating of the product
-    private int numberOfRatings;
-    private int ratingTotal;
-    private int averageRating;
+    private Set<Review> reviews;
 
     private Category category;
 
@@ -42,10 +37,7 @@ public class Product {
      */
     public Product(Category c, String url){
         this.url = url;
-        this.reviews = new ArrayList<>();
-        this.ratingTotal = 0;
-        this.numberOfRatings = 0;
-        this.averageRating = 0;
+        this.reviews = new HashSet<>();
         this.category = c;
     }
 
@@ -70,9 +62,6 @@ public class Product {
 
         review.setProduct(this);
         reviews.add(review);
-        ratingTotal += review.getRating();
-        numberOfRatings++;
-        setAvgRating((ratingTotal/numberOfRatings));
     }
 
     /**
@@ -103,25 +92,33 @@ public class Product {
      * Getter method for the product's reviews
      * @return  - List of the product's reviews
      */
-    public List<Review> getReviews() { return reviews; }
+    public Set<Review> getReviews() { return reviews; }
 
     /**
      * Setter method for the product's review list
      * @param reviews - new product review list
      */
-    public void setReviews(List<Review> reviews) { this.reviews = reviews; }
+    public void setReviews(Set<Review> reviews) { this.reviews = reviews; }
 
     /**
      * Getter method for the product's Average rating
      * @return - products average rating
      */
-    public int getAvgRating() { return averageRating; }
+    public int getAverageRating()
+    {
+        if(reviews.size() == 0)
+            return 0;
 
-    /**
-     * Setter method for the product's average rating
-     * @param avgRating - product's new average rating
-     */
-    public void setAvgRating(int avgRating) { this.averageRating = avgRating; }
+        int sum = 0;
+
+        for(Review r : reviews)
+        {
+            sum += r.getRating();
+        }
+
+        return sum / reviews.size();
+    }
+
 
     /**
      * Getter method for the product's category
@@ -134,5 +131,26 @@ public class Product {
      * @param category - product's new category
      */
     public void setCategory(Category category) { this.category = category; }
+
+    /**
+     * Checks to see if two Product Objects are equal
+     * @param o The object to compare
+     * @return True if o is a Product and shares the same id OR product URL, category, rating total, and same reviews as this Product
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+
+        if (!(o instanceof Product))
+            return false;
+
+        Product other = (Product) o;
+
+        if(this.id > 0 && other.id > 0)
+            return other.id == (this.id);
+
+        return other.url.equals(this.url) && other.category.equals(this.category) && other.getAverageRating() == this.getAverageRating() && other.reviews.equals(this.reviews);
+    }
 
 }

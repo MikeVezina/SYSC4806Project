@@ -6,6 +6,8 @@ import com.sysc4806.project.models.Product;
 import com.sysc4806.project.security.UserAuthentication;
 import com.sysc4806.project.security.UserSecurityService;
 import com.sysc4806.project.security.WebSecurityConfig;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +26,33 @@ public class ProductRepositoryTest {
     @Autowired
     ProductRepository repo;
 
-    @Test
-    public void testSaveProductToRepo() throws Exception {
-        Product product = new Product(Category.BOOKS, "TestURL");
-        product.setAvgRating(2);
+    private Product product;
+
+    @Before
+    public void setup()
+    {
+        product = new Product(Category.BOOKS, "TestURL");
         repo.save(product);
+    }
+
+    @Test
+    public void testFindByURL() throws Exception {
+        // Test retrieve data
+        Assert.assertEquals(product, repo.findByUrlIgnoreCase(product.getUrl()));
+    }
+
+    @Test
+    public void testFindOne() throws Exception {
+        // Test repo.findOne by ID
+        Assert.assertEquals(product, repo.findOne(product.getId()));
+    }
+
+    @Test
+    public void testSave() throws Exception {
+        Assert.assertTrue("Ensure ID was set correctly", product.getId() > 0);
+
+        // Test repo.findOne by ID
+        Assert.assertTrue(repo.findAll().contains(product));
     }
 
 }

@@ -77,9 +77,7 @@
         </div>
     </div>
 
-    <form action="#" th:action="@{/searchUser}">
-        <input class="home_button" type="submit" value  = "Search Users"/>
-    </form>
+    <a th:href="${'/searchUser'}"><input class="home_button" type="submit" value  = "Search Users"/></a>
 
     <!-- User Followers -->
     <div id="userFollowers" th:switch="${user.followers.size()}">

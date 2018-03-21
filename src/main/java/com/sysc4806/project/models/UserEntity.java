@@ -67,16 +67,30 @@ public class UserEntity implements Comparable{
      * @param product - The product the review is about
      * @param rating - The rating of the product
      */
-    public void writeReview(Product product,int rating)
+    public Review writeReview(Product product,int rating)
     {
+        // Make sure we can't review a product twice.
+        // Overwrite the existing review
+        for(Review r : reviews)
+        {
+            if(r.getProduct().equals(product))
+            {
+                r.setRating(rating);
+                return r;
+            }
+        }
+
+        // Else, create a new review
         Review newReview = new Review(product, rating);
         newReview.setAuthor(this);
         product.addUserReview(newReview);
         reviews.add(newReview);
+
+        return newReview;
     }
 
     /**
-     * A method to allow users to follow eachother.
+     * A method to allow users to follow each other.
      * @param user - the user to be followed
      */
     public void followUser(UserEntity user)
@@ -134,7 +148,7 @@ public class UserEntity implements Comparable{
      * @param user The user to check if they are a follower
      * @return True if the specified user is following this user
      */
-    public boolean isFollower(UserEntity user)
+    public boolean hasFollower(UserEntity user)
     {
         return this.followers.contains(user);
     }

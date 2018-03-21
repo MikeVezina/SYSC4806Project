@@ -7,7 +7,7 @@ public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private UserEntity author;
@@ -73,6 +73,27 @@ public class Review {
 
     public void setRating(int rating) {
         this.rating = rating;
+    }
+
+    /**
+     * Checks to see if two Review Objects are equal
+     * @param o The object to compare
+     * @return True if o is a review and shares the same id OR product, author and rating as this review
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+
+        if (!(o instanceof Review))
+            return false;
+
+        Review other = (Review) o;
+
+        if(this.id > 0 && other.id > 0)
+            return other.id == (this.id);
+
+        return other.author.equals(this.author) && other.product.equals(this.product) && other.rating == this.rating;
     }
 
 }

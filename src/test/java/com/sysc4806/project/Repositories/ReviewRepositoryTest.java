@@ -8,6 +8,8 @@ import com.sysc4806.project.models.UserEntity;
 import com.sysc4806.project.security.UserAuthentication;
 import com.sysc4806.project.security.UserSecurityService;
 import com.sysc4806.project.security.WebSecurityConfig;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,17 +34,37 @@ public class ReviewRepositoryTest {
     @Autowired
     UserEntityRepository userRepo;
 
+    private Product product;
+    private UserEntity userEntity;
+    private Review review;
 
-    @Test
-    public void testSaveReviewToRepo() throws Exception {
-        Product product = new Product(Category.BOOKS, "myUrl");
-        UserEntity userEntity = new UserEntity("test");
-        Review review = new Review(product,1);
+    @Before
+    public void setup()
+    {
+        product = new Product(Category.BOOKS, "myUrl");
+        userEntity = new UserEntity("test");
+        productRepo.save(product);
+
+        review = new Review(product,1);
         review.setAuthor(userEntity);
+
         userEntity.getReviews().add(review);
         product.getReviews().add(review);
-
         reviewRepo.save(review);
+    }
+
+    @Test
+    public void testFindOne() throws Exception {
+        // Test repo.findOne by ID
+        Assert.assertEquals(review, reviewRepo.findOne(review.getId()));
+    }
+
+    @Test
+    public void testSave() throws Exception {
+        Assert.assertTrue("Ensure ID was set correctly", review.getId() > 0);
+
+        // Test repo.findOne by ID
+        Assert.assertTrue(reviewRepo.findAll().contains(review));
     }
 
 }
