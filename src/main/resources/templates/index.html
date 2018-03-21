@@ -16,6 +16,30 @@
 <br/>
 <!--/*@thymesVar id="user" type="com.sysc4806.project.models.UserEntity"*/-->
 <div th:if="${user}" th:text="${'Currently Logged in as: ' + user.username + ' (Role: ' + user.authorizationRole + ')'}"/>
+
+<!-- Button navigating to user profile -->
+<a th:href="${'/user'}">
+    <input class="home_button" type="submit" value="Account"/>
+</a>
+
+
+<!-- Table of Popular Products -->
+<div th:if="${not #lists.isEmpty(products)}">
+    <h1>Top Products:</h1>
+    <table>
+        <tr>
+            <th>URL</th><th>Id</th><th>Average Rating</th>
+        </tr>
+        <tr th:each="product : ${products}">
+            <td th:text="${product.url}"></td>
+            <td th:text="${product.id}"></td>
+            <td th:text="${product.getAverageRating()}"></td>
+
+        </tr>
+
+    </table>
+</div>
+
 </body>
 
 
