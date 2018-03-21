@@ -1,10 +1,12 @@
 package com.sysc4806.project.controllers;
 
 import com.sysc4806.project.Repositories.ProductRepository;
+import com.sysc4806.project.Repositories.ReviewRepository;
 import com.sysc4806.project.Repositories.UserEntityRepository;
 import com.sysc4806.project.controllers.exceptions.HttpErrorException;
 import com.sysc4806.project.controllers.exceptions.HttpRedirectException;
 import com.sysc4806.project.models.Product;
+import com.sysc4806.project.models.Review;
 import com.sysc4806.project.models.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ErrorController;
@@ -36,6 +38,9 @@ public class ProductController implements ErrorController {
     @Autowired
     private ProductRepository productRepo;
 
+    @Autowired
+    private ReviewRepository reviewRepo;
+
     /**
      * @return The Application user template html
      */
@@ -43,18 +48,27 @@ public class ProductController implements ErrorController {
     public String reviewProduct(HttpServletRequest req, Model model, Principal principal) throws IOException
     {
         Product product = getProduct(req.getParameter("productId"));
+        String comment = req.getParameter("comment");
         // Get current logged in user
         UserEntity loggedInUser = getCurrentUser(principal);
 
         model.addAttribute("product", product);
         model.addAttribute("loggedInUser", loggedInUser);
 
-        int rating = Integer.parseInt(req.getParameter("rating"));
+        try {
+            int rating = Integer.parseInt(req.getParameter("rating"));
 
-        loggedInUser.writeReview(product,rating);
+            Review review = loggedInUser.writeReview(product,rating,comment);
 
-        productRepo.save(product);
-        userRepo.save(loggedInUser);
+            reviewRepo.save(review);
+            productRepo.save(product);
+            userRepo.save(loggedInUser);
+
+        }
+        catch (NumberFormatException nfE)
+        {
+            // Do nothing
+        }
 
         return "redirect:/products/" + product.getId();
     }
