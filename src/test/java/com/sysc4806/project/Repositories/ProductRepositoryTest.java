@@ -23,6 +23,8 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 @DataJpaTest
 public class ProductRepositoryTest {
 
+    private static final String PRODUCT_NAME = "product_name";
+    private static final String PRODUCT_URL = "TestURL";
     @Autowired
     ProductRepository repo;
 
@@ -31,7 +33,7 @@ public class ProductRepositoryTest {
     @Before
     public void setup()
     {
-        product = new Product(Category.BOOKS, "TestURL");
+        product = new Product(Category.BOOKS, PRODUCT_NAME, PRODUCT_URL);
         repo.save(product);
     }
 

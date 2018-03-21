@@ -17,30 +17,35 @@ public class Review {
 
     private int rating;
 
+    private String comment;
+
     /**
      * Constructor of a review
      * @param product - The product to review
      * @param rating - the rating of the product
      */
-    public Review(Product product, int rating){
+    public Review(Product product, UserEntity author, int rating){
 
-        this.product = product;
-        this.rating = rating;
+        this(product, author, rating, "");
     }
 
     /**
      * Constructor of a review
      * @param rating - the rating of the product
      */
-    public Review(int rating){
-        this(null, rating);
+    public Review(Product product, UserEntity author, int rating, String comment){
+
+        this.product = product;
+        this.author = author;
+        this.rating = rating;
+        this.comment = comment;
     }
 
     /**
      * Default Constructor for Database.
      */
-    public Review(){
-        this(null, 0);
+    private Review(){
+        this(null, null, 0);
     }
 
     /**
@@ -51,13 +56,6 @@ public class Review {
         return id;
     }
 
-    /**
-     * Setter method for the Review id
-     * @param id new id
-     */
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     /**
      * Getter method for the Review author
@@ -100,11 +98,27 @@ public class Review {
     }
 
     /**
+     * Set the ID for the review
+     * @param id The id
+     */
+    private void setId(Long id) {
+        this.id = id;
+    }
+
+    /**
      * Setter method for the Review rating
      * @param rating new rating
      */
     public void setRating(int rating) {
         this.rating = rating;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     /**
@@ -125,7 +139,16 @@ public class Review {
         if(this.id > 0 && other.id > 0)
             return other.id == (this.id);
 
-        return other.author.equals(this.author) && other.product.equals(this.product) && other.rating == this.rating;
+        return other.author.equals(this.author) && other.product.equals(this.product) && other.rating == this.rating && other
+                .comment.equals(this.comment);
     }
 
+    @Override
+    public int hashCode() {
+        int result = author != null ? author.hashCode() : 0;
+        result = 31 * result + (product != null ? product.hashCode() : 0);
+        result = 31 * result + rating;
+        result = 31 * result + (comment != null ? comment.hashCode() : 0);
+        return result;
+    }
 }
