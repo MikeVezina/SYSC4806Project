@@ -33,6 +33,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 
+
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = App.class)
 @SpringBootTest(classes = {App.class, WebSecurityConfig.class, UserSecurityService.class, UserAuthentication.class})
 @RunWith(SpringRunner.class)
@@ -52,18 +53,19 @@ public class UserEntityRepositoryTest {
     UserEntityRepository userRepo;
 
     private Product product;
+    private Review review;
     private UserEntity userEntity;
 
     @Before
     public void setUp()
     {
         userEntity = new UserEntity("test");
-        product = new Product("Test", "tested");
+        product = new Product(Category.BOOKS, "test_product", "tested");
         userEntity = new UserEntity("test");
-        userEntity.writeReview(product, 5);
+        review = userEntity.writeReview(product, 5);
         userRepo.save(userEntity);
     }
-  
+
     @After
     public void tearDown() throws Exception {
         userRepo.delete(userEntity.getId());
@@ -81,7 +83,7 @@ public class UserEntityRepositoryTest {
 
     @Test
     public void testFindReview() throws Exception {
-        Assert.assertTrue(userEntity.getReviews().contains(reviewRepo.findOne(userEntity.getId())));
+        Assert.assertEquals(review, reviewRepo.findOne(review.getId()));
     }
 
     @Test

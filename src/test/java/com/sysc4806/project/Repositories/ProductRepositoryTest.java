@@ -33,7 +33,7 @@ import static org.junit.Assert.*;
 
 
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = App.class)
-@SpringBootTest(classes = {App.class})
+@SpringBootTest(classes = {App.class, WebSecurityConfig.class, UserSecurityService.class, UserAuthentication.class})
 @RunWith(SpringRunner.class)
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class, FlywayTestExecutionListener.class})
 @Transactional
@@ -54,13 +54,14 @@ public class ProductRepositoryTest {
 
     private Product product;
     private UserEntity userEntity;
+    private Review review;
 
 
     @Before
     public void setUp() {
         product = new Product(Category.BOOKS, PRODUCT_NAME, PRODUCT_URL);
-        userEntity = new UserEntity("Random");
-        userEntity.writeReview(product, 3);
+        userEntity = new UserEntity("test_user");
+        review = userEntity.writeReview(product, 3);
         repo.save(product);
     }
 
@@ -72,6 +73,11 @@ public class ProductRepositoryTest {
     @Test
     public void testFake() throws Exception {
         assertNull(repo.findOne((long) 100000));
+    }
+
+    @Test
+    public void testFindReview() throws Exception {
+        Assert.assertEquals(review, reviewRepo.findOne(review.getId()));
     }
 
     public void testFindByURL() throws Exception {

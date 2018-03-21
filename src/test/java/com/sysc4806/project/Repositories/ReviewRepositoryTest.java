@@ -58,7 +58,7 @@ public class ReviewRepositoryTest {
     @Before
     public void setup()
     {
-        product = new Product("test", "tested");
+        product = new Product(Category.BOOKS, PRODUCT_NAME, PRODUCT_URL);
         userEntity = new UserEntity("test");
         review = new Review(product, userEntity, 1);
 

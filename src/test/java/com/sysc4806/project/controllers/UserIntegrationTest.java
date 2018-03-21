@@ -4,6 +4,7 @@ import com.sysc4806.project.Repositories.UserEntityRepository;
 import com.sysc4806.project.models.UserEntity;
 import com.sysc4806.project.models.UserRole;
 import org.flywaydb.test.annotation.FlywayTest;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
