@@ -9,21 +9,24 @@ public class ReviewTest {
     //Test Variables
     private Product testProduct;
     private UserEntity testUserEntity;
+    private Review testReview;
+
     @Before
     public void setup()
     {
         testProduct = new Product();
         testUserEntity = new UserEntity();
-        testUserEntity.writeReview(testProduct, 4);
+        testReview = testUserEntity.writeReview(testProduct, 4);
     }
 
     @Test
-    public void testAuthour(){
-        assertEquals("A Review must maintain reference to it author", testUserEntity, testProduct.getReviews().get(0).getAuthor());
+    public void testAuthor(){
+        assertEquals("A Review must maintain reference to it author", testUserEntity, testReview.getAuthor());
     }
 
     @Test
     public void testProduct(){
-        assertEquals("A Review must maintain reference to it product", testProduct, testUserEntity.getReviews().get(0).getProduct());
+        assertEquals("A Review must maintain reference to it product", testProduct, testReview.getProduct());
+        assertTrue("A Product must maintain a reference to its reviews", testProduct.getReviews().contains(testReview));
     }
 }

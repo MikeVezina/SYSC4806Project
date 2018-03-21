@@ -1,6 +1,5 @@
 package com.sysc4806.project.models;
 
-import org.hibernate.validator.constraints.NotEmpty;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.*;
@@ -31,14 +30,16 @@ public class UserEntity implements Comparable{
     @Size(min=8)
     private String password;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "user_relations",
             joinColumns = @JoinColumn(name = "following_id"),
             inverseJoinColumns = @JoinColumn(name = "follower_id"))
     private List<UserEntity> followers;
 
-    @ManyToMany(mappedBy = "followers")
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER,  mappedBy = "followers")
     private List<UserEntity> following;
+
+    private UserRole authorizationRole;
 
     /**
      * Constructor of a new user to be persisted in the
@@ -46,17 +47,18 @@ public class UserEntity implements Comparable{
      * @param n - The username of the new user
      */
     public UserEntity(String n){
+        this();
         this.username = n;
-        this.reviews = new ArrayList<>();
-        this.followers = new ArrayList<>();
-        this.following = new ArrayList<>();
     }
 
     /**
      * default constructor for database.
      */
     public UserEntity(){
-        this("temp");
+        this.reviews = new ArrayList<>();
+        this.followers = new ArrayList<>();
+        this.following = new ArrayList<>();
+        this.authorizationRole = UserRole.MEMBER;
     }
 
 
@@ -65,21 +67,35 @@ public class UserEntity implements Comparable{
      * @param product - The product the review is about
      * @param rating - The rating of the product
      */
-    public void writeReview(Product product,int rating)
+    public Review writeReview(Product product,int rating)
     {
+        // Make sure we can't review a product twice.
+        // Overwrite the existing review
+        for(Review r : reviews)
+        {
+            if(r.getProduct().equals(product))
+            {
+                r.setRating(rating);
+                return r;
+            }
+        }
+
+        // Else, create a new review
         Review newReview = new Review(product, rating);
         newReview.setAuthor(this);
         product.addUserReview(newReview);
         reviews.add(newReview);
+
+        return newReview;
     }
 
     /**
-     * A method to allow users to follow eachother.
+     * A method to allow users to follow each other.
      * @param user - the user to be followed
      */
     public void followUser(UserEntity user)
     {
-        if(this.following.contains(user))
+        if(this.following.contains(user) || this.equals(user))
             return;
 
         this.following.add(user);
@@ -87,12 +103,84 @@ public class UserEntity implements Comparable{
     }
 
     /**
+     * Calculates the Jaccard index of similar reviews between two users
+     * @param otherUser The other user
+     * @return The Jaccard Coefficient/index (A value between 0 and 1).
+     */
+    private double calculateJaccardIndex(UserEntity otherUser)
+    {
+        // Total of all reviews
+        long unionSize = otherUser.reviews.size() + this.reviews.size();
+        long intersectionSize = 0;
+
+        // Filter all reviews that are for the same product and are the same rating
+        for(Review otherReview : otherUser.reviews)
+            intersectionSize += this.reviews.stream().filter(review -> review.getProduct().equals(otherReview.getProduct()) && review.getRating() == otherReview.getRating()).count();
+
+        // Will return between 0 and 1
+        return ((double)intersectionSize / (double)unionSize);
+    }
+
+    /**
+     * Calculates the Jaccard distance of similar reviews between two users
+     * @param otherUser The other user
+     * @return A value between 0 and 1. 1 being the furthest possible distance
+     */
+    public double calculateJaccardDistance(UserEntity otherUser)
+    {
+        return 1 - calculateJaccardIndex(otherUser);
+    }
+
+    /**
+     * A method to allow users to follow eachother.
+     * @param user - the user to be followed
+     */
+    public void unfollowUser(UserEntity user)
+    {
+        if(!this.following.contains(user) || this.equals(user))
+            return;
+
+        this.following.remove(user);
+        user.removeFollower(this);
+    }
+
+    /**
+     * @param user The user to check if they are a follower
+     * @return True if the specified user is following this user
+     */
+    public boolean hasFollower(UserEntity user)
+    {
+        return this.followers.contains(user);
+    }
+
+    /**
+     * @param user The user to check if they are being followed
+     * @return True if the specified this user is following the specified user
+     */
+    public boolean isFollowing(UserEntity user)
+    {
+        return this.following.contains(user);
+    }
+
+    /**
+     * Removes a Follower
+     * @param userEntity The user to remove from followers
+     */
+    private void removeFollower(UserEntity userEntity)
+    {
+        if(!this.followers.contains(userEntity) || this.equals(userEntity))
+            return;
+
+        this.followers.remove(userEntity);
+    }
+
+    /**
      * A method to add a user to a User's list of followers
      * @param user
      */
-    public void addFollower(UserEntity user)
+    private void addFollower(UserEntity user)
     {
-        if(this.followers.contains(user))
+        if(this.followers.contains(user) || this.equals(user))
             return;
 
         followers.add(user);
@@ -167,6 +255,43 @@ public class UserEntity implements Comparable{
         this.password = password;
     }
 
+
+    /**
+     * Get the authorization role of the user
+     * @return The authorization role
+     */
+    public UserRole getAuthorizationRole() {
+        return authorizationRole;
+    }
+
+    /**
+     * Set the authorization role of the user
+     * @param authorizationRole
+     */
+    public void setAuthorizationRole(UserRole authorizationRole) {
+        this.authorizationRole = authorizationRole;
+    }
+
+    /**
+     * Checks to see if two UserEntity Objects are equal
+     * @param o The object to compare
+     * @return True if o is a user entity and shares the same id and username as this user
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+
+        if (!(o instanceof UserEntity))
+            return false;
+
+        UserEntity other = (UserEntity) o;
+
+        if(this.id > 0 && other.id > 0)
+            return other.id == this.id;
+
+        return other.username.equals(this.username);
+    }
 
     @Override
     public int compareTo(Object compareuser) {

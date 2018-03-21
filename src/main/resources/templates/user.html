@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Users</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -8,10 +8,31 @@
 </head>
 <body>
 <h1>
+    <span th:if="${user.equals(loggedInUser)}">My</span>
     User Profile
 </h1>
 
-<h3 th:if="${!user.equals(loggedInUser) AND !user.followers.contains(loggedInUser)}"><a th:href="${'/user/' + user.id + '/follow'}">Follow</a></h3>
+<!--/*@thymesVar id="user" type="com.sysc4806.project.models.UserEntity"*/-->
+<!--/*@thymesVar id="loggedInUser" type="com.sysc4806.project.models.UserEntity"*/-->
+<div th:if="${!user.equals(loggedInUser)}">
+
+    <div th:switch="${user.followers.contains(loggedInUser)}">
+        <div th:case="${false}">
+            <form th:action="@{/user/follow}" method="post">
+                <input type="hidden" name="userId" th:value="${user.id}"/>
+                <input type="submit" value="Follow"/>
+            </form>
+        </div>
+
+        <div th:case="${true}">
+            <form th:action="@{/user/unfollow}" method="post">
+                <input type="hidden" name="userId" th:value="${user.id}"/>
+                <input type="submit" value="UnFollow"/>
+            </form>
+        </div>
+    </div>
+</div>
+
 <div th:if="${user}">
     <!-- Current User Info -->
     <table>
@@ -56,9 +77,7 @@
         </div>
     </div>
 
-    <form action="#" th:action="@{/searchUser}">
-        <input class="home_button" type="submit" value  = "Search Users"/>
-    </form>
+    <a th:href="${'/searchUser'}"><input class="home_button" type="submit" value  = "Search Users"/></a>
 
     <!-- User Followers -->
     <div id="userFollowers" th:switch="${user.followers.size()}">

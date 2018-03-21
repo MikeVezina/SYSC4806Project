@@ -11,11 +11,15 @@ public class ProductTest
     private Product testProduct;
     private Product testProduct2;
     private UserEntity testUserEntity;
+    private UserEntity testUserEntity2;
+
     @Before
     public void setup() {
-        testProduct = new Product();
-        testProduct2 = new Product();
-        testUserEntity = new UserEntity();
+        testProduct = new Product("product_url_1");
+        testProduct2 = new Product("product_url_2");
+        testUserEntity = new UserEntity("user_1");
+        testUserEntity2 = new UserEntity("user_2");
+
         testUserEntity.writeReview(testProduct, 4);
     }
 
@@ -36,11 +40,15 @@ public class ProductTest
 
     @Test
     public void testProductRating(){
-        assertTrue("Product average rating should be initialized to 0", testProduct2.getAvgRating()==0);
+        assertEquals("Product average rating should be initialized to 0", 0, testProduct2.getAverageRating());
         testUserEntity.writeReview(testProduct2,2);
-        assertTrue("Product average should be updated when a new review is written", testProduct2.getAvgRating() == 2);
+        assertEquals("Product average should be updated when a new review is written", 2,testProduct2.getAverageRating());
         testUserEntity.writeReview(testProduct2,4);
-        assertTrue("Product's average rating should be the average of it's review ratings", testProduct2.getAvgRating() == 3);
+        assertEquals("Product's average rating should reflect the updated rating of the user", 4, testProduct2.getAverageRating());
+        testUserEntity2.writeReview(testProduct2,3);
+        assertEquals("Product's average rating should reflect multiple ratings", (7/2), testProduct2.getAverageRating());
+
+
     }
 
 
