@@ -59,19 +59,23 @@
             <br/>
             <table>
                 <tr>
-                    <th colspan="4">Reviews <span th:text="${'Total: ' + user.reviews.size()}"/></th>
+                    <th colspan="6">Reviews <span th:text="${'Total: ' + user.reviews.size()}"/></th>
                 </tr>
                 <tr>
                     <th>Rating ID</th>
-                    <th>Rating (/5)</th>
                     <th>Product ID</th>
+                    <th>Product Name</th>
                     <th>Product URL</th>
+                    <th>Rating (/5)</th>
+                    <th>Comment</th>
                 </tr>
                 <tr th:each="review : ${user.reviews}">
                     <td th:text="${review.id}"></td>
-                    <td th:text="${review.rating}"></td>
                     <td><a th:href="${'/products/' + review.product.id}" th:text="${review.product.id}"></a></td>
+                    <td th:text="${review.product.name}"></td>
                     <td><a th:href="'http://' + ${review.product.url}" th:text="${review.product.url}"></a></td>
+                    <td th:text="${review.rating}"></td>
+                    <td th:text="${review.comment}"></td>
                 </tr>
             </table>
         </div>

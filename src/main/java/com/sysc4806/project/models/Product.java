@@ -2,7 +2,6 @@ package com.sysc4806.project.models;
 
 import com.sysc4806.project.enumeration.Category;
 import org.hibernate.validator.constraints.NotEmpty;
-//import javax.persistence.*;
 import javax.persistence.*;
 import java.util.*;
 
@@ -23,7 +22,10 @@ public class Product {
     private long id;
 
     @NotEmpty
+    @Column(unique = true)
     private String url;
+
+    private String name;
 
     @OneToMany(targetEntity=Review.class, mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Review> reviews;
@@ -35,7 +37,8 @@ public class Product {
      * application.
      * @param c - The category of the new product
      */
-    public Product(Category c, String url){
+    public Product(Category c, String name, String url){
+        this.name = name;
         this.url = url;
         this.reviews = new HashSet<>();
         this.category = c;
@@ -46,21 +49,20 @@ public class Product {
      * application.
      * @param url - The url of the new product
      */
-    public Product(String url){
-        this(Category.DEFAULT, url);
+    public Product(String name, String url){
+        this(Category.DEFAULT, name, url);
     }
 
     /**
      * Default constructor for database.
      */
-    public Product(){this(Category.DEFAULT, "");}
+    private Product(){this(Category.DEFAULT, "", "");}
 
     public void addUserReview(Review review)
     {
         if(reviews.contains(review))
             return;
 
-        review.setProduct(this);
         reviews.add(review);
     }
 
@@ -74,7 +76,7 @@ public class Product {
      * Setter method for the product id
      * @param id - new product id
      */
-    public void setId(long id) { this.id = id; }
+    private void setId(long id) { this.id = id; }
 
     /**
      * Getter method for the product url
@@ -89,6 +91,21 @@ public class Product {
     public void setUrl(String url) { this.url = url; }
 
     /**
+     * @return Get the product name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Set the product name
+     * @param name The new product name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
      * Getter method for the product's reviews
      * @return  - List of the product's reviews
      */
@@ -98,7 +115,7 @@ public class Product {
      * Setter method for the product's review list
      * @param reviews - new product review list
      */
-    public void setReviews(Set<Review> reviews) { this.reviews = reviews; }
+    private void setReviews(Set<Review> reviews) { this.reviews = reviews; }
 
     /**
      * Getter method for the product's Average rating
@@ -150,7 +167,12 @@ public class Product {
         if(this.id > 0 && other.id > 0)
             return other.id == (this.id);
 
-        return other.url.equals(this.url) && other.category.equals(this.category) && other.getAverageRating() == this.getAverageRating() && other.reviews.equals(this.reviews);
+        return other.url.equals(this.url) && other.category.equals(this.category) && other.getAverageRating() == this.getAverageRating();
+    }
+
+    @Override
+    public int hashCode() {
+        return url != null ? url.hashCode() : 0;
     }
 
 }

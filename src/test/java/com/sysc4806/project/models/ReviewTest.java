@@ -6,6 +6,10 @@ import static org.junit.Assert.*;
 
 public class ReviewTest {
 
+    private static final String TEST_PRODUCT_URL = "test_product_url";
+    private static final String TEST_PRODUCT_NAME = "test_product_name";
+    private static final String TEST_USER = "test_user";
+
     //Test Variables
     private Product testProduct;
     private UserEntity testUserEntity;
@@ -14,8 +18,8 @@ public class ReviewTest {
     @Before
     public void setup()
     {
-        testProduct = new Product();
-        testUserEntity = new UserEntity();
+        testProduct = new Product(TEST_PRODUCT_NAME, TEST_PRODUCT_URL);
+        testUserEntity = new UserEntity(TEST_USER);
         testReview = testUserEntity.writeReview(testProduct, 4);
     }
 

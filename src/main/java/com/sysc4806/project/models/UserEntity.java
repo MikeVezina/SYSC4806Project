@@ -21,7 +21,7 @@ public class UserEntity implements Comparable{
     private long id;
 
     @OneToMany(targetEntity=Review.class, mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Review> reviews;
+    private Set<Review> reviews;
 
     @Size(min=1, max=32)
     @Column(unique = true)
@@ -34,10 +34,10 @@ public class UserEntity implements Comparable{
     @JoinTable(name = "user_relations",
             joinColumns = @JoinColumn(name = "following_id"),
             inverseJoinColumns = @JoinColumn(name = "follower_id"))
-    private List<UserEntity> followers;
+    private Set<UserEntity> followers;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER,  mappedBy = "followers")
-    private List<UserEntity> following;
+    private Set<UserEntity> following;
 
     private UserRole authorizationRole;
 
@@ -47,18 +47,18 @@ public class UserEntity implements Comparable{
      * @param n - The username of the new user
      */
     public UserEntity(String n){
-        this();
+        this.reviews = new HashSet<>();
+        this.followers = new HashSet<>();
+        this.following = new HashSet<>();
+        this.authorizationRole = UserRole.MEMBER;
         this.username = n;
     }
 
     /**
      * default constructor for database.
      */
-    public UserEntity(){
-        this.reviews = new ArrayList<>();
-        this.followers = new ArrayList<>();
-        this.following = new ArrayList<>();
-        this.authorizationRole = UserRole.MEMBER;
+    private UserEntity(){
+        this("");
     }
 
 
@@ -67,26 +67,24 @@ public class UserEntity implements Comparable{
      * @param product - The product the review is about
      * @param rating - The rating of the product
      */
-    public Review writeReview(Product product,int rating)
+    public Review writeReview(Product product, int rating, String comment)
     {
-        // Make sure we can't review a product twice.
-        // Overwrite the existing review
-        for(Review r : reviews)
-        {
-            if(r.getProduct().equals(product))
-            {
-                r.setRating(rating);
-                return r;
-            }
-        }
-
-        // Else, create a new review
-        Review newReview = new Review(product, rating);
-        newReview.setAuthor(this);
+        // Create a new review on product
+        Review newReview = new Review(product, this, rating, comment);
         product.addUserReview(newReview);
         reviews.add(newReview);
 
         return newReview;
+    }
+
+    /**
+     * A method for creating a new User Review
+     * @param product - The product the review is about
+     * @param rating - The rating of the product
+     */
+    public Review writeReview(Product product, int rating)
+    {
+        return writeReview(product, rating, "");
     }
 
     /**
@@ -215,37 +213,37 @@ public class UserEntity implements Comparable{
      * Getter method for the UserEntity's reviews
      * @return  - List of the UserEntity's reviews
      */
-    public List<Review> getReviews() { return reviews; }
+    public Set<Review> getReviews() { return reviews; }
 
     /**
      * Setter method for the UserEntity's review list
      * @param reviews - new UserEntity review list
      */
-    public void setReviews(List<Review> reviews) { this.reviews = reviews; }
+    private void setReviews(Set<Review> reviews) { this.reviews = reviews; }
 
     /**
      * Getter method for the UserEntity's followers
      * @return  - List of the UserEntity's followers
      */
-    public List<UserEntity> getFollowers() { return followers; }
+    public Set<UserEntity> getFollowers() { return followers; }
 
     /**
      * Setter method for the UserEntity's followers
      * @param followers - new UserEntity follower list
      */
-    public void setFollowers(List<UserEntity> followers) { this.followers = followers; }
+    private void setFollowers(Set<UserEntity> followers) { this.followers = followers; }
 
     /**
      * Getter method for the UserEntity's following list
      * @return - UserEntity's following list
      */
-    public List<UserEntity> getFollowing() { return following; }
+    public Set<UserEntity> getFollowing() { return following; }
 
     /**
      * Setter method for the product's category
      * @param following - product's new category
      */
-    public void setFollowing(List<UserEntity> following) { this.following = following; }
+    private void setFollowing(Set<UserEntity> following) { this.following = following; }
 
     public String getPassword() {
         return password;
@@ -293,9 +291,22 @@ public class UserEntity implements Comparable{
         return other.username.equals(this.username);
     }
 
+
+
     @Override
-    public int compareTo(Object compareuser) {
-        int comparefollowers=((UserEntity)compareuser).getFollowers().size();
-        return comparefollowers-this.followers.size();
+    public int compareTo(Object compareUser) {
+        if(compareUser == this)
+            return 0;
+
+        if(!(compareUser instanceof UserEntity))
+            return 1;
+
+        int compareFollowers = ((UserEntity)compareUser).getFollowers().size();
+        return compareFollowers - this.followers.size();
+    }
+
+    @Override
+    public int hashCode() {
+        return username != null ? username.hashCode() : 0;
     }
 }
