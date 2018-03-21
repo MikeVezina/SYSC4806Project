@@ -28,7 +28,7 @@ public class RegistrationController{
 
     @PostMapping("/registration")
     public String registration(@Valid UserEntity user, BindingResult bindingResult, Model model) {
-        if(userRepo.findByUsername(user.getUsername()) != null) {
+        if(userRepo.findByUsernameIgnoreCase(user.getUsername().toLowerCase()) != null) {
             bindingResult.rejectValue("username", "error.username", "alreadyTaken");
         }
         if (bindingResult.hasErrors()) {

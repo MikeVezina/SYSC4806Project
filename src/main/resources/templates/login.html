@@ -1,22 +1,36 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>login into your account</title>
+    <title>Log In</title>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/login.css"/>
 </head>
 <body>
 <div class="container">
-
+    <table>
     <form th:action="@{/login}" method="post">
-        <label for="username">Username</label>:
-        <input type="text" id="username" name="username" autofocus="autofocus" /> <br />
-        <label for="password">Password</label>:
-        <input type="password" id="password" name="password" /> <br />
-        <input type="submit" value="Log in" />
-    </form>
-    <form th:action="@{/registration}" method="get">
-        <input type="submit" value="Register"/>
+
+            <tr>
+                <td><label for="username">Username</label>:</td>
+                <td><input type="text" id="username" name="username" autofocus="autofocus"/></td>
+            </tr>
+
+            <tr>
+                <td><label for="password">Password</label>:</td>
+                <td><input type="password" id="password" name="password"/></td>
+            </tr>
+            <tr>
+                <td colspan="2"><input id="submitButton" type="submit" value="Log in"/></td>
+            </tr>
     </form>
 
+    <form id="registrationForm" th:action="@{/registration}" method="get">
+            <tr>
+                <td colspan="2">
+                    <input id="registerButton" form="registrationForm" type="submit" value="Register"/>
+                </td>
+            </tr>
+    </form>
+    </table>
 </div>
 </body>
 </html>

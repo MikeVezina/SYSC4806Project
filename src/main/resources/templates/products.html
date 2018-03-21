@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Product</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -11,6 +11,7 @@
     Current Product
 </h1>
 
+<!--/*@thymesVar id="product" type="com.sysc4806.project.models.Product"*/-->
 <div th:if="${product}">
     <!-- Current Product Info -->
     <table>
@@ -19,12 +20,14 @@
         </tr>
         <tr>
             <th>Product ID</th>
+            <th>Name</th>
             <th>URL</th>
             <th>Average Rating</th>
             <th>Category</th>
         </tr>
         <tr>
             <td><span th:text="${product.id}"/></td>
+            <td><span th:text="${product.name}"/></td>
             <td><a th:href="${'http://' + product.url}" th:text="${product.url}"/></td>
             <td><span th:text="${product.getAvgRating()}"/></td>
             <td><span th:text="${product.category}"/></td>
@@ -40,17 +43,19 @@
             <br/>
             <table>
                 <tr>
-                    <th colspan="3">Reviews <span th:text="${'Total: ' + product.reviews.size()}"/></th>
+                    <th colspan="4">Reviews <span th:text="${'Total: ' + product.reviews.size()}"/></th>
                 </tr>
                 <tr>
                     <th>Rating ID</th>
-                    <th>Rating (/5)</th>
                     <th>Author</th>
+                    <th>Rating (/5)</th>
+                    <th>Comment</th>
                 </tr>
                 <tr th:each="review : ${product.reviews}">
                     <td th:text="${review.id}"></td>
-                    <td th:text="${review.rating}"></td>
                     <td><a th:href="${'/user/' + review.author.id}" th:text="${review.author.username}"></a></td>
+                    <td th:text="${review.rating}"></td>
+                    <td th:text="${review.comment}"></td>
                 </tr>
             </table>
         </div>

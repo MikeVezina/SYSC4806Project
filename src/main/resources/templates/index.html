@@ -1,4 +1,4 @@
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>SYSC 4806 Project</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -13,6 +13,33 @@
 <div> Created by: <div class="appInfo" id="authorsDiv"></div></div>
 <br/>
 <div> Current Project Version: <div class="appInfo" id="versionDiv"/></div>
+<br/>
+<!--/*@thymesVar id="user" type="com.sysc4806.project.models.UserEntity"*/-->
+<div th:if="${user}" th:text="${'Currently Logged in as: ' + user.username + ' (Role: ' + user.authorizationRole + ')'}"/>
+
+<!-- Button navigating to user profile -->
+<a th:href="${'/user'}">
+    <input class="home_button" type="submit" value="Account"/>
+</a>
+
+
+<!-- Table of Popular Products -->
+<div th:if="${not #lists.isEmpty(products)}">
+    <h1>Top Products:</h1>
+    <table>
+        <tr>
+            <th>URL</th><th>Id</th><th>Average Rating</th>
+        </tr>
+        <tr th:each="product : ${products}">
+            <td th:text="${product.url}"></td>
+            <td th:text="${product.id}"></td>
+            <td th:text="${product.getAverageRating()}"></td>
+
+        </tr>
+
+    </table>
+</div>
+
 </body>
 
 

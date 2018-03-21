@@ -6,24 +6,31 @@ import static org.junit.Assert.*;
 
 public class ReviewTest {
 
+    private static final String TEST_PRODUCT_URL = "test_product_url";
+    private static final String TEST_PRODUCT_NAME = "test_product_name";
+    private static final String TEST_USER = "test_user";
+
     //Test Variables
     private Product testProduct;
     private UserEntity testUserEntity;
+    private Review testReview;
+
     @Before
     public void setup()
     {
-        testProduct = new Product();
-        testUserEntity = new UserEntity();
-        testUserEntity.writeReview(testProduct, 4);
+        testProduct = new Product(TEST_PRODUCT_NAME, TEST_PRODUCT_URL);
+        testUserEntity = new UserEntity(TEST_USER);
+        testReview = testUserEntity.writeReview(testProduct, 4);
     }
 
     @Test
-    public void testAuthour(){
-        assertEquals("A Review must maintain reference to it author", testUserEntity, testProduct.getReviews().get(0).getAuthor());
+    public void testAuthor(){
+        assertEquals("A Review must maintain reference to it author", testUserEntity, testReview.getAuthor());
     }
 
     @Test
     public void testProduct(){
-        assertEquals("A Review must maintain reference to it product", testProduct, testUserEntity.getReviews().get(0).getProduct());
+        assertEquals("A Review must maintain reference to it product", testProduct, testReview.getProduct());
+        assertTrue("A Product must maintain a reference to its reviews", testProduct.getReviews().contains(testReview));
     }
 }

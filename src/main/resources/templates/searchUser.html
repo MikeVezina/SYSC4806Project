@@ -7,9 +7,7 @@
     <link rel="stylesheet" type="text/css" href="/stylesheets/users.css"/>
 </head>
 <body>
-    <form action="#" th:action="@{/user}">
-        <input class="home_button" type="submit" value="Back to Account"/>
-    </form>
+<a th:href="${'/user'}"><input class="home_button" type="submit" value="Back to Account"/></a>
     <!-- Table of current Users -->
     <div th:if="${not #lists.isEmpty(userEntities)}">
         <h1>Top Users:</h1>

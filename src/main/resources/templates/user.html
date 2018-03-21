@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Users</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -8,10 +8,31 @@
 </head>
 <body>
 <h1>
+    <span th:if="${user.equals(loggedInUser)}">My</span>
     User Profile
 </h1>
 
-<h3 th:if="${!user.equals(loggedInUser) AND !user.followers.contains(loggedInUser)}"><a th:href="${'/user/' + user.id + '/follow'}">Follow</a></h3>
+<!--/*@thymesVar id="user" type="com.sysc4806.project.models.UserEntity"*/-->
+<!--/*@thymesVar id="loggedInUser" type="com.sysc4806.project.models.UserEntity"*/-->
+<div th:if="${!user.equals(loggedInUser)}">
+
+    <div th:switch="${user.followers.contains(loggedInUser)}">
+        <div th:case="${false}">
+            <form th:action="@{/user/follow}" method="post">
+                <input type="hidden" name="userId" th:value="${user.id}"/>
+                <input type="submit" value="Follow"/>
+            </form>
+        </div>
+
+        <div th:case="${true}">
+            <form th:action="@{/user/unfollow}" method="post">
+                <input type="hidden" name="userId" th:value="${user.id}"/>
+                <input type="submit" value="UnFollow"/>
+            </form>
+        </div>
+    </div>
+</div>
+
 <div th:if="${user}">
     <!-- Current User Info -->
     <table>
@@ -38,27 +59,29 @@
             <br/>
             <table>
                 <tr>
-                    <th colspan="4">Reviews <span th:text="${'Total: ' + user.reviews.size()}"/></th>
+                    <th colspan="6">Reviews <span th:text="${'Total: ' + user.reviews.size()}"/></th>
                 </tr>
                 <tr>
                     <th>Rating ID</th>
-                    <th>Rating (/5)</th>
                     <th>Product ID</th>
+                    <th>Product Name</th>
                     <th>Product URL</th>
+                    <th>Rating (/5)</th>
+                    <th>Comment</th>
                 </tr>
                 <tr th:each="review : ${user.reviews}">
                     <td th:text="${review.id}"></td>
-                    <td th:text="${review.rating}"></td>
                     <td><a th:href="${'/products/' + review.product.id}" th:text="${review.product.id}"></a></td>
+                    <td th:text="${review.product.name}"></td>
                     <td><a th:href="'http://' + ${review.product.url}" th:text="${review.product.url}"></a></td>
+                    <td th:text="${review.rating}"></td>
+                    <td th:text="${review.comment}"></td>
                 </tr>
             </table>
         </div>
     </div>
 
-    <form action="#" th:action="@{/searchUser}">
-        <input class="home_button" type="submit" value  = "Search Users"/>
-    </form>
+    <a th:href="${'/searchUser'}"><input class="home_button" type="submit" value  = "Search Users"/></a>
 
     <!-- User Followers -->
     <div id="userFollowers" th:switch="${user.followers.size()}">
