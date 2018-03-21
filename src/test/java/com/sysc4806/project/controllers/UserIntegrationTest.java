@@ -72,18 +72,6 @@ public class UserIntegrationTest {
         loadUsersFromRepo();
     }
 
-    @After
-    public void tearDown()
-    {
-        testUserDetails = Mockito.mock(UserDetails.class);
-
-        // Create a token for test user 1 only
-        mockUserDetails(testUserDetails, TEST_USER_1, UserRole.MEMBER);
-
-        mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
-        loadUsersFromRepo();
-    }
-
     /**
      * Get user entity from repo, or create (and save) a new user entity for testing
      * @param userName The user name of the user entity
