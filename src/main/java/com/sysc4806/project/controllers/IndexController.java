@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -39,9 +40,14 @@ public class IndexController implements ErrorController {
     public String index(Model model, UsernamePasswordAuthenticationToken token)
     {
         UserEntity currentUser = userRepo.findByUsernameIgnoreCase(token.getName());
+
         if(currentUser != null) {
             model.addAttribute("user", currentUser);
         }
+
+        List<Product> products = productRepo.findAll();
+        Collections.sort(products);
+        model.addAttribute("products", products);
         return "index";
     }
 

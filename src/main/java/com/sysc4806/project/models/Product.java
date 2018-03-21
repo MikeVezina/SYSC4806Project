@@ -15,7 +15,7 @@ import java.util.*;
  *
  */
 @Entity
-public class Product {
+public class Product implements Comparable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -175,4 +175,16 @@ public class Product {
         return url != null ? url.hashCode() : 0;
     }
 
+
+    @Override
+    public int compareTo(Object compareProduct) {
+        if(compareProduct == this)
+            return 0;
+
+        if(!(compareProduct instanceof Product))
+            return 1;
+
+        int compareAvgRating = ((Product)compareProduct).getAverageRating();
+        return compareAvgRating - this.getAverageRating();
+    }
 }

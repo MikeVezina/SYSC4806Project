@@ -67,6 +67,7 @@ public class UserEntity implements Comparable{
      * @param product - The product the review is about
      * @param rating - The rating of the product
      */
+
     public Review writeReview(Product product, int rating, String comment)
     {
         // Create a new review on product
@@ -290,7 +291,6 @@ public class UserEntity implements Comparable{
 
         return other.username.equals(this.username);
     }
-
 
 
     @Override
