@@ -175,12 +175,17 @@ public class UserController {
     @RequestMapping(value=USER_SEARCH_PATH, method= RequestMethod.GET)
     public String getAllUsers(Model model)
     {
+<<<<<<< Updated upstream
         Iterator<UserEntity> usrs = userRepo.findAll().iterator();
         List<UserEntity> users = new ArrayList<>();
         while (usrs.hasNext())
         {
             users.add(usrs.next());
         }
+=======
+        List<UserEntity> users = userRepo.findAll();
+
+>>>>>>> Stashed changes
         Collections.sort(users);
         model.addAttribute("userEntities",users);
         return "searchUser";
