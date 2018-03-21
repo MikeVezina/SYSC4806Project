@@ -14,6 +14,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+
 /**
  * Controller for handling application index and error endpoints
  */
@@ -37,9 +42,17 @@ public class IndexController implements ErrorController {
     public String index(Model model, UsernamePasswordAuthenticationToken token)
     {
         UserEntity currentUser = userRepo.findByUsernameIgnoreCase(token.getName());
+        Iterator<Product> prds = productRepo.findAll().iterator();
+        List<Product> products = new ArrayList<>();
         if(currentUser != null) {
             model.addAttribute("user", currentUser);
         }
+        while (prds.hasNext())
+        {
+            products.add(prds.next());
+        }
+        Collections.sort(products);
+        model.addAttribute("products",products);
         return "index";
     }
 
