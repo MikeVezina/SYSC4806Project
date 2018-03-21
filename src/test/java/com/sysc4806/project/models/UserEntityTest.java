@@ -8,16 +8,18 @@ import static org.junit.Assert.*;
 
 public class UserEntityTest {
 
-    public static final String USER_NAME_1 = "user1";
-    public static final String USER_NAME_2 = "user2";
-    public static final String USER_NAME_3 = "user3";
-    public static final String USER_NAME_4 = "user4";
-
-    //Test variables
-    private Product testProduct1;
-    private Product testProduct2;
-    private Product testProduct3;
-    private Product testProduct4;
+    private static final String USER_NAME_1 = "user1";
+    private static final String USER_NAME_2 = "user2";
+    private static final String USER_NAME_3 = "user3";
+    private static final String USER_NAME_4 = "user4";
+    private static final String TEST_PROD_URL_1 = "test_prod_1";
+    private static final String TEST_PROD_URL_2 = "test_prod_2";
+    private static final String TEST_PROD_URL_3 = "test_prod_3";
+    private static final String TEST_PROD_URL_4 = "test_prod_4";
+    private static final String TEST_PROD_NAME_1 = "test_prod_1";
+    private static final String TEST_PROD_NAME_2 = "test_prod_2";
+    private static final String TEST_PROD_NAME_3 = "test_prod_3";
+    private static final String TEST_PROD_NAME_4 = "test_prod_4";
 
     private UserEntity testUserEntity1;
     private UserEntity testUserEntity2;
@@ -26,10 +28,10 @@ public class UserEntityTest {
 
     @Before
     public void  setup(){
-        testProduct1 = new Product("test_prod_1");
-        testProduct2 = new Product("test_prod_2");
-        testProduct3 = new Product("test_prod_3");
-        testProduct4 = new Product("test_prod_4");
+        Product testProduct1 = new Product(TEST_PROD_NAME_1, TEST_PROD_URL_1);
+        Product testProduct2 = new Product(TEST_PROD_NAME_2, TEST_PROD_URL_2);
+        Product testProduct3 = new Product(TEST_PROD_NAME_3, TEST_PROD_URL_3);
+        Product testProduct4 = new Product(TEST_PROD_NAME_4, TEST_PROD_URL_4);
 
         testUserEntity1 = new UserEntity(USER_NAME_1);
         testUserEntity2 = new UserEntity(USER_NAME_2);

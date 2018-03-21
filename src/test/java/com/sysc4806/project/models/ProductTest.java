@@ -15,8 +15,8 @@ public class ProductTest
 
     @Before
     public void setup() {
-        testProduct = new Product("product_url_1");
-        testProduct2 = new Product("product_url_2");
+        testProduct = new Product("product_name","product_url_1");
+        testProduct2 = new Product("product_name_2", "product_url_2");
         testUserEntity = new UserEntity("user_1");
         testUserEntity2 = new UserEntity("user_2");
 
@@ -44,9 +44,9 @@ public class ProductTest
         testUserEntity.writeReview(testProduct2,2);
         assertEquals("Product average should be updated when a new review is written", 2,testProduct2.getAverageRating());
         testUserEntity.writeReview(testProduct2,4);
-        assertEquals("Product's average rating should reflect the updated rating of the user", 4, testProduct2.getAverageRating());
+        assertEquals("Product's average rating should reflect the updated rating of the user", (2 + 4) / 2, testProduct2.getAverageRating());
         testUserEntity2.writeReview(testProduct2,3);
-        assertEquals("Product's average rating should reflect multiple ratings", (7/2), testProduct2.getAverageRating());
+        assertEquals("Product's average rating should reflect multiple ratings", (2 + 4 + 3) / 3, testProduct2.getAverageRating());
 
 
     }

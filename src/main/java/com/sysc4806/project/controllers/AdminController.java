@@ -127,29 +127,28 @@ public class AdminController {
         userEntityNoah = userRepo.saveAndFlush(userEntityNoah);
 
         /* Add All Products */
-        Product productMonitor = new Product(Category.MONITORS, "Monitors.com");
-        Product productTool = new Product(Category.TOOLS, "Tools.com");
-        Product productNintendoSwitch = new Product(Category.ELECTRONICS, "Electronics.com");
-
-
-        reviewRepo.saveAndFlush(userEntityAlex.writeReview(productMonitor,2));
-        reviewRepo.saveAndFlush(userEntityMichael.writeReview(productMonitor,3));
-        reviewRepo.saveAndFlush(userEntityReid.writeReview(productMonitor,4));
-        reviewRepo.saveAndFlush(userEntityJustin.writeReview(productMonitor, 5));
-        reviewRepo.saveAndFlush(userEntityNoah.writeReview(productMonitor, 2));
-
-        reviewRepo.saveAndFlush(userEntityAlex.writeReview(productTool,1));
-        reviewRepo.saveAndFlush(userEntityMichael.writeReview(productTool,1));
-        reviewRepo.saveAndFlush(userEntityReid.writeReview(productTool,3));
-
-        reviewRepo.saveAndFlush(userEntityAlex.writeReview(productNintendoSwitch,5));
-        reviewRepo.saveAndFlush(userEntityMichael.writeReview(productNintendoSwitch,5));
-        reviewRepo.saveAndFlush(userEntityReid.writeReview(productNintendoSwitch,5));
-        reviewRepo.saveAndFlush(userEntityAndrew.writeReview(productNintendoSwitch, 5));
+        Product productMonitor = new Product(Category.MONITORS, "LG Monitor", "Monitors.com");
+        Product productTool = new Product(Category.TOOLS, "Wrench", "Tools.com");
+        Product productNintendoSwitch = new Product(Category.ELECTRONICS, "Nintendo Switch", "http://www.nintendo.com/switch");
 
         productRepo.saveAndFlush(productMonitor);
         productRepo.saveAndFlush(productTool);
         productRepo.saveAndFlush(productNintendoSwitch);
+
+        reviewRepo.saveAndFlush(userEntityAlex.writeReview(productMonitor,2, "Terrible product!"));
+        reviewRepo.saveAndFlush(userEntityMichael.writeReview(productMonitor,3, "Mediocre"));
+        reviewRepo.saveAndFlush(userEntityReid.writeReview(productMonitor,4, "I loved it!"));
+        reviewRepo.saveAndFlush(userEntityJustin.writeReview(productMonitor, 5, "Speech-less."));
+        reviewRepo.saveAndFlush(userEntityNoah.writeReview(productMonitor, 2));
+
+        reviewRepo.saveAndFlush(userEntityAlex.writeReview(productTool,1));
+        reviewRepo.saveAndFlush(userEntityMichael.writeReview(productTool,1, "Refund please!"));
+        reviewRepo.saveAndFlush(userEntityReid.writeReview(productTool,3));
+
+        reviewRepo.saveAndFlush(userEntityAlex.writeReview(productNintendoSwitch,5, "AMAZING!"));
+        reviewRepo.saveAndFlush(userEntityMichael.writeReview(productNintendoSwitch,5, "GREAT!"));
+        reviewRepo.saveAndFlush(userEntityReid.writeReview(productNintendoSwitch,5, "WOW!"));
+        reviewRepo.saveAndFlush(userEntityAndrew.writeReview(productNintendoSwitch, 5, "AMAZING!"));
 
         userRepo.saveAndFlush(userEntityMichael);
         userRepo.saveAndFlush(userEntityAlex);

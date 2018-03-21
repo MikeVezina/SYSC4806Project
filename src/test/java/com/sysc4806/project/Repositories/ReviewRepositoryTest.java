@@ -25,6 +25,8 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 @DataJpaTest
 public class ReviewRepositoryTest {
 
+    private static final String PRODUCT_NAME = "product_name";
+    private static final String PRODUCT_URL = "myUrl";
     @Autowired
     ReviewRepository reviewRepo;
 
@@ -41,11 +43,11 @@ public class ReviewRepositoryTest {
     @Before
     public void setup()
     {
-        product = new Product(Category.BOOKS, "myUrl");
+        product = new Product(Category.BOOKS, PRODUCT_NAME, PRODUCT_URL);
         userEntity = new UserEntity("test");
         productRepo.save(product);
 
-        review = new Review(product,1);
+        review = new Review(product, userEntity, 1);
         review.setAuthor(userEntity);
 
         userEntity.getReviews().add(review);
