@@ -44,10 +44,6 @@ public class IndexController implements ErrorController {
             model.addAttribute("user", currentUser);
         }
         List<Product> products = productRepo.findAll();
-        if(currentUser != null) {
-            model.addAttribute("user", currentUser);
-        }
-
         Collections.sort(products);
         model.addAttribute("products",products);
         return "index";
