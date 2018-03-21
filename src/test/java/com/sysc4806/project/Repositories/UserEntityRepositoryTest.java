@@ -34,9 +34,8 @@ import static org.junit.Assert.assertNull;
 
 
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = App.class)
-@SpringBootTest(classes = {WebSecurityConfig.class, UserSecurityService.class, UserAuthentication.class})
+@SpringBootTest(classes = {App.class, WebSecurityConfig.class, UserSecurityService.class, UserAuthentication.class})
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = App.class)
 @Transactional
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class, FlywayTestExecutionListener.class})
 @FlywayTest
@@ -59,7 +58,7 @@ public class UserEntityRepositoryTest {
     public void setUp()
     {
         userEntity = new UserEntity("test");
-        product = new Product(Category.BOOKS, "tested");
+        product = new Product("Test", "tested");
         userEntity = new UserEntity("test");
         userEntity.writeReview(product, 5);
         userRepo.save(userEntity);
@@ -82,13 +81,13 @@ public class UserEntityRepositoryTest {
 
     @Test
     public void testFindReview() throws Exception {
-        Assert.assertEquals(review, reviewRepo.findOne(userEntity.getId()));
+        Assert.assertTrue(userEntity.getReviews().contains(reviewRepo.findOne(userEntity.getId())));
     }
 
     @Test
     public void testFindUser() throws Exception {
         // Test repo.findOne by ID
-        Assert.assertEquals(userEntity, repo.findOne(userEntity.getId()));
+        Assert.assertEquals(userEntity, userRepo.findOne(userEntity.getId()));
     }
 
     @Test
@@ -96,6 +95,6 @@ public class UserEntityRepositoryTest {
         Assert.assertTrue("Ensure ID was set correctly", userEntity.getId() > 0);
 
         // Test repo.findOne by ID
-        Assert.assertTrue(repo.findAll().contains(userEntity));
+        Assert.assertTrue(userRepo.findAll().contains(userEntity));
     }
 }

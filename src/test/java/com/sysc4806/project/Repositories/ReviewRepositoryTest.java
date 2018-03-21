@@ -32,9 +32,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = App.class)
-@SpringBootTest(classes = {WebSecurityConfig.class, UserSecurityService.class, UserAuthentication.class})
+@SpringBootTest(classes = {App.class, WebSecurityConfig.class, UserSecurityService.class, UserAuthentication.class})
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = App.class)
 @Transactional
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class, FlywayTestExecutionListener.class})
 @FlywayTest
@@ -59,7 +58,7 @@ public class ReviewRepositoryTest {
     @Before
     public void setup()
     {
-        product = new Product(Category.BOOKS, "tested");
+        product = new Product("test", "tested");
         userEntity = new UserEntity("test");
         review = new Review(product, userEntity, 1);
 
