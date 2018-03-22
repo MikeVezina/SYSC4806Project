@@ -20,7 +20,7 @@ public class ReviewTest {
     {
         testProduct = new Product(TEST_PRODUCT_NAME, TEST_PRODUCT_URL);
         testUserEntity = new UserEntity(TEST_USER);
-        testReview = testUserEntity.writeReview(testProduct, 4);
+        testReview = testUserEntity.writeReview(testProduct, 4, "Wow!");
     }
 
     @Test
@@ -32,5 +32,10 @@ public class ReviewTest {
     public void testProduct(){
         assertEquals("A Review must maintain reference to it product", testProduct, testReview.getProduct());
         assertTrue("A Product must maintain a reference to its reviews", testProduct.getReviews().contains(testReview));
+    }
+
+    @Test
+    public void testTest(){
+        assertEquals("A Review should persist a user written comment", testReview.getComment(),"Wow!");
     }
 }

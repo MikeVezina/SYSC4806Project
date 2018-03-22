@@ -34,6 +34,28 @@
         </tr>
     </table>
 
+    <!-- Add a product Review -->
+    <!--/*@thymesVar id="loggedInUser" type="com.sysc4806.project.models.UserEntity"*/-->
+    <br/>
+    <table>
+        <form th:action="@{/products/review}" method="post">
+            <input type="hidden" name="productId" th:value="${product.getId()}"/>
+            <tr>
+                <th colspan="2">Write Product Review</th>
+            </tr>
+            <tr>
+                <th><label for="rating">Rating (Out of 5)</label>:</th>
+                <td><input type="text" id="rating" name="rating"/></td>
+            </tr>
+            <tr>
+                <th><label for="comment">Comment (Optional)</label>:</th>
+                <td><input type="text" id="comment" name="comment"/></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="Submit Review"/></td>
+            </tr>
+        </form>
+    </table>
 
     <!-- Table of Reviews -->
     <div id="productReviews" th:switch="${product.reviews.size()}">
@@ -43,7 +65,8 @@
             <br/>
             <table>
                 <tr>
-                    <th colspan="4">Reviews <span th:text="${'Total: ' + product.reviews.size()}"/></th>
+                    <th colspan="2">Average <span th:text="${'Rating: ' + product.getAverageRating()}"/></th>
+                    <th colspan="2">Reviews <span th:text="${'Total: ' + product.reviews.size()}"/></th>
                 </tr>
                 <tr>
                     <th>Rating ID</th>

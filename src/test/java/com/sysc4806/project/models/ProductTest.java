@@ -20,7 +20,7 @@ public class ProductTest
         testUserEntity = new UserEntity("user_1");
         testUserEntity2 = new UserEntity("user_2");
 
-        testUserEntity.writeReview(testProduct, 4);
+        testUserEntity.writeReview(testProduct, 4, "Wow!");
     }
 
     @Test
@@ -41,13 +41,10 @@ public class ProductTest
     @Test
     public void testProductRating(){
         assertEquals("Product average rating should be initialized to 0", 0, testProduct2.getAverageRating());
-        testUserEntity.writeReview(testProduct2,2);
+        testUserEntity.writeReview(testProduct2,2, "Solid Meh!");
         assertEquals("Product average should be updated when a new review is written", 2,testProduct2.getAverageRating());
-        testUserEntity.writeReview(testProduct2,4);
-        assertEquals("Product's average rating should reflect the updated rating of the user", (2 + 4) / 2, testProduct2.getAverageRating());
-        testUserEntity2.writeReview(testProduct2,3);
-        assertEquals("Product's average rating should reflect multiple ratings", (2 + 4 + 3) / 3, testProduct2.getAverageRating());
-
+        testUserEntity2.writeReview(testProduct2, 4, "Would recommend to a friend");
+        assertEquals("Product's average rating should reflect multiple ratings", (2 + 4 ) / 2, testProduct2.getAverageRating());
 
     }
 }

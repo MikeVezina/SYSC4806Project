@@ -176,7 +176,6 @@ public class UserController {
     public String getAllUsers(Model model)
     {
         List<UserEntity> users = userRepo.findAll();
-       
         Collections.sort(users);
         model.addAttribute("userEntities",users);
         return "searchUser";

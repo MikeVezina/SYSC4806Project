@@ -28,13 +28,13 @@
     <h1>Top Products:</h1>
     <table>
         <tr>
-            <th>URL</th><th>Id</th><th>Average Rating</th>
+            <th>URL</th><th>Id</th><th>Name</th><th>Average Rating</th>
         </tr>
         <tr th:each="product : ${products}">
-            <td th:text="${product.url}"></td>
+            <td><a th:href="${product.url}" th:text="${product.url}"/></td>
             <td th:text="${product.id}"></td>
+            <td><a th:href="${'/products/' + product.id}" th:text="${product.name}"/></td>
             <td th:text="${product.getAverageRating()}"></td>
-
         </tr>
 
     </table>

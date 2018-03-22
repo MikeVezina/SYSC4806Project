@@ -1,2 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Services</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/users.css"/>
+</head>
+<body>
+
 <h1>Admin Control Panel</h1>
 <a href="/admin/generate">Generate Test Data</a>
+
+<!-- Add a Product -->
+<br/>
+    <table>
+        <form th:action="@{/admin/createProduct}" method="post">
+            <tr>
+                <th colspan="2">Create a new Product</th>
+            </tr>
+            <tr>
+                <th><label for="url">Url:</label></th>
+                <td><input type="text" id="url" name="url"/></td>
+
+                <th><label for="name">Name:</label></th>
+                <td><input type="text" id="name" name="name"/></td>
+            </tr>
+            <tr>
+                <th><label for="category">Category:</label></th>
+                <td><select id="category" name="category">
+                    <option value="default">Default</option>
+                    <option value="monitor">Monitors</option>
+                    <option value="electronics">Electronics</option>
+                    <option value="books">Books</option>
+                    <option value="tools">Tools</option>
+                </select></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="Create Product"/></td>
+            </tr>
+        </form>
+    </table>
+
+</body>
+</html>

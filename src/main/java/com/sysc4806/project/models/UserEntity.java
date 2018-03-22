@@ -70,12 +70,16 @@ public class UserEntity implements Comparable{
 
     public Review writeReview(Product product, int rating, String comment)
     {
-        // Create a new review on product
-        Review newReview = new Review(product, this, rating, comment);
-        product.addUserReview(newReview);
-        reviews.add(newReview);
+        Review review = product.getReviews().stream().filter(r -> r.getAuthor().equals(this)).findFirst().orElse(new Review(product, this, rating, comment));
 
-        return newReview;
+        review.setRating(rating);
+        review.setComment(comment);
+
+        // Create a new review on product
+        product.addUserReview(review);
+        reviews.add(review);
+
+        return review;
     }
 
     /**
