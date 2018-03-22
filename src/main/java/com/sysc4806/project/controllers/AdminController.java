@@ -19,7 +19,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.security.Principal;
 
 
 /**
@@ -58,6 +60,36 @@ public class AdminController {
     public String getError(Model model)
     {
         throw new HttpErrorException(HttpStatus.FORBIDDEN, "The user is forbidden");
+    }
+
+    /**
+     * Controller method to create new products for the application
+     * @param req
+     * @param model
+     * @param principal
+     * @return
+     */
+    @RequestMapping(value = "/admin/createProduct")
+    @AdministratorEndpoint
+    public String createProduct(HttpServletRequest req, Model model, Principal principal)
+    {
+        String url = req.getParameter("url");
+        String name = req.getParameter("name");
+
+        Category enumCat;
+        String category = req.getParameter("category");
+        switch(category){
+            case"monitors": enumCat = Category.MONITORS;
+            case"electronics":  enumCat = Category.ELECTRONICS;
+            case"books":    enumCat = Category.BOOKS;
+            case"tools":    enumCat = Category.TOOLS;
+            default:    enumCat = Category.DEFAULT;
+        }
+        Product newProduct = new Product(enumCat,name,url);
+
+        productRepo.save(newProduct);
+
+        return "redirect:/admin";
     }
 
     /**
