@@ -1,10 +1,9 @@
 package com.sysc4806.project.controllers;
 
-import com.sysc4806.project.Repositories.UserEntityRepository;
+import com.sysc4806.project.TestHelper;
 import com.sysc4806.project.models.UserEntity;
 import com.sysc4806.project.models.UserRole;
 import org.flywaydb.test.annotation.FlywayTest;
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +12,6 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -21,9 +19,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
-
-import java.util.Arrays;
-import java.util.Collection;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -47,7 +42,6 @@ public class UserIntegrationTest {
 
     private static final String TEST_USER_1 = "test_user_1";
     private static final String TEST_USER_2 = "test_user_2";
-    private static final String TEST_PASSWORD = "fake_password";
 
     @Autowired
     private WebApplicationContext context;
@@ -55,7 +49,7 @@ public class UserIntegrationTest {
     private MockMvc mvc;
 
     @Autowired
-    private UserEntityRepository repo;
+    private TestHelper testHelper;
 
     private UserEntity testUser1;
     private UserEntity testUser2;
@@ -67,48 +61,17 @@ public class UserIntegrationTest {
         testUserDetails = Mockito.mock(UserDetails.class);
 
         // Create a token for test user 1 only
-        mockUserDetails(testUserDetails, TEST_USER_1, UserRole.MEMBER);
+        testHelper.mockUserDetails(testUserDetails, TEST_USER_1, UserRole.MEMBER);
 
         mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
         loadUsersFromRepo();
     }
 
-    /**
-     * Get user entity from repo, or create (and save) a new user entity for testing
-     * @param userName The user name of the user entity
-     * @return
-     */
-    private UserEntity createUserEntity(String userName)
-    {
-        UserEntity repoUser = repo.findByUsernameIgnoreCase(userName);
-
-        if(repoUser == null) {
-            repoUser = new UserEntity(userName);
-            repoUser.setPassword(TEST_PASSWORD);
-            repoUser.setAuthorizationRole(UserRole.MEMBER);
-            repo.save(repoUser);
-        }
-        return repoUser;
-    }
 
     private void loadUsersFromRepo()
     {
-        testUser1 = createUserEntity(TEST_USER_1);
-        testUser2 = createUserEntity(TEST_USER_2);
-    }
-
-    /**
-     * Create mocked user details
-     * @param userDetails The user details object
-     * @param username The username of the user
-     * @param grantedAuthorities The authorities of the user
-     */
-    private void mockUserDetails(UserDetails userDetails, String username, GrantedAuthority... grantedAuthorities)
-    {
-        Mockito.when(userDetails.isEnabled()).thenReturn(true);
-        Mockito.when(userDetails.getUsername()).thenReturn(username);
-        Mockito.when(userDetails.getPassword()).thenReturn(TEST_PASSWORD);
-        Mockito.when(userDetails.getAuthorities()).thenReturn((Collection)Arrays.asList(grantedAuthorities));
+        testUser1 = testHelper.createUserEntity(TEST_USER_1);
+        testUser2 = testHelper.createUserEntity(TEST_USER_2);
     }
 
     /**
