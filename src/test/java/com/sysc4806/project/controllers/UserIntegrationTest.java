@@ -3,6 +3,8 @@ package com.sysc4806.project.controllers;
 import com.sysc4806.project.Repositories.UserEntityRepository;
 import com.sysc4806.project.models.UserEntity;
 import com.sysc4806.project.models.UserRole;
+import org.flywaydb.test.annotation.FlywayTest;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,9 +15,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Arrays;
@@ -36,6 +40,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
+@FlywayTest
+@TestPropertySource(locations = "classpath:test.properties")
 public class UserIntegrationTest {
 
     private static final String TEST_USER_1 = "test_user_1";

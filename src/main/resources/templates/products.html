@@ -16,18 +16,20 @@
     <!-- Current Product Info -->
     <table>
         <tr>
-            <th colspan="3">Product Information</th>
+            <th colspan="4">Product Information</th>
         </tr>
         <tr>
             <th>Product ID</th>
             <th>Name</th>
             <th>URL</th>
+            <th>Average Rating</th>
             <th>Category</th>
         </tr>
         <tr>
             <td><span th:text="${product.id}"/></td>
             <td><span th:text="${product.name}"/></td>
             <td><a th:href="${'http://' + product.url}" th:text="${product.url}"/></td>
+            <td><span th:text="${product.getAvgRating()}"/></td>
             <td><span th:text="${product.category}"/></td>
         </tr>
     </table>

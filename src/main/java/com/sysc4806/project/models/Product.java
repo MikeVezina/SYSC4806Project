@@ -121,21 +121,10 @@ public class Product implements Comparable{
      * Getter method for the product's Average rating
      * @return - products average rating
      */
-    public int getAverageRating()
-    {
-        if(reviews.size() == 0)
-            return 0;
-
-        int sum = 0;
-
-        for(Review r : reviews)
-        {
-            sum += r.getRating();
-        }
-
-        return sum / reviews.size();
+    public int getAverageRating() {
+        if(reviews.isEmpty()) return 0;
+        return reviews.stream().mapToInt(Review::getRating).sum() / reviews.size();
     }
-
 
     /**
      * Getter method for the product's category
