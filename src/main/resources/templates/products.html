@@ -29,7 +29,7 @@
             <td><span th:text="${product.id}"/></td>
             <td><span th:text="${product.name}"/></td>
             <td><a th:href="${'http://' + product.url}" th:text="${product.url}"/></td>
-            <td><span th:text="${product.getAvgRating()}"/></td>
+            <td><span th:text="${product.getAverageRating()}"/></td>
             <td><span th:text="${product.category}"/></td>
         </tr>
     </table>
