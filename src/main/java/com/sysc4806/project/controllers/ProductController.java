@@ -28,7 +28,7 @@ import java.util.List;
  * Controller for handling application products and error endpoints
  */
 @Controller
-public class ProductController implements ErrorController {
+public class ProductController{
 
     private static final String PRODUCT_REVIEW_PATH = "/products/{product.id}";
 
@@ -132,8 +132,4 @@ public class ProductController implements ErrorController {
         return loggedInUser;
     }
 
-    @Override
-    public String getErrorPath() {
-        return null;
-    }
 }

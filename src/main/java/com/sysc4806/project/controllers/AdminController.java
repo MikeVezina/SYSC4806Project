@@ -16,6 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -69,7 +70,7 @@ public class AdminController {
      * @param principal
      * @return
      */
-    @RequestMapping(value = "/admin/createProduct")
+    @PostMapping(value = "/admin/createProduct")
     @AdministratorEndpoint
     public String createProduct(HttpServletRequest req, Model model, Principal principal)
     {
