@@ -5,43 +5,45 @@ import com.sysc4806.project.enumeration.Category;
 import com.sysc4806.project.models.Product;
 import com.sysc4806.project.models.Review;
 import com.sysc4806.project.models.UserEntity;
-import org.flywaydb.test.FlywayTestExecutionListener;
-import org.flywaydb.test.annotation.FlywayTest;
-import org.junit.After;
-import com.sysc4806.project.models.UserEntity;
 import com.sysc4806.project.security.UserAuthentication;
 import com.sysc4806.project.security.UserSecurityService;
 import com.sysc4806.project.security.WebSecurityConfig;
+import com.sysc4806.project.security.social.DatabaseSocialConfigurer;
+import com.sysc4806.project.security.social.SocialConnectController;
+import com.sysc4806.project.security.social.SocialSignInAdapter;
+import com.sysc4806.project.security.social.UniqueConnectionRepository;
+import org.flywaydb.test.FlywayTestExecutionListener;
+import org.flywaydb.test.annotation.FlywayTest;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.social.config.annotation.EnableSocial;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 
 
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = App.class)
-@SpringBootTest(classes = {App.class, WebSecurityConfig.class, UserSecurityService.class, UserAuthentication.class})
+@SpringBootTest(classes = {App.class, WebSecurityConfig.class, UserSecurityService.class, UserAuthentication.class, SocialConnectController.class, DatabaseSocialConfigurer.class, SocialSignInAdapter.class, UniqueConnectionRepository.class})
 @RunWith(SpringRunner.class)
 @Transactional
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class, FlywayTestExecutionListener.class})
 @FlywayTest
 @TestPropertySource(locations = "classpath:test.properties")
+@EnableSocial
 public class UserEntityRepositoryTest {
+
 
     @Autowired
     ReviewRepository reviewRepo;

@@ -8,12 +8,8 @@
 </head>
 <body>
 <h1>
-    SYSC 4806 Project
+    Product Review System
 </h1>
-<div> Created by: <div class="appInfo" id="authorsDiv"></div></div>
-<br/>
-<div> Current Project Version: <div class="appInfo" id="versionDiv"/></div>
-<br/>
 <!--/*@thymesVar id="user" type="com.sysc4806.project.models.UserEntity"*/-->
 <div th:if="${user}" th:text="${'Currently Logged in as: ' + user.username + ' (Role: ' + user.authorizationRole + ')'}"/>
 
@@ -39,6 +35,34 @@
 
     </table>
 </div>
+
+<div th:if="${facebook == null}">
+    <form action="/connect/facebook" method="POST">
+        <input type="hidden" name="scope" value="public_profile" />
+        <div class="formInfo">
+            <p>You aren't connected to Facebook yet. Click the button to connect this application with your Facebook account.</p>
+        </div>
+        <p><button type="submit">Connect to Facebook</button></p>
+    </form>
+</div>
+
+
+<div th:if="${twitter == null}">
+    <form action="/connect/twitter" method="POST">
+        <input type="hidden" name="scope" value="public_profile" />
+        <div class="formInfo">
+            <p>You aren't connected to Twitter yet. Click the button to connect this application with your Twitter account.</p>
+        </div>
+        <p><button type="submit">Connect to Twitter</button></p>
+    </form>
+</div>
+
+<div>
+    <form action="/logout" method="POST">
+        <p><button type="submit">Logout</button></p>
+    </form>
+</div>
+
 
 </body>
 

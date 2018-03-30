@@ -7,7 +7,7 @@
 <body>
 <div class="container">
     <table>
-    <form th:action="@{/login}" method="post">
+        <form th:action="@{/login}" method="post">
 
             <tr>
                 <td><label for="username">Username</label>:</td>
@@ -21,16 +21,36 @@
             <tr>
                 <td colspan="2"><input id="submitButton" type="submit" value="Log in"/></td>
             </tr>
-    </form>
+        </form>
 
-    <form id="registrationForm" th:action="@{/registration}" method="get">
+        <form id="registrationForm" th:action="@{/registration}" method="get">
             <tr>
                 <td colspan="2">
-                    <input id="registerButton" form="registrationForm" type="submit" value="Register"/>
+                    <input id="registerButton" type="submit" value="Register"/>
                 </td>
             </tr>
-    </form>
+        </form>
+
+        <form action="/signin/facebook" method="POST">
+            <input type="hidden" name="scope" value="public_profile"/>
+            <tr>
+                <td colspan="2">
+                    <input class="social-sign-in" type="image" name="submit" src="/images/sign-in-with-facebook-blue.png" border="0" alt="Submit"/>
+                </td>
+            </tr>
+        </form>
+
+
+        <form action="/signin/twitter" method="POST">
+            <tr>
+                <td colspan="2">
+                    <input class="social-sign-in" type="image" name="submit" src="/images/sign-in-with-twitter-gray.png" border="0" alt="Submit"/>
+                </td>
+            </tr>
+        </form>
     </table>
+
+
 </div>
 </body>
 </html>
