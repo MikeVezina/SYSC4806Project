@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Search for a User:</title>
@@ -16,7 +16,7 @@
                 <th>Name</th><th>Id</th><th>Number of Followers</th>
             </tr>
             <tr th:each="userEntity : ${userEntities}">
-                <td><a th:href="${'/user'}" th:text="${userEntity.username}"/></td>
+                <td><a th:href="${'/user/' + userEntity.id}" th:text="${userEntity.username}"/></td>
                 <td th:text="${userEntity.id}"></td>
                 <td th:text="${userEntity.followers.size()}"></td>
 
