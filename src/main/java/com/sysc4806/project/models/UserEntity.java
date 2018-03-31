@@ -1,5 +1,7 @@
 package com.sysc4806.project.models;
 
+import org.springframework.security.core.userdetails.User;
+
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.*;
@@ -134,6 +136,8 @@ public class UserEntity implements Comparable{
         return 1 - calculateJaccardIndex(otherUser);
     }
 
+    
+
     /**
      * A method to allow users to follow eachother.
      * @param user - the user to be followed
@@ -188,6 +192,7 @@ public class UserEntity implements Comparable{
 
         followers.add(user);
     }
+
 
     /**
 
