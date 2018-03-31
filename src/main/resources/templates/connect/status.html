@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+
+<h1>Linked Social Accounts</h1>
+<!--/*@thymesVar id="providerIds" type="java.util.Set<java.lang.String>"*/-->
+<div th:each="providerId : ${providerIds}">
+    <!--/*@thymesVar id="connectionMap" type="java.util.Map<java.lang.String, java.util.List<org.springframework.social.connect.Connection<?>>>"*/-->
+    <div th:each="conn : ${connectionMap}">
+
+        <!--/*@thymesVar id="con" type="org.springframework.social.connect.Connection<?>"*/-->
+        <div th:if="${conn.getKey().equals(providerId)}" th:each="con : ${conn.getValue()}">
+            <div th:text="${con.getKey().getProviderId() + ' - ' + con.getKey().getProviderUserId() + ' - ' + con.getDisplayName()}"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

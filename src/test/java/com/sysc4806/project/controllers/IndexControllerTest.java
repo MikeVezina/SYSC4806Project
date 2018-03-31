@@ -16,11 +16,6 @@ public class IndexControllerTest {
     }
 
     @Test
-    public void testReviews() {
-        assertEquals("Ensure reviews template name is returned", "reviews", indexController.review());
-    }
-
-    @Test
     public void testError() throws Exception {
         assertEquals("Ensure index template name is returned", "error/error", indexController.error());
     }

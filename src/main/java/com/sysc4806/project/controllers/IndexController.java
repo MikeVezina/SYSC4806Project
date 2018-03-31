@@ -1,10 +1,12 @@
 package com.sysc4806.project.controllers;
 
 import com.sysc4806.project.Repositories.ProductRepository;
+import com.sysc4806.project.Repositories.UserConnectionRepository;
 import com.sysc4806.project.Repositories.UserEntityRepository;
 import com.sysc4806.project.controllers.exceptions.HttpErrorException;
 import com.sysc4806.project.models.Product;
 import com.sysc4806.project.models.UserEntity;
+import com.sysc4806.project.models.social.UserConnection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.http.HttpStatus;
@@ -14,9 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -27,13 +27,15 @@ public class IndexController implements ErrorController {
 
     private static final String ERROR_PATH = "/error";
     private static final String PRODUCT_PATH = "/products/{productId}";
-    private static final String REVIEW_PATH = "/reviews";
 
     @Autowired
     private UserEntityRepository userRepo;
 
     @Autowired
     private ProductRepository productRepo;
+
+    @Autowired
+    private UserConnectionRepository connectionRepo;
 
     /**
      * @return The Application index template html
@@ -43,6 +45,11 @@ public class IndexController implements ErrorController {
     {
         UserEntity currentUser = userRepo.findByUsernameIgnoreCase(token.getName());
         if(currentUser != null) {
+            List<UserConnection> ssoConnections = connectionRepo.findByUserConnectionKeyUserId(currentUser.getUsername());
+
+            for (UserConnection connection : ssoConnections)
+                model.addAttribute(connection.getUserConnectionKey().getProviderId(), connection);
+
             model.addAttribute("user", currentUser);
         }
         List<Product> products = productRepo.findAll();
@@ -68,16 +75,6 @@ public class IndexController implements ErrorController {
 
         return "products";
     }
-
-    /**
-     * @return The review index template html
-     */
-    @RequestMapping(REVIEW_PATH)
-    public String review()
-    {
-        return "reviews";
-    }
-
 
     /**
      * @return The error path

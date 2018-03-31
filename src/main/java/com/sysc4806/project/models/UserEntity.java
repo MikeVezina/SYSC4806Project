@@ -1,10 +1,19 @@
 package com.sysc4806.project.models;
 
-import org.springframework.security.core.userdetails.User;
-
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The UserEntity class of the application.
@@ -136,8 +145,6 @@ public class UserEntity implements Comparable{
         return 1 - calculateJaccardIndex(otherUser);
     }
 
-    
-
     /**
      * A method to allow users to follow eachother.
      * @param user - the user to be followed
@@ -192,7 +199,6 @@ public class UserEntity implements Comparable{
 
         followers.add(user);
     }
-
 
     /**
 
