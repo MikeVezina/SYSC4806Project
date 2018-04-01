@@ -127,6 +127,15 @@
             </table>
         </div>
     </div>
+
+    <div id="SearchProduct" th:if="${user.equals(loggedInUser)}">
+    <h2>Search For Products:</h2>
+        <form th:action="@{/products/search}" method="post">
+                <label for="searchTerm">Search Term:</label>
+                <input type="text" id="searchTerm" name="searchTerm" autofocus="autofocus"/>
+                <input id="submitButton" type="submit" value="Search"/>
+        </form>
+    </div>
 </div>
 
 </body>

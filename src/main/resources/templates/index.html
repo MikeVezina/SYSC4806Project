@@ -58,11 +58,19 @@
 </div>
 
 <div>
+    <h2>Search For Products:</h2>
+    <form th:action="@{/products/search}" method="post">
+        <label for="searchTerm">Search Term:</label>
+        <input type="text" id="searchTerm" name="searchTerm" autofocus="autofocus"/>
+        <input id="submitButton" type="submit" value="Search"/>
+    </form>
+</div>
+
+<div>
     <form action="/logout" method="POST">
         <p><button type="submit">Logout</button></p>
     </form>
 </div>
-
 
 </body>
 
