@@ -89,6 +89,14 @@ public class ProductRepositoryTest {
     }
 
     @Test
+    public void testFindByContains() throws Exception{
+        Assert.assertEquals(product,
+                repo.findAllByUrlContainsIgnoreCaseOrNameContainsIgnoreCase("Test", "Test").get(0));
+        Assert.assertEquals(product,
+                repo.findAllByUrlContainsIgnoreCaseOrNameContainsIgnoreCase("product","product").get(0));
+    }
+
+    @Test
     public void testFindProduct() throws Exception {
         // Test repo.findOne by ID
         Assert.assertEquals(product, repo.findOne(product.getId()));
