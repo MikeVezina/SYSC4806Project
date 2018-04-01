@@ -1,23 +1,14 @@
+<!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>SYSC 4806 Project</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script src="/scripts/index.js"></script>
     <link rel="stylesheet" type="text/css" href="/stylesheets/index.css"/>
+    <div th:replace="fragments/bootstrapHeaders"></div>
 </head>
 <body>
-<h1>
-    Product Review System
-</h1>
-<!--/*@thymesVar id="user" type="com.sysc4806.project.models.UserEntity"*/-->
-<div th:if="${user}" th:text="${'Currently Logged in as: ' + user.username + ' (Role: ' + user.authorizationRole + ')'}"/>
 
-<!-- Button navigating to user profile -->
-<a th:href="${'/user'}">
-    <input class="home_button" type="submit" value="Account"/>
-</a>
-
+<div th:replace="fragments/navigationBar :: navigationBar"></div>
 
 <!-- Table of Popular Products -->
 <div th:if="${not #lists.isEmpty(products)}">
@@ -35,35 +26,6 @@
 
     </table>
 </div>
-
-<div th:if="${facebook == null}">
-    <form action="/connect/facebook" method="POST">
-        <input type="hidden" name="scope" value="public_profile" />
-        <div class="formInfo">
-            <p>You aren't connected to Facebook yet. Click the button to connect this application with your Facebook account.</p>
-        </div>
-        <p><button type="submit">Connect to Facebook</button></p>
-    </form>
-</div>
-
-
-<div th:if="${twitter == null}">
-    <form action="/connect/twitter" method="POST">
-        <input type="hidden" name="scope" value="public_profile" />
-        <div class="formInfo">
-            <p>You aren't connected to Twitter yet. Click the button to connect this application with your Twitter account.</p>
-        </div>
-        <p><button type="submit">Connect to Twitter</button></p>
-    </form>
-</div>
-
-<div>
-    <form action="/logout" method="POST">
-        <p><button type="submit">Logout</button></p>
-    </form>
-</div>
-
-
 </body>
 
 

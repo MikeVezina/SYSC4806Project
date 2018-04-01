@@ -1,9 +1,11 @@
 package com.sysc4806.project.controllers;
 
+import com.sysc4806.project.Repositories.UserConnectionRepository;
 import com.sysc4806.project.Repositories.UserEntityRepository;
 import com.sysc4806.project.controllers.exceptions.HttpErrorException;
 import com.sysc4806.project.controllers.exceptions.HttpRedirectException;
 import com.sysc4806.project.models.UserEntity;
+import com.sysc4806.project.models.social.UserConnection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -23,12 +25,16 @@ public class UserController {
 
     private static final String USER_PATH = "/user";
     private static final String USER_ID_PATH = "/user/{userId}";
+    private static final String ACCOUNT_SETTINGS_PATH = "/account";
     private static final String USER_FOLLOW_PATH = "/user/follow";
     private static final String USER_UNFOLLOW_PATH = "/user/unfollow";
     private static final String USER_SEARCH_PATH = "/searchUser";
 
     @Autowired
     private UserEntityRepository userRepo;
+
+    @Autowired
+    private UserConnectionRepository connectionRepo;
 
     /**
      * @return The Application user template html
@@ -60,6 +66,29 @@ public class UserController {
             throw new HttpRedirectException("user");
 
         return "user";
+    }
+
+    /**
+     * @return The Application user template html
+     */
+    @RequestMapping(value = ACCOUNT_SETTINGS_PATH)
+    public String accountSettings(Model model, Principal principal) throws IOException
+    {
+        UserEntity currentUser = getCurrentUser(principal);
+
+        if(currentUser != null) {
+            List<UserConnection> ssoConnections = connectionRepo.findByUserConnectionKeyUserId(currentUser.getUsername());
+
+            for (UserConnection connection : ssoConnections)
+                model.addAttribute(connection.getUserConnectionKey().getProviderId(), connection);
+
+            model.addAttribute("user", currentUser);
+        }
+        else
+            // Redirect to the current logged in users page if the id matches the current logged in user
+            throw new HttpRedirectException("login");
+
+        return "accountSettings";
     }
 
     /**
