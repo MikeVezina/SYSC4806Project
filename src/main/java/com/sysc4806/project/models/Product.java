@@ -121,9 +121,9 @@ public class Product implements Comparable{
      * Getter method for the product's Average rating
      * @return - products average rating
      */
-    public int getAverageRating() {
+    public float getAverageRating() {
         if(reviews.isEmpty()) return 0;
-        return reviews.stream().mapToInt(Review::getRating).sum() / reviews.size();
+        return reviews.stream().mapToInt(Review::getRating).sum() / (float) reviews.size();
     }
 
     /**
@@ -173,7 +173,7 @@ public class Product implements Comparable{
         if(!(compareProduct instanceof Product))
             return 1;
 
-        int compareAvgRating = ((Product)compareProduct).getAverageRating();
-        return compareAvgRating - this.getAverageRating();
+        float compareAvgRating = ((Product)compareProduct).getAverageRating();
+        return (int) (compareAvgRating - this.getAverageRating());
     }
 }
