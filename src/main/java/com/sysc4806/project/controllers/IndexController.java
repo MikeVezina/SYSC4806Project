@@ -4,6 +4,7 @@ import com.sysc4806.project.Repositories.ProductRepository;
 import com.sysc4806.project.Repositories.UserConnectionRepository;
 import com.sysc4806.project.Repositories.UserEntityRepository;
 import com.sysc4806.project.controllers.exceptions.HttpErrorException;
+import com.sysc4806.project.controllers.exceptions.HttpRedirectException;
 import com.sysc4806.project.models.Product;
 import com.sysc4806.project.models.UserEntity;
 import com.sysc4806.project.models.social.UserConnection;
@@ -16,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 
@@ -62,9 +64,10 @@ public class IndexController implements ErrorController {
      * @return The product index template html
      */
     @RequestMapping(PRODUCT_PATH)
-    public String product(@PathVariable Long productId, Model model)
+    public String product(@PathVariable Long productId, Model model, Principal principal)
     {
         Product product = productRepo.findOne(productId);
+        UserEntity loggedInUser = getCurrentUser(principal);
 
         if(product == null)
         {
@@ -72,6 +75,7 @@ public class IndexController implements ErrorController {
         }
 
         model.addAttribute("product", product);
+        model.addAttribute("loggedInUser", loggedInUser);
 
         return "products";
     }
@@ -92,5 +96,26 @@ public class IndexController implements ErrorController {
     public String error()
     {
         return "error/error";
+    }
+
+    /**
+     * Gets the current logged in user
+     * @param principal The principal passed in through spring security
+     * @return The currently logged in user
+     */
+    private UserEntity getCurrentUser(Principal principal)
+    {
+        // Get current logged in user
+        UserEntity loggedInUser = userRepo.findByUsernameIgnoreCase(principal.getName());
+
+
+        // Check to see if the user is logged in.
+        if(loggedInUser == null)
+        {
+            // Redirect if the user was not found
+            throw new HttpRedirectException("login");
+        }
+
+        return loggedInUser;
     }
 }
