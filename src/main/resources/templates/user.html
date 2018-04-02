@@ -31,6 +31,14 @@
             </form>
         </div>
     </div>
+
+    <table>
+        <tr>
+            <th>Degree of Separation</th>
+            <td><span th:text="${loggedInUser.findBaconNumber(user)}"/> </td>
+        </tr>
+    </table>
+
 </div>
 
 <div th:if="${user}">
@@ -42,10 +50,12 @@
         <tr>
             <th>User ID</th>
             <th>Name</th>
+
         </tr>
         <tr>
             <td><span th:text="${user.id}"/></td>
             <td><span th:text="${user.username}"/></td>
+
         </tr>
     </table>
 
