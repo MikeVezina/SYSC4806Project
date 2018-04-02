@@ -10,6 +10,18 @@
 
 <!-- Table of Popular Products -->
 <div th:if="${not #lists.isEmpty(products)}">
+    <div class="navbar">
+        <div class="dropdown">
+            <button class="dropbtn">Filter Products
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content">
+                <a href="#Rating">Highest Rated</a>
+                <a href="#numRating">Most Rated</a>
+                <a href="#pId">Product Id</a>
+            </div>
+        </div>
+    </div>
     <h1 th:text="${'Results for Products with search '+ searchTerm +':'}"/>
     <table>
         <tr>
