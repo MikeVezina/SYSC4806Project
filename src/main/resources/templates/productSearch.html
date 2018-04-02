@@ -20,7 +20,7 @@
             <td><a th:href="${'/products/' + product.id}" th:text="${product.id}"/></td>
             <td><a th:href="${'/products/' + product.id}" th:text="${product.name}"/></td>
             <td><a th:text="${product.category}"/></td>
-            <td th:text="${product.getAverageRating()}"></td>
+            <td th:text="${#numbers.formatDecimal(product.getAverageRating(),0,2)}"></td>
         </tr>
 
     </table>
