@@ -135,6 +135,7 @@ public class ProductController{
         if(searchTerm == null){
             throw new HttpErrorException(HttpStatus.NOT_FOUND, "No Search Term Provided.");
         }
+
         List<Product> products = productRepo.findAllByUrlContainsIgnoreCaseOrNameContainsIgnoreCase(searchTerm, searchTerm);
         Collections.sort(products);
         model.addAttribute("products", products);

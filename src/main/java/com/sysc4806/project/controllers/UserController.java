@@ -173,11 +173,14 @@ public class UserController {
      * @return The application Search User template
      */
     @RequestMapping(value=USER_SEARCH_PATH, method= RequestMethod.GET)
-    public String getAllUsers(Model model)
+    public String getAllUsers(Model model, Principal principal)
     {
+        UserEntity loggedInUser = getCurrentUser(principal);
+
         List<UserEntity> users = userRepo.findAll();
         Collections.sort(users);
         model.addAttribute("userEntities",users);
+        model.addAttribute("loggedInUser",loggedInUser);
         return "searchUser";
 
     }
