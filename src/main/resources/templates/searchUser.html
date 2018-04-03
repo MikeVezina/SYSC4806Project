@@ -31,7 +31,7 @@
                     <td th:text="${userEntity.id}"></td>
                     <td th:text="${userEntity.followers.size()}"></td>
                     <td th:text="${loggedInUser.findBaconNumber(userEntity)}"></td>
-                    <td th:text="${loggedInUser.calculateJaccardDistance(userEntity)}"></td>
+                    <td th:text="${#numbers.formatDecimal(loggedInUser.calculateJaccardDistance(userEntity),0,2)}"></td>
                 </tr>
             </tbody>
         </table>
