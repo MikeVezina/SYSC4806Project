@@ -3,7 +3,7 @@
     <!--/*@thymesVar id="users" type="java.util.List<com.sysc4806.project.models.UserEntity>"*/-->
     <div th:each="user : ${users}">
 
-        <div th:replace="/fragments/users/userItem :: userGroupItem(user=${user})"></div>
+        <div th:replace="fragments/users/userItem :: userGroupItem(user=${user})"></div>
     </div>
 
     <!--/*@thymesVar id="searchTerm" type="java.lang.String"*/-->
