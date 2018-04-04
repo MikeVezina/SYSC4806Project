@@ -21,19 +21,19 @@
                     My Account
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item" th:href="${'/user'}">My Profile</a>
+                    <a class="dropdown-item text-success" th:href="${'/user'}">My Profile</a>
                     <a class="dropdown-item" href="/account">Account Settings</a>
-                    <a class="dropdown-item" href="/admin" th:if="${user.authorizationRole.equals(user.authorizationRole.ADMIN)}">Control Panel</a>
+                    <a class="dropdown-item text-primary" href="/admin" th:if="${user.authorizationRole.equals(user.authorizationRole.ADMIN)}">Control Panel</a>
                     <form action="/logout" method="POST">
-                        <button class="dropdown-item" style="color: red;" type="submit">Logout</button>
+                        <button class="dropdown-item text-danger" type="submit">Logout</button>
                     </form>
                 </div>
             </li>
         </ul>
 
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search Products"/>
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        <form class="form-inline my-2 my-lg-0" th:action="@{/products/search}" method="post">
+            <input class="form-control mr-sm-2" type="search" name="searchTerm" placeholder="Search Products"/>
+            <button id="submitButton" class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Search">Search</button>
         </form>
     </div>
 </nav>

@@ -9,14 +9,10 @@ import com.sysc4806.project.models.Product;
 import com.sysc4806.project.models.Review;
 import com.sysc4806.project.models.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -31,6 +27,7 @@ import java.util.List;
 public class ProductController{
 
     private static final String PRODUCT_REVIEW_PATH = "/products/{product.id}";
+    private static final String PRODUCT_SEARCH_PATH = "/products/search";
 
     @Autowired
     private UserEntityRepository userRepo;
@@ -130,6 +127,19 @@ public class ProductController{
         }
 
         return loggedInUser;
+    }
+
+    @PostMapping(PRODUCT_SEARCH_PATH)
+    private String searchProduct(@RequestParam(value = "searchTerm", required = false) String searchTerm, Model model)
+    {
+        if(searchTerm == null){
+            throw new HttpErrorException(HttpStatus.NOT_FOUND, "No Search Term Provided.");
+        }
+        List<Product> products = productRepo.findAllByUrlContainsIgnoreCaseOrNameContainsIgnoreCase(searchTerm, searchTerm);
+        Collections.sort(products);
+        model.addAttribute("products", products);
+        model.addAttribute("searchTerm", searchTerm);
+        return "productSearch";
     }
 
 }

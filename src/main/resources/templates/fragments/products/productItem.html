@@ -1,0 +1,27 @@
+<!--/*@thymesVar id="product" type="com.sysc4806.project.models.Product"*/-->
+<div th:fragment="productGroupItem(product)" th:if="${product != null}" xmlns:th="http://www.thymeleaf.org">
+
+    <!--/*@thymesVar id="product" type="com.sysc4806.project.models.Product"*/-->
+    <a th:href="${'/products/' + product.id}" class="top-product-item list-group-item list-group-item-action border border-primary flex-column align-items-start">
+        <div class="d-flex w-100 justify-content-between">
+            <h4 class="mb-1" th:text="${product.name}"></h4>
+            <div>
+                <span th:each="i : ${#numbers.sequence(1, 5)}">
+                    <span th:if="${i &lt;= product.getAverageRating()}" class="fa fa-star checked"></span>
+                    <span th:if="${i &gt; product.getAverageRating()}" class="fa fa-star"></span>
+                </span>
+
+            </div>
+        </div>
+
+        <div class="d-flex w-100 justify-content-between">
+            <p th:text="${product.category}"></p>
+            <p th:text="${product.getReviews().size() + ' Rating' + (product.getReviews().size() == 1 ? '' : 's')}"></p>
+        </div>
+        <div class="d-flex w-100 justify-content-between">
+            <small th:text="${product.getUrlHref().toLowerCase()}"></small>
+        </div>
+
+
+    </a>
+</div>

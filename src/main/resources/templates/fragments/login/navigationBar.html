@@ -1,0 +1,41 @@
+<nav id="navigationBar" class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark mb-1" th:fragment="navigationBar(location)" xmlns:th="http://www.thymeleaf.org">
+    <a class="navbar-brand" th:href="${'/'}">Product Review System</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarToggler">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li th:class="${'nav-item' + ((location == null || location.equalsIgnoreCase('home')) ? ' active' : '')}">
+                <a class="nav-link" th:href="${'/'}">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li th:class="${'nav-item' + (location.equalsIgnoreCase('users') ? ' active' : '')}">
+                <a class="nav-link" href="/users">Users</a>
+            </li>
+            <li th:class="${'nav-item' + (location.equalsIgnoreCase('products') ? ' active' : '')}">
+                <a class="nav-link" href="/products/search">Products</a>
+            </li>
+
+            <li th:class="${'nav-item dropdown' + (location.equalsIgnoreCase('curUser') ? ' active' : '')}">
+                <!--/*@thymesVar id="loggedInUser" type="com.sysc4806.project.models.UserEntity"*/-->
+                <a th:text="${loggedInUser.username}" class="nav-link dropdown-toggle" href="/account" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    My Account
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" th:href="${'/user'}">My Profile</a>
+                    <a class="dropdown-item" href="/account">Account Settings</a>
+                    <a class="dropdown-item text-primary" href="/admin" th:if="${loggedInUser.authorizationRole.equals(loggedInUser.authorizationRole.ADMIN)}">Control Panel</a>
+                    <form action="/logout" method="POST">
+                        <button class="dropdown-item text-danger" type="submit">Logout</button>
+                    </form>
+                </div>
+            </li>
+        </ul>
+
+        <form class="form-inline my-2 my-lg-0" th:action="@{/products/search}" method="get">
+            <!--/*@thymesVar id="searchTerm" type="java.lang.String"*/-->
+            <input th:value="${searchTerm}" placeholder="Search Products" class="form-control mr-sm-2" type="search" name="searchTerm"/>
+            <button id="submitButton" class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Search">Search</button>
+        </form>
+    </div>
+</nav>
