@@ -1,25 +1,29 @@
 h1, h4 {
     text-align: center;
-    color: gray;
 }
 
-h4 {
-    color: gray;
+.follower-container, .following-container {
+    overflow-y: auto;
+    height: 20rem !important;
+    max-height: 20rem !important;
 }
 
-table {
-    font-family: arial, sans-serif;
-    border-collapse: collapse;
-    width: 100%;
-}
-
-td, th {
-    border: 1px solid darkgray;
+.follow-container {
     text-align: center;
-    padding: 8px;
+    padding-bottom: 4rem;
+    padding-top: 4rem;
+
 }
 
-tr:nth-child(even) {
-    background-color: #dddddd;
-    border: 1px solid #dddddd;
+#userJumbotron {
+    padding: 1rem;
+    text-align: center;
+}
+
+.card-title.text-muted {
+    font-style: italic;
+}
+
+#navigationBar{
+    margin-bottom: 0 !important;
 }

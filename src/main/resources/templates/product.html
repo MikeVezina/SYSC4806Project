@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Product</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <div th:replace="/fragments/bootstrapHeaders"></div>
+    <script src="/scripts/product.js" type="application/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/products.css"/>
+</head>
+<body>
+<div th:replace="/fragments/navigationBar :: navigationBar('products')"></div>
+
+<!--/*@thymesVar id="product" type="com.sysc4806.project.models.Product"*/-->
+<div th:if="${product}">
+
+    <div th:replace="/fragments/products/productBreadcrumb :: productBreadcrumb(category=${product.getCategory()}, product=${product})"></div>
+
+
+    <div id="userJumbotron" class="jumbotron">
+        <a id="usernameTitle" class="display-4" th:text="${product.name}"></a>
+        <div>
+            <a th:href="${product.getUrlHref()}" th:text="${product.getUrlHref()}"/>
+        </div>
+        <div>
+                <span th:text="${product.category.name()}"></span>
+
+        </div>
+        <div>
+                <span th:each="i : ${#numbers.sequence(1, 5)}">
+                    <span th:if="${i &lt;= product.getAverageRating()}" class="fa fa-star checked"></span>
+                    <span th:if="${i &gt; product.getAverageRating()}" class="fa fa-star"></span>
+                </span>
+
+        </div>
+        <a class="btn btn-primary btn-sm" data-toggle="collapse" href="#writeReviewCollapse" role="button" aria-expanded="false" aria-controls="writeReviewCollapse">
+            Write Review
+        </a>
+
+
+
+    </div>
+
+    <!-- Add a product Review -->
+    <!--/*@thymesVar id="loggedInUser" type="com.sysc4806.project.models.UserEntity"*/-->
+    <div id="writeReviewCollapse" class="collapse show container mb-2">
+        <div class="card w-100">
+            <div class="card-body mx-auto">
+                <div class="row">
+                    <form th:action="@{/products/review}" method="post">
+                        <input type="hidden" name="productId" th:value="${product.getId()}"/>
+                        <div class="row mb-2">
+                            <label class="pl-0 col-sm" for="rating">Rating:</label>
+                            <select id="rating" class="col-sm" name="rating">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                        <div class="form-group row mb-2">
+                            <label class="col-sm pl-0" for="comment">Comment (Optional):</label>
+                            <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+                        </div>
+                        <div class="row mb-1">
+                            <input class="w-100" type="submit" value="Submit Review"/>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table of Reviews -->
+    <!-- Table of Reviews -->
+    <div th:replace="/fragments/reviews/reviewList :: reviewList(reviews = ${product.reviews})"></div>
+
+
+</div>
+</body>
+
+
+</html>

@@ -1,6 +1,5 @@
 package com.sysc4806.project.models;
 
-import javax.jws.soap.SOAPBinding;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,7 +12,11 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Set;
 
 /**
  * The UserEntity class of the application.
@@ -25,7 +28,7 @@ import java.util.*;
  *
  */
 @Entity
-public class UserEntity implements Comparable{
+public class UserEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -128,8 +131,15 @@ public class UserEntity implements Comparable{
         long intersectionSize = 0;
 
         // Filter all reviews that are for the same product and are the same rating
-        for(Review otherReview : otherUser.reviews)
-            intersectionSize += this.reviews.stream().filter(review -> review.getProduct().equals(otherReview.getProduct()) && review.getRating() == otherReview.getRating()).count();
+        for(Review other : otherUser.reviews)
+            intersectionSize += this.reviews.stream().filter(
+                    review -> other.getProduct().equals(review.getProduct()) && other.getRating() == review.getRating()).count();
+
+        // Remove duplicates from union
+        unionSize -= intersectionSize;
+
+        if(unionSize == 0)
+            return 0;
 
         // Will return between 0 and 1
         return ((double)intersectionSize / (double)unionSize);
@@ -337,19 +347,6 @@ public class UserEntity implements Comparable{
             return other.id == this.id;
 
         return other.username.equals(this.username);
-    }
-
-
-    @Override
-    public int compareTo(Object compareUser) {
-        if(compareUser == this)
-            return 0;
-
-        if(!(compareUser instanceof UserEntity))
-            return 1;
-
-        int compareFollowers = ((UserEntity)compareUser).getFollowers().size();
-        return compareFollowers - this.followers.size();
     }
 
     @Override

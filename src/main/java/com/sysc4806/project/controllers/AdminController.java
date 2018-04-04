@@ -45,6 +45,9 @@ public class AdminController {
     @Autowired
     private ReviewRepository reviewRepo;
 
+    @Autowired
+    private ControllerUtils controllerUtils;
+
     /**
      * Gets the admin control panel page
      * @param token The current (logged in) user's token
@@ -54,6 +57,7 @@ public class AdminController {
     @AdministratorEndpoint
     public String admin(UsernamePasswordAuthenticationToken token, Model model, HttpServletResponse servletResponse)
     {
+        controllerUtils.addCurrentUserToModel(model);
         return ADMIN_TEMPLATE_BASE_DIR + "admin";
     }
 

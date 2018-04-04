@@ -2,9 +2,10 @@ package com.sysc4806.project.models;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.security.access.method.P;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class UserEntityTest {
 
@@ -83,12 +84,12 @@ public class UserEntityTest {
     @Test
     public void testJaccardDistance()
     {
-        assertEquals("Jaccard Distance with 2 similar reviews", 1 - ((double)2/8), testUserEntity1.calculateJaccardDistance(testUserEntity2), 0.0005);
-        assertEquals("Jaccard Distance with 2 similar reviews", 1 - ((double)2/8), testUserEntity2.calculateJaccardDistance(testUserEntity1), 0.0005);
-        assertEquals("Jaccard Distance with 0 similar reviews", 1 - ((double)0/8), testUserEntity1.calculateJaccardDistance(testUserEntity3), 0.0005);
-        assertEquals("Jaccard Distance with 0 similar reviews", 1 - ((double)0/8), testUserEntity3.calculateJaccardDistance(testUserEntity1), 0.0005);
-        assertEquals("Jaccard Distance with 1 similar review", 1 - ((double)1/8), testUserEntity1.calculateJaccardDistance(testUserEntity4), 0.0005);
-        assertEquals("Jaccard Distance with 1 similar review", 1 - ((double)1/8), testUserEntity4.calculateJaccardDistance(testUserEntity1), 0.0005);
+        assertEquals("Jaccard Distance with 2 similar reviews", 1 - ((double)2/6), testUserEntity1.calculateJaccardDistance(testUserEntity2), 0.0005);
+        assertEquals("Jaccard Distance with 2 similar reviews", 1 - ((double)2/6), testUserEntity2.calculateJaccardDistance(testUserEntity1), 0.0005);
+        assertEquals("Jaccard Distance with 0 similar reviews", 1 - ((double)0/6), testUserEntity1.calculateJaccardDistance(testUserEntity3), 0.0005);
+        assertEquals("Jaccard Distance with 0 similar reviews", 1 - ((double)0/6), testUserEntity3.calculateJaccardDistance(testUserEntity1), 0.0005);
+        assertEquals("Jaccard Distance with 1 similar review", 1 - ((double)1/7), testUserEntity1.calculateJaccardDistance(testUserEntity4), 0.0005);
+        assertEquals("Jaccard Distance with 1 similar review", 1 - ((double)1/7), testUserEntity4.calculateJaccardDistance(testUserEntity1), 0.0005);
     }
 
     @Test

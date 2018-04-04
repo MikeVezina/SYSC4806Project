@@ -12,34 +12,44 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.security.Principal;
-import java.util.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class UserController {
 
     private static final String USER_PATH = "/user";
     private static final String USER_ID_PATH = "/user/{userId}";
+    private static final String ACCOUNT_SETTINGS_PATH = "/account";
     private static final String USER_FOLLOW_PATH = "/user/follow";
     private static final String USER_UNFOLLOW_PATH = "/user/unfollow";
-    private static final String USER_SEARCH_PATH = "/searchUser";
+    private static final String USER_SEARCH_PATH = "/users";
+    private static final String SORT_ASC = "asc";
+    private static final String SORT_DESC = "desc";
 
     @Autowired
     private UserEntityRepository userRepo;
+
+    @Autowired
+    private ControllerUtils controllerUtils;
+
+    @Autowired
+    private Map<String, Comparator<UserEntity>> comparatorStrategies;
 
     /**
      * @return The Application user template html
      */
     @RequestMapping(USER_PATH)
-    public String currentUser(Model model, Principal principal) throws IOException
+    public String currentUser(Model model) throws IOException
     {
-        UserEntity loggedInUser = getCurrentUser(principal);
-
+        UserEntity loggedInUser = controllerUtils.addCurrentUserToModel(model);
         model.addAttribute("user", loggedInUser);
-        model.addAttribute("loggedInUser", loggedInUser);
         return "user";
     }
 
@@ -47,17 +57,16 @@ public class UserController {
      * @return The Application user template html
      */
     @RequestMapping(value = USER_ID_PATH)
-    public String user(@PathVariable Long userId, Model model, Principal principal) throws IOException
+    public String user(@PathVariable Long userId, Model model) throws IOException
     {
         UserEntity userEntity = getUser(userId);
-        UserEntity loggedInUser = getCurrentUser(principal);
-
-        model.addAttribute("user", userEntity);
-        model.addAttribute("loggedInUser", loggedInUser);
+        UserEntity loggedInUser = controllerUtils.addCurrentUserToModel(model);
 
         // Redirect to the current logged in users page if the id matches the current logged in user
         if(userEntity.equals(loggedInUser))
             throw new HttpRedirectException("user");
+
+        model.addAttribute("user", userEntity);
 
         return "user";
     }
@@ -65,14 +74,23 @@ public class UserController {
     /**
      * @return The Application user template html
      */
+    @RequestMapping(value = ACCOUNT_SETTINGS_PATH)
+    public String accountSettings(Model model) throws IOException
+    {
+        controllerUtils.addCurrentUserToModel(model);
+        return "accountSettings";
+    }
+
+    /**
+     * @return The Application user template html
+     */
     @PostMapping(value = USER_FOLLOW_PATH)
-    public String followUser(HttpServletRequest req, Model model, Principal principal) throws IOException
+    public String followUser(HttpServletRequest req, Model model) throws IOException
     {
         UserEntity userEntity = getUser(req.getParameter("userId"));
-        UserEntity loggedInUser = getCurrentUser(principal);
+        UserEntity loggedInUser = controllerUtils.addCurrentUserToModel(model);
 
         model.addAttribute("user", userEntity);
-        model.addAttribute("loggedInUser", loggedInUser);
 
         // Check to see if we are currently following the other user
         if(loggedInUser.equals(userEntity) || loggedInUser.isFollowing(userEntity))
@@ -89,11 +107,10 @@ public class UserController {
      * @return The Application user template html
      */
     @PostMapping(value = USER_UNFOLLOW_PATH)
-    public String unFollowUser(HttpServletRequest req, Model model, Principal principal) throws IOException
+    public String unFollowUser(HttpServletRequest req, Model model) throws IOException
     {
         UserEntity userEntity = getUser(req.getParameter("userId"));
-        UserEntity loggedInUser = getCurrentUser(principal);
-
+        UserEntity loggedInUser = controllerUtils.addCurrentUserToModel(model);
 
         // Check to see if we are currently following the other user
         if(!loggedInUser.equals(userEntity) && loggedInUser.isFollowing(userEntity)) {
@@ -102,7 +119,6 @@ public class UserController {
         }
 
         model.addAttribute("user", userEntity);
-        model.addAttribute("loggedInUser", loggedInUser);
         return "redirect:/user/" + userEntity.getId();
     }
 
@@ -142,29 +158,6 @@ public class UserController {
         {
             throw new HttpErrorException(HttpStatus.NOT_FOUND, "Could not follow the specified user.");
         }
-
-
-    }
-
-    /**
-     * Gets the current logged in user
-     * @param principal The principal passed in through spring security
-     * @return The currently logged in user
-     */
-    private UserEntity getCurrentUser(Principal principal)
-    {
-        // Get current logged in user
-        UserEntity loggedInUser = userRepo.findByUsernameIgnoreCase(principal.getName());
-
-
-        // Check to see if the user is logged in.
-        if(loggedInUser == null)
-        {
-            // Redirect if the user was not found
-            throw new HttpRedirectException("login");
-        }
-
-        return loggedInUser;
     }
 
     /**
@@ -173,15 +166,47 @@ public class UserController {
      * @return The application Search User template
      */
     @RequestMapping(value=USER_SEARCH_PATH, method= RequestMethod.GET)
-    public String getAllUsers(Model model, Principal principal)
+    public String getAllUsers(Model model, @RequestParam(required = false) String sortCriteria, @RequestParam(required = false) String usernameFilter, @RequestParam(required = false) String sortDirection)
     {
-        UserEntity loggedInUser = getCurrentUser(principal);
+        UserEntity loggedInUser = controllerUtils.addCurrentUserToModel(model);
 
-        List<UserEntity> users = userRepo.findAll();
-        Collections.sort(users);
-        model.addAttribute("userEntities",users);
-        model.addAttribute("loggedInUser",loggedInUser);
+        List<UserEntity> users = findUsers(usernameFilter);
+
+        // Remove current user from listing
+        users.remove(loggedInUser);
+
+        if(sortDirection == null || sortDirection.isEmpty())
+            sortDirection = SORT_ASC;
+
+        if(sortCriteria != null && !sortCriteria.isEmpty() && comparatorStrategies.containsKey(sortCriteria)) {
+            Comparator<UserEntity> comparator = comparatorStrategies.get(sortCriteria);
+            Collections.sort(users, comparator.reversed());
+        }
+        else {
+            // Set default comparator
+            Map.Entry<String, Comparator<UserEntity>> defaultEntry = comparatorStrategies.entrySet().iterator().next();
+            sortCriteria = defaultEntry.getKey();
+            Collections.sort(users, defaultEntry.getValue().reversed());
+        }
+
+        // Reverse sorting if desc is chosen
+        // Ascending is the default if no direction is given
+        if(sortDirection.equalsIgnoreCase(SORT_DESC))
+            Collections.reverse(users);
+
+        model.addAttribute("userCompareStrategies", comparatorStrategies);
+        model.addAttribute("users", users);
+        model.addAttribute("sortCriteria", sortCriteria);
+        model.addAttribute("sortDirection", sortDirection);
+        model.addAttribute("usernameFilter", usernameFilter);
         return "searchUser";
+    }
 
+    private List<UserEntity> findUsers(String userName)
+    {
+        if(userName != null && !userName.isEmpty())
+            return userRepo.findAllByUsernameContainsIgnoreCase(userName);
+
+        return userRepo.findAll();
     }
 }

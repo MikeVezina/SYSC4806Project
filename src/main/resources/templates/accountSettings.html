@@ -1,0 +1,71 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Account Settings</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <div th:replace="/fragments/bootstrapHeaders"></div>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/index.css"/>
+</head>
+<body>
+
+<!--/*@thymesVar id="facebook" type="com.sysc4806.project.models.social.UserConnection"*/-->
+<!--/*@thymesVar id="twitter" type="com.sysc4806.project.models.social.UserConnection"*/-->
+<div th:replace="fragments/navigationBar :: navigationBar('curUser')">...</div>
+<div id="userJumbotron" class="jumbotron">
+    <a id="usernameTitle" class="display-4">Account Settings</a>
+</div>
+
+<div class="container">
+    <div class="card text-center mx-auto mb-5">
+        <div class="card-body ">
+            <h4 class="card-title text-primary">Social Media Account Links</h4>
+            <span class="card-text">Manage your social media accounts</span>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <form action="/connect/facebook" method="POST">
+                    <div th:if="${facebook == null}">
+                        <input type="hidden" name="scope" value="public_profile" />
+                        <button class="btn btn-sm btn-primary" type="submit">Connect With Facebook</button>
+                    </div>
+                    <div th:if="${facebook != null}">
+                        <input type="hidden" name="_method" value="DELETE"/>
+                        <p class="mb-1 pb-1">Facebook Link: <a class="text-primary" th:href="${facebook.getProfileUrl()}" th:text="${facebook.getDisplayName()}"></a></p>
+                        <button class="btn btn-sm btn-outline-danger" type="submit">Remove Facebook Link</button>
+                    </div>
+                </form>
+
+            </li>
+            <li class="list-group-item">
+                <form action="/connect/twitter" method="POST">
+                    <div th:if="${twitter == null}">
+                        <input type="hidden" name="scope" value="public_profile" />
+                        <button class="btn btn-sm btn-primary" type="submit">Connect With Twitter</button>
+                    </div>
+                    <div th:if="${twitter != null}">
+                        <input type="hidden" name="_method" value="DELETE"/>
+                        <p class="mb-1 pb-1">Twitter Link: <a class="text-primary" th:href="${twitter.getProfileUrl()}" th:text="${twitter.getDisplayName()}"></a></p>
+                        <button class="btn btn-sm btn-outline-danger" type="submit">Remove Twitter Link</button>
+                    </div>
+                </form>
+            </li>
+        </ul>
+    </div>
+
+    <div class="card text-center mx-auto">
+        <div class="card-body pb-0">
+            <h4 class="card-title text-danger">Advanced Settings</h4>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <form action="/logout" method="POST">
+                    <button class="btn btn-sm btn-outline-danger" type="submit">Logout</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+
+
+</html>

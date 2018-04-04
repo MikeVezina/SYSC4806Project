@@ -24,7 +24,6 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlPattern;
@@ -83,7 +82,7 @@ public class ProductIntegrationTest {
     public void testProductEndpoints() throws Exception
     {
         // Ensure the user view is returned when a logged in user attempts to access a user page
-        mvc.perform(get("/products/" + product.getId()).with(user(testUserDetails))).andExpect(status().isOk()).andExpect(view().name("products")).andExpect(model().attributeExists("product")).andDo(print());
+        mvc.perform(get("/products/" + product.getId()).with(user(testUserDetails))).andExpect(status().isOk()).andExpect(view().name("product")).andExpect(model().attributeExists("product")).andDo(print());
 
         // Ensure we get redirected to login page when no user token is provided
         mvc.perform(get("/products/" + product.getId())).andExpect(status().isFound()).andExpect(redirectedUrlPattern("**/login")).andDo(print());
@@ -97,13 +96,9 @@ public class ProductIntegrationTest {
     public void testProductSearch() throws Exception
     {
         // Ensure the search view is returned when a logged in user attempts to access the search page
-        mvc.perform(post("/products/search").param("searchTerm", "test").with(csrf()).with(user(testUserDetails))).andExpect(status().isOk()).andExpect(view().name("productSearch")).andExpect(model().attributeExists("products")).andDo(print());
-
+        mvc.perform(get("/products/search").param("searchTerm", "test").with(csrf()).with(user(testUserDetails))).andExpect(status().isOk()).andExpect(view().name("products")).andExpect(model().attributeExists("products")).andDo(print());
         // Ensure we get redirected to login page when no user token is provided
-        mvc.perform(post("/products/search").with(csrf())).andExpect(status().isFound()).andExpect(redirectedUrlPattern("**/login")).andDo(print());
-
-        // Ensure we get a page not found when looking for a product with an invalid ID
-        mvc.perform(post("/products/search").with(csrf()).with(user(testUserDetails))).andExpect(status().isNotFound()).andExpect(view().name("error/status")).andDo(print());
+        mvc.perform(get("/products/search").with(csrf())).andExpect(status().isFound()).andExpect(redirectedUrlPattern("**/login")).andDo(print());
 
     }
 
