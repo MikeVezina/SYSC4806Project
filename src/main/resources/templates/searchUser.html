@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Search for a User:</title>
-    <div th:replace="/fragments/bootstrapHeaders"></div>
+    <div th:replace="fragments/bootstrapHeaders"></div>
     <script src="/scripts/users.js" type="application/javascript"></script>
     <link rel="stylesheet" type="text/css" href="/stylesheets/users.css"/>
 </head>
@@ -10,7 +10,7 @@
 
 <!--/*@thymesVar id="loggedInUser" type="com.sysc4806.project.models.UserEntity"*/-->
 <body>
-<div th:replace="/fragments/navigationBar :: navigationBar('users')"></div>
+<div th:replace="fragments/navigationBar :: navigationBar('users')"></div>
 
 <div id="userJumbotron" class="jumbotron">
     <a id="usernameTitle" class="display-4">Search Users</a>
@@ -65,6 +65,6 @@
     </div>
 </div>
 
-<div th:replace="/fragments/users/userList :: userList(users=${users})"></div>
+<div th:replace="fragments/users/userList :: userList(users=${users})"></div>
 </body>
 </html>

@@ -3,17 +3,17 @@
 <head>
     <title>Product</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <div th:replace="/fragments/bootstrapHeaders"></div>
+    <div th:replace="fragments/bootstrapHeaders"></div>
     <script src="/scripts/product.js" type="application/javascript"></script>
     <link rel="stylesheet" type="text/css" href="/stylesheets/products.css"/>
 </head>
 <body>
-<div th:replace="/fragments/navigationBar :: navigationBar('products')"></div>
+<div th:replace="fragments/navigationBar :: navigationBar('products')"></div>
 
 <!--/*@thymesVar id="product" type="com.sysc4806.project.models.Product"*/-->
 <div th:if="${product}">
 
-    <div th:replace="/fragments/products/productBreadcrumb :: productBreadcrumb(category=${product.getCategory()}, product=${product})"></div>
+    <div th:replace="fragments/products/productBreadcrumb :: productBreadcrumb(category=${product.getCategory()}, product=${product})"></div>
 
 
     <div id="userJumbotron" class="jumbotron">
@@ -73,7 +73,7 @@
 
     <!-- Table of Reviews -->
     <!-- Table of Reviews -->
-    <div th:replace="/fragments/reviews/reviewList :: reviewList(reviews = ${product.reviews})"></div>
+    <div th:replace="fragments/reviews/reviewList :: reviewList(reviews = ${product.reviews})"></div>
 
 
 </div>
