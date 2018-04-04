@@ -12,7 +12,6 @@
 <!--/*@thymesVar id="user" type="com.sysc4806.project.models.UserEntity"*/-->
 <!--/*@thymesVar id="loggedInUser" type="com.sysc4806.project.models.UserEntity"*/-->
 <div th:if="${user}">
-
     <div id="userJumbotron" class="jumbotron">
         <a id="usernameTitle" class="display-4" th:text="${(user == null || user.equals(loggedInUser)) ? 'My User Profile' : user.username}"></a>
 

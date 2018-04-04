@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Search for a User:</title>
     <div th:replace="/fragments/bootstrapHeaders"></div>
     <script src="/scripts/users.js" type="application/javascript"></script>
     <link rel="stylesheet" type="text/css" href="/stylesheets/users.css"/>
 </head>
+
+
+<!--/*@thymesVar id="loggedInUser" type="com.sysc4806.project.models.UserEntity"*/-->
 <body>
 <div th:replace="/fragments/navigationBar :: navigationBar('users')"></div>
 

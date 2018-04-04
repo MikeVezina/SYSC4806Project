@@ -135,9 +135,9 @@ public class Product{
      * Getter method for the product's Average rating
      * @return - products average rating
      */
-    public int getAverageRating() {
+    public float getAverageRating() {
         if(reviews.isEmpty()) return 0;
-        return reviews.stream().mapToInt(Review::getRating).sum() / reviews.size();
+        return reviews.stream().mapToInt(Review::getRating).sum() / (float) reviews.size();
     }
 
     /**

@@ -2,12 +2,14 @@ package com.sysc4806.project.controllers;
 
 import com.sysc4806.project.Repositories.ProductRepository;
 import com.sysc4806.project.models.Product;
+import com.sysc4806.project.models.comparators.products.ProductAverageRatingComparator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -24,6 +26,9 @@ public class IndexController implements ErrorController {
     @Autowired
     private ControllerUtils controllerUtils;
 
+    @Autowired
+    private ProductAverageRatingComparator productAverageRatingComparator;
+
     /**
      * @return The Application index template html
      */
@@ -34,8 +39,8 @@ public class IndexController implements ErrorController {
 
         List<Product> products = productRepo.findAll();
         List<Product> topProducts = products.subList(0, Math.min(15, products.size()));
-//        Collections.sort(topProducts, comparator);
         model.addAttribute("products", topProducts);
+        Collections.sort(topProducts, productAverageRatingComparator.reversed());
         return "index";
     }
 

@@ -65,6 +65,7 @@ public class UserEntityTest {
 
 
         testUserEntity2.followUser(testUserEntity1);
+        testUserEntity1.followUser(testUserEntity3);
     }
 
     @Test
@@ -89,6 +90,13 @@ public class UserEntityTest {
         assertEquals("Jaccard Distance with 0 similar reviews", 1 - ((double)0/6), testUserEntity3.calculateJaccardDistance(testUserEntity1), 0.0005);
         assertEquals("Jaccard Distance with 1 similar review", 1 - ((double)1/7), testUserEntity1.calculateJaccardDistance(testUserEntity4), 0.0005);
         assertEquals("Jaccard Distance with 1 similar review", 1 - ((double)1/7), testUserEntity4.calculateJaccardDistance(testUserEntity1), 0.0005);
+    }
+
+    @Test
+    public void testBacon()
+    {
+        assertEquals("Bacon number should be 1 if a User follows another User",1,testUserEntity2.findBaconNumber(testUserEntity1));
+        assertEquals("Bacon number should be > 1",2,testUserEntity2.findBaconNumber(testUserEntity3));
     }
 
     @Test

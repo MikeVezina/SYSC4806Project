@@ -171,6 +171,8 @@ public class UserController {
         UserEntity loggedInUser = controllerUtils.addCurrentUserToModel(model);
 
         List<UserEntity> users = findUsers(usernameFilter);
+
+        // Remove current user from listing
         users.remove(loggedInUser);
 
         if(sortDirection == null || sortDirection.isEmpty())

@@ -1,5 +1,6 @@
 package com.sysc4806.project.models;
 
+import javax.jws.soap.SOAPBinding;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,8 +13,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * The UserEntity class of the application.
@@ -151,6 +151,38 @@ public class UserEntity{
     {
         return 1 - calculateJaccardIndex(otherUser);
     }
+
+
+
+    public int findBaconNumber(UserEntity otherUser)
+    {
+        int bacon = -1;
+        Queue<UserEntity> q = new LinkedList<UserEntity>();
+        HashMap<UserEntity, Integer> visited = new HashMap<UserEntity, Integer>();
+        q.add(this);
+        visited.put(this,0);
+
+        while(!q.isEmpty())
+        {
+            UserEntity curr = q.poll();
+
+            if(curr == otherUser)
+            {
+                bacon = visited.get(curr);
+            }
+
+            for (UserEntity u: curr.getFollowing())
+            {
+                if (!visited.containsKey(u)) {
+                    visited.put(u,visited.get(curr)+1);
+                    q.add(u);
+                }
+            }
+        }
+        return bacon;
+    }
+
+
 
     /**
      * A method to allow users to follow eachother.
