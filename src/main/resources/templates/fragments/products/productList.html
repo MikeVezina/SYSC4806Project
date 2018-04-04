@@ -3,7 +3,7 @@
     <!--/*@thymesVar id="products" type="java.util.List<com.sysc4806.project.models.Product>"*/-->
     <div th:each="product : ${products}">
 
-        <div th:replace="/fragments/products/productItem :: productGroupItem(product=${product})"></div>
+        <div th:replace="fragments/products/productItem :: productGroupItem(product=${product})"></div>
     </div>
 
     <!--/*@thymesVar id="searchTerm" type="java.lang.String"*/-->

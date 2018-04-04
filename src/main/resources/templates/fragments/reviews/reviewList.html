@@ -4,7 +4,7 @@
     <!--/*@thymesVar id="products" type="java.util.List<com.sysc4806.project.models.Product>"*/-->
         <div class="row">
         <div class="col-md-6 mb-3" th:each="review : ${reviews}">
-            <div th:replace="/fragments/reviews/reviewItem :: reviewGroupItem(review=${review})"></div>
+            <div th:replace="fragments/reviews/reviewItem :: reviewGroupItem(review=${review})"></div>
         </div>
         </div>
 </div>
