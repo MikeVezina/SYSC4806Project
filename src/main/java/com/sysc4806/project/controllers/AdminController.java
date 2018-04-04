@@ -85,9 +85,13 @@ public class AdminController {
         String category = req.getParameter("category");
         switch(category){
             case"monitors": enumCat = Category.MONITORS;
+            break;
             case"electronics":  enumCat = Category.ELECTRONICS;
+            break;
             case"books":    enumCat = Category.BOOKS;
+            break;
             case"tools":    enumCat = Category.TOOLS;
+            break;
             default:    enumCat = Category.DEFAULT;
         }
         Product newProduct = new Product(enumCat,name,url);
