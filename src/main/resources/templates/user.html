@@ -3,11 +3,11 @@
 <head>
     <title>Users</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <div th:replace="/fragments/bootstrapHeaders"></div>
+    <div th:replace="fragments/bootstrapHeaders"></div>
     <link rel="stylesheet" type="text/css" href="/stylesheets/users.css"/>
 </head>
 <body th:if="${loggedInUser}">
-<div th:replace="/fragments/navigationBar :: navigationBar(location='users')"></div>
+<div th:replace="fragments/navigationBar :: navigationBar(location='users')"></div>
 
 <!--/*@thymesVar id="user" type="com.sysc4806.project.models.UserEntity"*/-->
 <!--/*@thymesVar id="loggedInUser" type="com.sysc4806.project.models.UserEntity"*/-->
@@ -37,7 +37,7 @@
     </div>
 
     <!-- Table of Reviews -->
-    <div th:replace="/fragments/reviews/reviewList :: reviewList(reviews = ${user.reviews})"></div>
+    <div th:replace="fragments/reviews/reviewList :: reviewList(reviews = ${user.reviews})"></div>
 
     <div class="container mh-25 h-25 follow-container">
 

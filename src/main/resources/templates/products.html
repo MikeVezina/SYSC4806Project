@@ -3,14 +3,14 @@
 <head>
     <title>Product Search</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <div th:replace="/fragments/bootstrapHeaders"></div>
+    <div th:replace="fragments/bootstrapHeaders"></div>
     <script src="/scripts/products.js" type="application/javascript"></script>
     <link rel="stylesheet" type="text/css" href="/stylesheets/products.css"/>
 </head>
 <body>
-<div th:replace="/fragments/navigationBar :: navigationBar('products')"></div>
+<div th:replace="fragments/navigationBar :: navigationBar('products')"></div>
 
-<div th:replace="/fragments/products/productBreadcrumb :: productBreadcrumb(category=${category}, product=null)"></div>
+<div th:replace="fragments/products/productBreadcrumb :: productBreadcrumb(category=${category}, product=null)"></div>
 
 <div id="userJumbotron" class="jumbotron pb-3">
     <a id="usernameTitle" class="display-4">Product Search</a>
@@ -73,7 +73,7 @@
 
 <!-- Table of Popular Products -->
 <!--/*@thymesVar id="products" type="com.sysc4806.project.models.Product"*/-->
-<div th:replace="/fragments/products/productList :: productList(products=${products})"></div>
+<div th:replace="fragments/products/productList :: productList(products=${products})"></div>
 
 </body>
 
