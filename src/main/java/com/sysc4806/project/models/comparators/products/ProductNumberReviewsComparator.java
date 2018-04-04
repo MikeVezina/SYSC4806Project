@@ -22,7 +22,6 @@ public class ProductNumberReviewsComparator implements Comparator<Product>{
 
         // The larger the number of reviews, the higher the compared product will rank
         return o1.getReviews().size() - o2.getReviews().size();
-
     }
 
     @Override

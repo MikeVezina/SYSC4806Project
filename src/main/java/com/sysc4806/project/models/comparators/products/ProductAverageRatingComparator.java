@@ -21,8 +21,13 @@ public class ProductAverageRatingComparator implements Comparator<Product>{
             return 1;
 
         // The larger the number of reviews, the higher the compared product will rank
-        return o1.getAverageRating() - o2.getAverageRating();
+        if(o1.getAverageRating() > o2.getAverageRating())
+            return 1;
 
+        if(o1.getAverageRating() < o2.getAverageRating())
+            return -1;
+
+        return 0;
     }
 
     @Override

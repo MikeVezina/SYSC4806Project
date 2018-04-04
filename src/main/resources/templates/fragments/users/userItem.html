@@ -9,6 +9,7 @@
         </div>
         <div class="d-flex w-100 justify-content-between">
             <small th:class="${user.authorizationRole.equals(user.authorizationRole.ADMIN) ? 'text-danger' : 'text-primary'}" th:text="${user.authorizationRole.name()}"></small>
+            <span th:text="${'Bacon Number: ' + T(String).format('%d', loggedInUser.findBaconNumber(user))}"></span>
         </div>
 
 

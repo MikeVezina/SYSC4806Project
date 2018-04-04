@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.Comparator;
 
 @Component
-public class UserJaccardComparator implements Comparator<UserEntity>{
+public class UserBaconComparator implements Comparator<UserEntity>{
 
     @Autowired
     private ControllerUtils controllerUtils;
@@ -26,26 +26,25 @@ public class UserJaccardComparator implements Comparator<UserEntity>{
         if(o2 == null)
             return 1;
 
-        double jaccardDistance1 = o1.calculateJaccardDistance(curUser);
-        double jaccardDistance2 = o2.calculateJaccardDistance(curUser);
+        int baconNumber1 = curUser.findBaconNumber(o1);
+        int baconNumber2 = curUser.findBaconNumber(o2);
 
-        // The larger the jaccard distance with the current user, the lower the compared user will rank
-        if(jaccardDistance1 > jaccardDistance2)
-            // User 2 is closer (smaller distance), and therefore ranks higher
+        if(baconNumber1 == baconNumber2)
+            return 0;
+
+        if(baconNumber1 == -1)
             return -1;
 
-        if(o1.calculateJaccardDistance(curUser) > o2.calculateJaccardDistance(curUser))
-            // User 2 is further (larger distance), and therefore ranks lower
-            return -1;
+        if(baconNumber2 == -1)
+            return 1;
 
-        // Jaccard distance is the same
-        return 0;
+        return baconNumber2 - baconNumber1;
 
     }
 
     @Override
     public String toString()
     {
-        return "Jaccard Distance";
+        return "Bacon Number";
     }
 }
