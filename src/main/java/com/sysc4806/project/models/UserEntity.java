@@ -25,7 +25,7 @@ import java.util.Set;
  *
  */
 @Entity
-public class UserEntity implements Comparable{
+public class UserEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -128,8 +128,15 @@ public class UserEntity implements Comparable{
         long intersectionSize = 0;
 
         // Filter all reviews that are for the same product and are the same rating
-        for(Review otherReview : otherUser.reviews)
-            intersectionSize += this.reviews.stream().filter(review -> review.getProduct().equals(otherReview.getProduct()) && review.getRating() == otherReview.getRating()).count();
+        for(Review other : otherUser.reviews)
+            intersectionSize += this.reviews.stream().filter(
+                    review -> other.getProduct().equals(review.getProduct()) && other.getRating() == review.getRating()).count();
+
+        // Remove duplicates from union
+        unionSize -= intersectionSize;
+
+        if(unionSize == 0)
+            return 0;
 
         // Will return between 0 and 1
         return ((double)intersectionSize / (double)unionSize);
@@ -305,19 +312,6 @@ public class UserEntity implements Comparable{
             return other.id == this.id;
 
         return other.username.equals(this.username);
-    }
-
-
-    @Override
-    public int compareTo(Object compareUser) {
-        if(compareUser == this)
-            return 0;
-
-        if(!(compareUser instanceof UserEntity))
-            return 1;
-
-        int compareFollowers = ((UserEntity)compareUser).getFollowers().size();
-        return compareFollowers - this.followers.size();
     }
 
     @Override

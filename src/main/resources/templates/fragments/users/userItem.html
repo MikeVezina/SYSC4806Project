@@ -1,25 +1,26 @@
-<!--/*@thymesVar id="review" type="com.sysc4806.project.models.Review"*/-->
-<div th:fragment="reviewGroupItem(review)" th:if="${review != null}" xmlns:th="http://www.thymeleaf.org">
+<!--/*@thymesVar id="user" type="com.sysc4806.project.models.UserEntity"*/-->
+<div th:fragment="userGroupItem(user)" th:if="${user != null}" xmlns:th="http://www.thymeleaf.org">
 
-    <!--/*@thymesVar id="review" type="com.sysc4806.project.models.Review"*/-->
-    <div class="review-item col-lg-auto pr-0 pl-0 review-card-col">
-        <div class="card w-100">
-            <span class="card-header">
-                <a class="text-success no-underline mx-auto" th:href="${'/products/' + review.getProduct().id}"><span
-                        th:text="${review.getProduct().name}"></span></a>
+    <!--/*@thymesVar id="user" type="com.sysc4806.project.models.UserEntity"*/-->
+    <a th:href="${'/user/' + user.id}" class="top-product-item list-group-item list-group-item-action border border-primary flex-column align-items-start">
+        <div class="d-flex w-100 justify-content-between">
+            <h4 class="mb-1" th:text="${user.username}"></h4>
 
-                <span class="float-right">
-                <span class="float-left" th:each="i : ${#numbers.sequence(1, 5)}">
-                        <span th:if="${i &lt;= review.getRating()}" class="fa fa-star checked"></span>
-                        <span th:if="${i &gt; review.getRating()}" class="fa fa-star"></span>
-                </span>
-                    </span>
-            </span>
-            <span class="card-body">
-                <span th:class="${'card-title' + (review.comment == null || review.comment.isEmpty() ? ' text-muted' : '')}" th:text="${(review.comment == null || review.comment.isEmpty() ? 'No Comment' : review.comment)}"></span>
-            </span>
-
-            <div class="card-footer text-muted">Review By: <a class="no-underline" th:href="${'/user/' + review.author.id}" th:text="${review.author.username}"></a></div>
         </div>
-    </div>
+        <div class="d-flex w-100 justify-content-between">
+            <small th:class="${user.authorizationRole.equals(user.authorizationRole.ADMIN) ? 'text-danger' : 'text-primary'}" th:text="${user.authorizationRole.name()}"></small>
+        </div>
+
+
+        <div class="d-flex w-100 justify-content-between">
+            <span th:text="${'Distance: ' + T(String).format('%.02f', user.calculateJaccardDistance(loggedInUser))}"></span>
+            <span th:text="${'Followers: ' + user.getFollowers().size()}"></span>
+        </div>
+        <div class="d-flex w-100 justify-content-between">
+            <span th:text="${'Reviews: ' + user.getReviews().size()}"></span>
+            <span th:text="${'Following: ' + user.getFollowing().size()}"></span>
+        </div>
+
+
+    </a>
 </div>

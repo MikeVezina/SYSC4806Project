@@ -3,52 +3,67 @@
 <head>
     <title>Log In</title>
     <link rel="stylesheet" type="text/css" href="/stylesheets/login.css"/>
+    <div th:replace="/fragments/bootstrapHeaders"></div>
 </head>
 <body>
-<div class="container">
-    <table>
-        <form th:action="@{/login}" method="post">
-
-            <tr>
-                <td><label for="username">Username</label>:</td>
-                <td><input type="text" id="username" name="username" autofocus="autofocus"/></td>
-            </tr>
-
-            <tr>
-                <td><label for="password">Password</label>:</td>
-                <td><input type="password" id="password" name="password"/></td>
-            </tr>
-            <tr>
-                <td colspan="2"><input id="submitButton" type="submit" value="Log in"/></td>
-            </tr>
-        </form>
-
-        <form id="registrationForm" th:action="@{/registration}" method="get">
-            <tr>
-                <td colspan="2">
-                    <input id="registerButton" type="submit" value="Register"/>
-                </td>
-            </tr>
-        </form>
-
-        <form action="/signin/facebook" method="POST">
-            <input type="hidden" name="scope" value="public_profile"/>
-            <tr>
-                <td colspan="2">
-                    <input class="social-sign-in" type="image" name="submit" src="/images/sign-in-with-facebook-blue.png" border="0" alt="Submit"/>
-                </td>
-            </tr>
-        </form>
 
 
-        <form action="/signin/twitter" method="POST">
-            <tr>
-                <td colspan="2">
-                    <input class="social-sign-in" type="image" name="submit" src="/images/sign-in-with-twitter-gray.png" border="0" alt="Submit"/>
-                </td>
-            </tr>
-        </form>
-    </table>
+<div th:replace="/fragments/login/navigationBar :: navigationBar('home')"></div>
+<div class="container h-100 align-self-center">
+    <div class="row h-75">
+        <div class="card mx-auto my-auto mw-50 w-50">
+            <div class="card-header">
+                <h5 class="card-title mb-0 text-center">Log In</h5>
+            </div>
+            <div class="card-body">
+
+                <form th:action="@{/login}" method="post">
+                    <div class="row form-group">
+                        <label class="col-md-auto col w-100" for="username">Username:</label>
+                        <div class="col ">
+                            <input class="w-100" type="text" id="username" name="username" autofocus="autofocus"/>
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <label class="col w-100 col-md-auto" for="password">Password:</label>
+                        <div class="col">
+                            <input class="w-100" type="password" id="password" name="password"/>
+                        </div>
+                    </div>
+
+                    <div class="row form-group">
+                        <div class="col">
+                            <button id="submitButton" type="submit" value="Log in"
+                                    class="btn btn-default btn-sm btn-block btn-success">Log In
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <form id="registrationForm" th:action="@{/registration}" method="get" class="row form-group">
+                    <div class="col">
+                        <button id="registerButton" type="submit" value="Register"
+                                class="btn btn-default btn-sm btn-block btn-primary">Register
+                        </button>
+                    </div>
+                </form>
+
+                <div class="form-group justify-content-md-center row mb-0">
+                    <form action="/signin/facebook" method="POST">
+                        <input type="hidden" name="scope" value="public_profile"/>
+                        <input class="social-sign-in mr-2" type="image" name="submit"
+                               src="/images/sign-in-with-facebook-blue.png" border="0" alt="Submit"/>
+                    </form>
+
+                    <form action="/signin/twitter" method="POST">
+                        <input class="social-sign-in" type="image" name="submit"
+                               src="/images/sign-in-with-twitter-gray.png" border="0" alt="Submit"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 </div>

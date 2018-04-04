@@ -1,10 +1,17 @@
 
-<div th:fragment="reviewList(reviews)" th:if="${reviews != null}" class="container" xmlns:th="http://www.thymeleaf.org">
-    <h3 class="text-center text-secondary">Reviews</h3>
-    <!--/*@thymesVar id="products" type="java.util.List<com.sysc4806.project.models.Product>"*/-->
-        <div class="row">
-        <div class="col-md-6 mb-3" th:each="review : ${reviews}">
-            <div th:replace="/fragments/reviews/reviewItem :: reviewGroupItem(review=${review})"></div>
-        </div>
-        </div>
+<div th:fragment="userList(users)" th:if="${users != null}" class="container list-group" xmlns:th="http://www.thymeleaf.org">
+    <!--/*@thymesVar id="users" type="java.util.List<com.sysc4806.project.models.UserEntity>"*/-->
+    <div th:each="user : ${users}">
+
+        <div th:replace="/fragments/users/userItem :: userGroupItem(user=${user})"></div>
+    </div>
+
+    <!--/*@thymesVar id="searchTerm" type="java.lang.String"*/-->
+    <div th:if="${users.isEmpty()}">
+        <a class="list-group-item list-group-item-action flex-column align-items-start disabled">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1" th:text="${'There are no users to display' + (searchTerm != null ? ' for ' + searchTerm : '')}"></h5>
+            </div>
+        </a>
+    </div>
 </div>

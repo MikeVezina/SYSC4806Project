@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import java.util.Comparator;
 
 @Component
-public class ProductAverageReviewComparator implements Comparator<Product>{
+public class ProductAverageRatingComparator implements Comparator<Product>{
 
     @Override
     public int compare(Product o1, Product o2) {
@@ -28,6 +28,6 @@ public class ProductAverageReviewComparator implements Comparator<Product>{
     @Override
     public String toString()
     {
-        return "Number of Reviews";
+        return "Avg. Rating";
     }
 }

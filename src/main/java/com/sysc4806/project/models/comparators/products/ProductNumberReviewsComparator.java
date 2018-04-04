@@ -1,15 +1,15 @@
-package com.sysc4806.project.models.comparators.users;
+package com.sysc4806.project.models.comparators.products;
 
-import com.sysc4806.project.models.UserEntity;
+import com.sysc4806.project.models.Product;
 import org.springframework.stereotype.Component;
 
 import java.util.Comparator;
 
 @Component
-public class UserFollowerComparator implements Comparator<UserEntity>{
+public class ProductNumberReviewsComparator implements Comparator<Product>{
 
     @Override
-    public int compare(UserEntity o1, UserEntity o2) {
+    public int compare(Product o1, Product o2) {
 
         if(o1 == o2)
             return 0;
@@ -20,14 +20,14 @@ public class UserFollowerComparator implements Comparator<UserEntity>{
         if(o2 == null)
             return 1;
 
-        // The larger the number of followers, the higher the compared user will rank
-        return o1.getFollowers().size() - o2.getFollowers().size();
+        // The larger the number of reviews, the higher the compared product will rank
+        return o1.getReviews().size() - o2.getReviews().size();
 
     }
 
     @Override
     public String toString()
     {
-        return "Followers";
+        return "Number of Reviews";
     }
 }

@@ -1,6 +1,6 @@
 pageLoaded = function () {
     // Hide the collapsable write review element on DOM load
-    var elem = $("#writeReviewCollapse");
+    var elem = $("#filtersCollapse");
     elem.removeClass("show");
 };
 

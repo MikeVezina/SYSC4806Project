@@ -15,7 +15,10 @@ import java.util.*;
  *
  */
 @Entity
-public class Product implements Comparable{
+public class Product{
+
+    private static final String HTTP_PREFIX = "http://";
+    private static final String HTTPS_PREFIX = "https://";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -83,6 +86,17 @@ public class Product implements Comparable{
      * @return  - product url
      */
     public String getUrl() { return url; }
+
+    /**
+     * @return The Href Safe URL (used for getting a valid url to the product)
+     */
+    public String getUrlHref()
+    {
+        if(!this.url.toLowerCase().startsWith(HTTP_PREFIX) && !this.url.toLowerCase().startsWith(HTTPS_PREFIX))
+            return HTTP_PREFIX + url;
+
+        return url;
+    }
 
     /**
      * Setter method for the product url
@@ -162,18 +176,5 @@ public class Product implements Comparable{
     @Override
     public int hashCode() {
         return url != null ? url.hashCode() : 0;
-    }
-
-
-    @Override
-    public int compareTo(Object compareProduct) {
-        if(compareProduct == this)
-            return 0;
-
-        if(!(compareProduct instanceof Product))
-            return 1;
-
-        int compareAvgRating = ((Product)compareProduct).getAverageRating();
-        return compareAvgRating - this.getAverageRating();
     }
 }

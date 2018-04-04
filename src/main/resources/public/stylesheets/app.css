@@ -1,0 +1,11 @@
+a.top-product-item.list-group-item, div.review-item.review-card-col{
+    margin-bottom: 0.25rem;
+}
+
+.checked {
+    color: orange;
+}
+
+a.no-underline {
+    text-decoration: none !important;
+}

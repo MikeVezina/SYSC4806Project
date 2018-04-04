@@ -3,26 +3,66 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <title>Search for a User:</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <div th:replace="/fragments/bootstrapHeaders"></div>
+    <script src="/scripts/users.js" type="application/javascript"></script>
     <link rel="stylesheet" type="text/css" href="/stylesheets/users.css"/>
 </head>
 <body>
-<a th:href="${'/user'}"><input class="home_button" type="submit" value="Back to Account"/></a>
-    <!-- Table of current Users -->
-    <div th:if="${not #lists.isEmpty(userEntities)}">
-        <h1>Top Users:</h1>
-        <table>
-            <tr>
-                <th>Name</th><th>Id</th><th>Number of Followers</th>
-            </tr>
-            <tr th:each="userEntity : ${userEntities}">
-                <td><a th:href="${'/user/' + userEntity.id}" th:text="${userEntity.username}"/></td>
-                <td th:text="${userEntity.id}"></td>
-                <td th:text="${userEntity.followers.size()}"></td>
+<div th:replace="/fragments/navigationBar :: navigationBar('users')"></div>
 
-            </tr>
+<div id="userJumbotron" class="jumbotron">
+    <a id="usernameTitle" class="display-4">Search Users</a>
+    <hr/>
+    <p>Users matching your criteria</p>
+    <a class="btn btn-primary btn-sm" data-toggle="collapse" href="#filtersCollapse" role="button" aria-expanded="false" aria-controls="filtersCollapse">
+        Filters
+    </a>
 
-        </table>
+</div>
+
+
+
+<!-- Add a product Review -->
+<!--/*@thymesVar id="loggedInUser" type="com.sysc4806.project.models.UserEntity"*/-->
+<div id="filtersCollapse" class="collapse show container mb-2 pl-0">
+    <div class="card w-100">
+        <div class="card-body mx-auto">
+            <div class="row">
+                <form th:action="@{/users}" method="GET">
+
+                    <div class="row mb-2">
+                        <label class="pl-0 col col-lg-12" for="sortCriteria">Sort Criteria:</label>
+                            <div class="col col-lg-12" id="sortCriteria">
+                                <div th:each="strategy : ${userCompareStrategies}">
+                                    <input class="mr-1" type="radio" name="sortCriteria" th:text="${strategy.getValue().toString()}" th:value="${strategy.getKey()}" th:checked="${strategy.getKey().equals(sortCriteria)}"/>
+                                </div>
+                            </div>
+                    </div>
+
+                    <div class="row mb-2">
+                        <label class="pl-0 col col-lg-12" for="sortDirection">Sort Direction:</label>
+                        <div class="col col-lg-12"  id="sortDirection">
+                            <input class="mr-1" type="radio" name="sortDirection" th:text=" Ascending" value="asc" th:checked="${sortDirection.equalsIgnoreCase('asc')}"/>
+                            <div class="mr-3">
+                            </div>
+                            <input class="mr-1" type="radio" name="sortDirection" th:text="Descending" value="desc" th:checked="${sortDirection.equalsIgnoreCase('desc')}"/>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row mb-2">
+                        <label class="col col-lg-12 pl-0" for="userName">Find by Username:</label>
+                        <input class="col col-lg-12 pl-1 pr-1" id="userName" type="text" th:value="${usernameFilter == null ? '' : usernameFilter}" name="usernameFilter" placeholder="Username"/>
+                    </div>
+                    <div class="row mb-1">
+                        <input class="w-100" type="submit" value="Search"/>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
+</div>
+
+<div th:replace="/fragments/users/userList :: userList(users=${users})"></div>
 </body>
 </html>

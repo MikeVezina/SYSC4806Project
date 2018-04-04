@@ -1,8 +1,9 @@
-#submitButton {
+#submitButton, #registerButton {
     width:100%;
 }
-#registerButton {
-    width:100%;
+
+html, body {
+    height: 100%;
 }
 
 .social-sign-in
@@ -10,4 +11,11 @@
     display: block;
     margin-left: auto;
     margin-right: auto;
+}
+.last-row {
+    margin-bottom:0px;
+}
+
+.checklabel {
+    font-weight:100;
 }

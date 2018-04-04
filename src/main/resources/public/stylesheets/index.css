@@ -1,23 +1,8 @@
-.appInfo {
-    /* Set basic styling for app information */
-    border: solid black 1px;
-    display: inline;
-    padding: 1px;
-}
-
-table {
-    font-family: arial, sans-serif;
-    border-collapse: collapse;
-    width: 100%;
-}
-
-td, th {
-    border: 1px solid darkgray;
+#userJumbotron {
+    padding: 1rem;
     text-align: center;
-    padding: 8px;
 }
 
-tr:nth-child(even) {
-    background-color: #dddddd;
-    border: 1px solid #dddddd;
+#navigationBar{
+    margin-bottom: 0 !important;
 }

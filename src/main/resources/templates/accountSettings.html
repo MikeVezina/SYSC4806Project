@@ -1,71 +1,70 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>SYSC 4806 Project</title>
+    <title>Account Settings</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <div th:replace="fragments/bootstrapHeaders"></div>
+    <div th:replace="/fragments/bootstrapHeaders"></div>
     <link rel="stylesheet" type="text/css" href="/stylesheets/index.css"/>
 </head>
 <body>
 
-<!-- Make this a thymeleaf template -->
-<div th:replace="fragments/navigationBar :: navigationBar">...</div>
-
-<!--/*@thymesVar id="user" type="com.sysc4806.project.models.UserEntity"*/-->
-<div th:if="${user}" th:text="${'Currently Logged in as: ' + user.username + ' (Role: ' + user.authorizationRole + ')'}"/>
-
-<!-- Button navigating to user profile -->
-<a th:href="${'/user'}">
-    <input class="home_button btn btn-outline-primary" type="submit" value="Account"/>
-</a>
-
-
-<!-- Table of Popular Products -->
-<div th:if="${not #lists.isEmpty(products)}">
-    <h1>Top Products:</h1>
-    <table>
-        <tr>
-            <th>URL</th><th>Id</th><th>Name</th><th>Average Rating</th>
-        </tr>
-        <tr th:each="product : ${products}">
-            <td><a th:href="${product.url}" th:text="${product.url}"/></td>
-            <td th:text="${product.id}"></td>
-            <td><a th:href="${'/products/' + product.id}" th:text="${product.name}"/></td>
-            <td th:text="${product.getAverageRating()}"></td>
-        </tr>
-
-    </table>
+<!--/*@thymesVar id="facebook" type="com.sysc4806.project.models.social.UserConnection"*/-->
+<!--/*@thymesVar id="twitter" type="com.sysc4806.project.models.social.UserConnection"*/-->
+<div th:replace="fragments/navigationBar :: navigationBar('curUser')">...</div>
+<div id="userJumbotron" class="jumbotron">
+    <a id="usernameTitle" class="display-4">Account Settings</a>
 </div>
 
-<div th:if="${facebook == null}">
-    <form action="/connect/facebook" method="POST">
-        <input type="hidden" name="scope" value="public_profile" />
-        <div class="formInfo">
-            <p>You aren't connected to Facebook yet. Click the button to connect this application with your Facebook account.</p>
+<div class="container">
+    <div class="card text-center mx-auto mb-5">
+        <div class="card-body ">
+            <h4 class="card-title text-primary">Social Media Account Links</h4>
+            <span class="card-text">Manage your social media accounts</span>
         </div>
-        <p><button type="submit">Connect to Facebook</button></p>
-    </form>
-</div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <form action="/connect/facebook" method="POST">
+                    <div th:if="${facebook == null}">
+                        <input type="hidden" name="scope" value="public_profile" />
+                        <button class="btn btn-sm btn-primary" type="submit">Connect With Facebook</button>
+                    </div>
+                    <div th:if="${facebook != null}">
+                        <input type="hidden" name="_method" value="DELETE"/>
+                        <p class="mb-1 pb-1">Facebook Link: <a class="text-primary" th:href="${facebook.getProfileUrl()}" th:text="${facebook.getDisplayName()}"></a></p>
+                        <button class="btn btn-sm btn-outline-danger" type="submit">Remove Facebook Link</button>
+                    </div>
+                </form>
 
+            </li>
+            <li class="list-group-item">
+                <form action="/connect/twitter" method="POST">
+                    <div th:if="${twitter == null}">
+                        <input type="hidden" name="scope" value="public_profile" />
+                        <button class="btn btn-sm btn-primary" type="submit">Connect With Twitter</button>
+                    </div>
+                    <div th:if="${twitter != null}">
+                        <input type="hidden" name="_method" value="DELETE"/>
+                        <p class="mb-1 pb-1">Twitter Link: <a class="text-primary" th:href="${twitter.getProfileUrl()}" th:text="${twitter.getDisplayName()}"></a></p>
+                        <button class="btn btn-sm btn-outline-danger" type="submit">Remove Twitter Link</button>
+                    </div>
+                </form>
+            </li>
+        </ul>
+    </div>
 
-<div th:if="${twitter == null}">
-    <form action="/connect/twitter" method="POST">
-        <input type="hidden" name="scope" value="public_profile" />
-        <div class="formInfo">
-            <p>You aren't connected to Twitter yet. Click the button to connect this application with your Twitter account.</p>
+    <div class="card text-center mx-auto">
+        <div class="card-body pb-0">
+            <h4 class="card-title text-danger">Advanced Settings</h4>
         </div>
-        <p><button type="submit">Connect to Twitter</button></p>
-    </form>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <form action="/logout" method="POST">
+                    <button class="btn btn-sm btn-outline-danger" type="submit">Logout</button>
+                </form>
+            </li>
+        </ul>
+    </div>
 </div>
-
-<div class="container-fluid">
-    <h7>Logout From Product Review System</h7>
-    <form action="/logout" method="POST">
-        <p><button class="btn btn-sm btn-outline-danger" type="submit">Logout</button></p>
-    </form>
-</div>
-
-
 </body>
 
 

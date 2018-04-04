@@ -3,138 +3,67 @@
 <head>
     <title>Users</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <div th:replace="/fragments/bootstrapHeaders"></div>
     <link rel="stylesheet" type="text/css" href="/stylesheets/users.css"/>
 </head>
-<body>
-<h1>
-    <span th:if="${user.equals(loggedInUser)}">My</span>
-    User Profile
-</h1>
+<body th:if="${loggedInUser}">
+<div th:replace="/fragments/navigationBar :: navigationBar(location='users')"></div>
 
 <!--/*@thymesVar id="user" type="com.sysc4806.project.models.UserEntity"*/-->
 <!--/*@thymesVar id="loggedInUser" type="com.sysc4806.project.models.UserEntity"*/-->
-<div th:if="${!user.equals(loggedInUser)}">
+<div th:if="${user}">
 
-    <div th:switch="${user.followers.contains(loggedInUser)}">
-        <div th:case="${false}">
-            <form th:action="@{/user/follow}" method="post">
-                <input type="hidden" name="userId" th:value="${user.id}"/>
-                <input type="submit" value="Follow"/>
-            </form>
-        </div>
+    <div id="userJumbotron" class="jumbotron">
+        <a id="usernameTitle" class="display-4" th:text="${(user == null || user.equals(loggedInUser)) ? 'My User Profile' : user.username}"></a>
 
-        <div th:case="${true}">
-            <form th:action="@{/user/unfollow}" method="post">
-                <input type="hidden" name="userId" th:value="${user.id}"/>
-                <input type="submit" value="UnFollow"/>
-            </form>
+        <div th:if="${user != null and !user.equals(loggedInUser)}">
+
+            <div th:switch="${user.followers.contains(loggedInUser)}">
+                <div th:case="${false}">
+                    <form th:action="@{/user/follow}" method="post">
+                        <input type="hidden" name="userId" th:value="${user.id}"/>
+                        <input class="btn btn-primary btn-md" type="submit" value="Follow"/>
+                    </form>
+                </div>
+
+                <div th:case="${true}">
+                    <form th:action="@{/user/unfollow}" method="post">
+                        <input type="hidden" name="userId" th:value="${user.id}"/>
+                        <input class="btn btn-primary btn-md" type="submit" value="Unfollow"/>
+                    </form>
+                </div>
+            </div>
+
         </div>
     </div>
-</div>
-
-<div th:if="${user}">
-    <!-- Current User Info -->
-    <table>
-        <tr>
-            <th colspan="2">User Information</th>
-        </tr>
-        <tr>
-            <th>User ID</th>
-            <th>Name</th>
-        </tr>
-        <tr>
-            <td><span th:text="${user.id}"/></td>
-            <td><span th:text="${user.username}"/></td>
-        </tr>
-    </table>
-
 
     <!-- Table of Reviews -->
+    <div th:replace="/fragments/reviews/reviewList :: reviewList(reviews = ${user.reviews})"></div>
 
-    <div id="userReviews" th:switch="${user.reviews.size()}">
-        <p th:case="${0}"><b>No Reviews</b></p>
+    <div class="container mh-25 h-25 follow-container">
 
-        <div th:case="*">
-            <br/>
-            <table>
-                <tr>
-                    <th colspan="6">Reviews <span th:text="${'Total: ' + user.reviews.size()}"/></th>
-                </tr>
-                <tr>
-                    <th>Rating ID</th>
-                    <th>Product ID</th>
-                    <th>Product Name</th>
-                    <th>Product URL</th>
-                    <th>Rating (/5)</th>
-                    <th>Comment</th>
-                </tr>
-                <tr th:each="review : ${user.reviews}">
-                    <td th:text="${review.id}"></td>
-                    <td><a th:href="${'/products/' + review.product.id}" th:text="${review.product.id}"></a></td>
-                    <td th:text="${review.product.name}"></td>
-                    <td><a th:href="'http://' + ${review.product.url}" th:text="${review.product.url}"></a></td>
-                    <td th:text="${review.rating}"></td>
-                    <td th:text="${review.comment}"></td>
-                </tr>
-            </table>
+        <div class="row mh-25 h-25 justify-content-center">
+            <h5 class="col mr-2" th:text="${'Followers (' + user.followers.size() + ')'}">
+            </h5>
+
+            <h5 class="col mr-2" th:text="${'Following (' + user.following.size() + ')'}">
+            </h5>
         </div>
-    </div>
 
-    <a th:href="${'/searchUser'}"><input class="home_button" type="submit" value  = "Search Users"/></a>
+        <!-- Content here -->
+        <div class="row mh-25 h-25 justify-content-center">
+            <div class="follower-container mh-25 h-25 col mr-2 border">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item" th:each="follower: ${user.followers}"><a th:href="${'/user/' + follower.id}" th:text="${follower.username}"></a></li>
+                </ul>
+            </div>
 
-    <!-- User Followers -->
-    <div id="userFollowers" th:switch="${user.followers.size()}">
-        <p th:case="${0}"><b>No Followers</b></p>
-
-        <div th:case="*">
-            <br/>
-            <table>
-                <tr>
-                    <th colspan="2">Followers <span th:text="${'Total: ' + user.followers.size()}"/></th>
-                </tr>
-                <tr>
-                    <th>User ID</th>
-                    <th>Username</th>
-                </tr>
-                <tr th:each="user : ${user.followers}">
-                    <td><a th:href="${'/user/' + user.id}" th:text="${user.id}"></a></td>
-                    <td th:text="${user.username}"></td>
-                </tr>
-            </table>
+            <div class="following-container col mr-2 border">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item" th:each="following: ${user.following}"><a th:href="${'/user/' + following.id}" th:text="${following.username}"></a></li>
+                </ul>
+            </div>
         </div>
-    </div>
-
-
-    <!-- User Following -->
-    <div id="userFollowing" th:switch="${user.following.size()}">
-        <p th:case="${0}"><b>Not Following Anybody</b></p>
-
-        <div th:case="*">
-            <br/>
-            <table>
-                <tr>
-                    <th colspan="2">Following <span th:text="${'Total: ' + user.following.size()}"/></th>
-                </tr>
-                <tr>
-                    <th>User ID</th>
-                    <th>Username</th>
-                </tr>
-                <tr th:each="user : ${user.following}">
-                    <td><a th:href="${'/user/' + user.id}" th:text="${user.id}"></a></td>
-                    <td th:text="${user.username}"></td>
-                </tr>
-            </table>
-        </div>
-    </div>
-
-    <div id="SearchProduct" th:if="${user.equals(loggedInUser)}">
-    <h2>Search For Products:</h2>
-        <form th:action="@{/products/search}" method="post">
-                <label for="searchTerm">Search Term:</label>
-                <input type="text" id="searchTerm" name="searchTerm" autofocus="autofocus"/>
-                <input id="submitButton" type="submit" value="Search"/>
-        </form>
     </div>
 </div>
 

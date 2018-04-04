@@ -50,7 +50,7 @@ public class AdminControllerIntegrationTest {
 
     private MockMvc mvc;
 
-    private static final String ADMIN_USERNAME = "admin";
+    private static final String ADMIN_USERNAME = "Michael";
     private static final String MEMBER_USERNAME = "member";
     private static final GrantedAuthority LOGGED_IN_ROLE = new SimpleGrantedAuthority("loggedIn");
 

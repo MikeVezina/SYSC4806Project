@@ -1,10 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+<!--/*@thymesVar id="product" type="com.sysc4806.project.models.Product"*/-->
+<div th:fragment="productBreadcrumb(category, product)" xmlns:th="http://www.thymeleaf.org">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0">
+            <a th:class="${'breadcrumb-item no-underline' + (category == null ? ' active' : '')}" href="/products/search">Products</a>
+            <a th:if="${category != null}" th:class="${'breadcrumb-item' + (product == null ? ' active' : '')}" aria-current="page" th:href="${'/products/search?category=' + category}" th:text="${category}"></a>
+            <li th:if="${product != null}" class="breadcrumb-item active" aria-current="page" th:text="${product.name}"></li>
+        </ol>
+    </nav>
+</div>

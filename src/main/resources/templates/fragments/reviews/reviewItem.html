@@ -1,27 +1,25 @@
-<!--/*@thymesVar id="product" type="com.sysc4806.project.models.Product"*/-->
-<div th:fragment="productGroupItem(product)" th:if="${product != null}" xmlns:th="http://www.thymeleaf.org">
+<!--/*@thymesVar id="review" type="com.sysc4806.project.models.Review"*/-->
+<div th:fragment="reviewGroupItem(review)" th:if="${review != null}" xmlns:th="http://www.thymeleaf.org">
 
-    <!--/*@thymesVar id="product" type="com.sysc4806.project.models.Product"*/-->
-    <a th:href="${'/products/' + product.id}" class="top-product-item list-group-item list-group-item-action border border-primary flex-column align-items-start">
-        <div class="d-flex w-100 justify-content-between">
-            <h4 class="mb-1" th:text="${product.name}"></h4>
-            <div>
-                <span th:each="i : ${#numbers.sequence(1, 5)}">
-                    <span th:if="${i &lt;= product.getAverageRating()}" class="fa fa-star checked"></span>
-                    <span th:if="${i &gt; product.getAverageRating()}" class="fa fa-star"></span>
+    <!--/*@thymesVar id="review" type="com.sysc4806.project.models.Review"*/-->
+    <div class="review-item col-lg-auto pr-0 pl-0 review-card-col">
+        <div class="card w-100">
+            <span class="card-header">
+                <a class="text-success no-underline mx-auto" th:href="${'/products/' + review.getProduct().id}"><span
+                        th:text="${review.getProduct().name}"></span></a>
+
+                <span class="float-right">
+                <span class="float-left" th:each="i : ${#numbers.sequence(1, 5)}">
+                        <span th:if="${i &lt;= review.getRating()}" class="fa fa-star checked"></span>
+                        <span th:if="${i &gt; review.getRating()}" class="fa fa-star"></span>
                 </span>
+                    </span>
+            </span>
+            <span class="card-body">
+                <span th:class="${'card-title' + (review.comment == null || review.comment.isEmpty() ? ' text-muted' : '')}" th:text="${(review.comment == null || review.comment.isEmpty() ? 'No Comment' : review.comment)}"></span>
+            </span>
 
-            </div>
+            <div class="card-footer text-muted">Review By: <a class="no-underline" th:href="${'/user/' + review.author.id}" th:text="${review.author.username}"></a></div>
         </div>
-
-        <div class="d-flex w-100 justify-content-between">
-            <p th:text="${product.category}"></p>
-            <p th:text="${product.getReviews().size() + ' Rating' + (product.getReviews().size() == 1 ? '' : 's')}"></p>
-        </div>
-        <div class="d-flex w-100 justify-content-between">
-            <small th:text="${product.getUrlHref().toLowerCase()}"></small>
-        </div>
-
-
-    </a>
+    </div>
 </div>

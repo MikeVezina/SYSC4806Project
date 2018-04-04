@@ -1,16 +1,16 @@
 
-<div th:fragment="productList" th:if="${products != null}" class="container list-group" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="productList(products)" th:if="${products != null}" class="container list-group" xmlns:th="http://www.thymeleaf.org">
     <!--/*@thymesVar id="products" type="java.util.List<com.sysc4806.project.models.Product>"*/-->
     <div th:each="product : ${products}">
 
-        <div th:replace="fragments/productItem :: productGroupItem(product=${product})"></div>
+        <div th:replace="/fragments/products/productItem :: productGroupItem(product=${product})"></div>
     </div>
 
     <!--/*@thymesVar id="searchTerm" type="java.lang.String"*/-->
     <div th:if="${products.isEmpty()}">
         <a class="list-group-item list-group-item-action flex-column align-items-start disabled">
             <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1" th:text="${'There are no products to display' + (searchTerm != null ? ' for ' + searchTerm : '')}"></h5>
+                <h5 class="mb-1" th:text="${'There are no products to display' + ((searchTerm != null and !searchTerm.isEmpty()) ? ' for ' + searchTerm : '')}"></h5>
             </div>
         </a>
     </div>

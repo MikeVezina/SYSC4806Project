@@ -4,13 +4,22 @@
     <title>SYSC 4806 Project</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" type="text/css" href="/stylesheets/index.css"/>
-    <div th:replace="fragments/bootstrapHeaders"></div>
+    <div th:replace="/fragments/bootstrapHeaders"></div>
+
 </head>
 <body>
 
-<div th:replace="fragments/navigationBar :: navigationBar"></div>
+<div th:replace="/fragments/navigationBar :: navigationBar('home')"></div>
+
+<div id="userJumbotron" class="jumbotron pb-1">
+    <a id="usernameTitle" class="display-4" th:text="${'Welcome, ' + loggedInUser.username}"></a>
+    <hr/>
+    <p th:if="${searchTerm == null}">Here are some suggested products for you</p>
+    <p th:if="${searchTerm != null}" th:text="${'Results for: ' + searchTerm}"></p>
+</div>
 
 <!-- Table of Popular Products -->
-<div th:replace="fragments/productList :: productList"></div>
+<!--/*@thymesVar id="products" type="com.sysc4806.project.models.Product"*/-->
+<div th:replace="/fragments/products/productList :: productList(products=${products})"></div>
 </body>
 </html>

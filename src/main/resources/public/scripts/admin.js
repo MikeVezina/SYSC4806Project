@@ -1,7 +1,19 @@
-pageLoaded = function () {
-    // Hide the collapsable write review element on DOM load
-    var elem = $("#filtersCollapse");
-    elem.removeClass("show");
+generateButtonClicked = function()
+{
+    $.get("/admin/generate", function (data) {
+        alert(data.replace("<br>", "\n"));
+    });
+
+    return false;
 };
 
-$(document).on("DOMContentLoaded", pageLoaded);
+pageLoaded = function () {
+    // Hide the collapsable write review element on DOM load
+    var elem = $("#generateDataButton");
+
+    if(elem) {
+        elem.click(generateButtonClicked);
+    }
+};
+
+$(pageLoaded);

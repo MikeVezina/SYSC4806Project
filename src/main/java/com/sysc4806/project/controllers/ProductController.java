@@ -4,7 +4,7 @@ import com.sysc4806.project.Repositories.ProductRepository;
 import com.sysc4806.project.Repositories.ReviewRepository;
 import com.sysc4806.project.Repositories.UserEntityRepository;
 import com.sysc4806.project.controllers.exceptions.HttpErrorException;
-import com.sysc4806.project.controllers.exceptions.HttpRedirectException;
+import com.sysc4806.project.enumeration.Category;
 import com.sysc4806.project.models.Product;
 import com.sysc4806.project.models.Review;
 import com.sysc4806.project.models.UserEntity;
@@ -12,13 +12,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.security.Principal;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Controller for handling application products and error endpoints
@@ -26,8 +31,10 @@ import java.util.List;
 @Controller
 public class ProductController{
 
-    private static final String PRODUCT_REVIEW_PATH = "/products/{product.id}";
     private static final String PRODUCT_SEARCH_PATH = "/products/search";
+    private static final String PRODUCT_PATH = "/products/{productId}";
+    private static final String SORT_ASC = "asc";
+    private static final String SORT_DESC = "desc";
 
     @Autowired
     private UserEntityRepository userRepo;
@@ -38,19 +45,25 @@ public class ProductController{
     @Autowired
     private ReviewRepository reviewRepo;
 
+    @Autowired
+    private ControllerUtils controllerUtils;
+
+    @Autowired
+    private Map<String, Comparator<Product>> comparatorStrategies;
+
     /**
      * @return The Application user template html
      */
-    @PostMapping(value = PRODUCT_REVIEW_PATH)
-    public String reviewProduct(HttpServletRequest req, Model model, Principal principal) throws IOException
+    @PostMapping(value = PRODUCT_PATH)
+    public String reviewProduct(HttpServletRequest req, Model model) throws IOException
     {
         Product product = getProduct(req.getParameter("productId"));
         String comment = req.getParameter("comment");
-        // Get current logged in user
-        UserEntity loggedInUser = getCurrentUser(principal);
+
+        // Get current logged in user and add to model
+        UserEntity loggedInUser = controllerUtils.addCurrentUserToModel(model);
 
         model.addAttribute("product", product);
-        model.addAttribute("loggedInUser", loggedInUser);
 
         try {
             int rating = Integer.parseInt(req.getParameter("rating"));
@@ -68,6 +81,26 @@ public class ProductController{
         }
 
         return "redirect:/products/" + product.getId();
+    }
+
+    /**
+     * @return The product index template html
+     */
+    @GetMapping(PRODUCT_PATH)
+    public String product(@PathVariable Long productId, Model model)
+    {
+        controllerUtils.addCurrentUserToModel(model);
+
+        Product product = productRepo.findOne(productId);
+
+        if(product == null)
+        {
+            throw new HttpErrorException(HttpStatus.NOT_FOUND, "The product you are looking for could not be found");
+        }
+
+        model.addAttribute("product", product);
+
+        return "product";
     }
 
     /**
@@ -108,38 +141,64 @@ public class ProductController{
         }
     }
 
-    /**
-     * Gets the current logged in user
-     * @param principal The principal passed in through spring security
-     * @return The currently logged in user
-     */
-    private UserEntity getCurrentUser(Principal principal)
-    {
-        // Get current logged in user
-        UserEntity loggedInUser = userRepo.findByUsernameIgnoreCase(principal.getName());
+    @GetMapping(PRODUCT_SEARCH_PATH)
+    public String searchProduct(Model model, @RequestParam(required = false) String category, @RequestParam(required = false) String searchTerm, @RequestParam(required = false) String sortCriteria, @RequestParam(required = false) String sortDirection) {
 
+        controllerUtils.addCurrentUserToModel(model);
 
-        // Check to see if the user is logged in.
-        if(loggedInUser == null)
+        // Reset search term if null/empty
+        if(searchTerm == null || searchTerm.isEmpty())
+            searchTerm = null;
+
+        // Find products based on search term (or all products if null)
+        List<Product> products = findProducts(searchTerm);
+
+        // Filter products by category
+        try {
+            Category cat = Category.valueOf(category);
+            products = products.stream().filter(product -> product.getCategory().equals(cat)).collect(Collectors.toList());
+        }catch (IllegalArgumentException | NullPointerException e)
         {
-            // Redirect if the user was not found
-            throw new HttpRedirectException("login");
+            // Ignore. Do not filter by category
+            // Reset category parameter
+            category = null;
         }
 
-        return loggedInUser;
-    }
 
-    @PostMapping(PRODUCT_SEARCH_PATH)
-    private String searchProduct(@RequestParam(value = "searchTerm", required = false) String searchTerm, Model model)
-    {
-        if(searchTerm == null){
-            throw new HttpErrorException(HttpStatus.NOT_FOUND, "No Search Term Provided.");
+        if (sortDirection == null || sortDirection.isEmpty())
+            sortDirection = SORT_ASC;
+
+        if (sortCriteria != null && !sortCriteria.isEmpty() && comparatorStrategies.containsKey(sortCriteria)) {
+            Comparator<Product> comparator = comparatorStrategies.get(sortCriteria);
+            Collections.sort(products, comparator.reversed());
+        } else {
+            // Set default comparator
+            Map.Entry<String, Comparator<Product>> defaultEntry = comparatorStrategies.entrySet().iterator().next();
+            sortCriteria = defaultEntry.getKey();
+            Collections.sort(products, defaultEntry.getValue().reversed());
         }
-        List<Product> products = productRepo.findAllByUrlContainsIgnoreCaseOrNameContainsIgnoreCase(searchTerm, searchTerm);
-        Collections.sort(products);
+
+        // Reverse sorting if desc is chosen
+        // Ascending is the default if no direction is given
+        if (sortDirection.equalsIgnoreCase(SORT_DESC))
+            Collections.reverse(products);
+
+        model.addAttribute("productCompareStrategies", comparatorStrategies);
         model.addAttribute("products", products);
         model.addAttribute("searchTerm", searchTerm);
-        return "productSearch";
+        model.addAttribute("sortCriteria", sortCriteria);
+        model.addAttribute("sortDirection", sortDirection);
+        model.addAttribute("category", category);
+        return "products";
+
+    }
+
+    private List<Product> findProducts(String productName)
+    {
+        if(productName != null && !productName.isEmpty())
+            return productRepo.findAllByUrlContainsIgnoreCaseOrNameContainsIgnoreCase(productName, productName);
+
+        return productRepo.findAll();
     }
 
 }

@@ -1,9 +1,11 @@
-package com.sysc4806.project.models.comparators;
+package com.sysc4806.project.models.comparators.users;
 
 import com.sysc4806.project.models.UserEntity;
+import org.springframework.stereotype.Component;
 
 import java.util.Comparator;
 
+@Component
 public class UserFollowerComparator implements Comparator<UserEntity>{
 
     @Override
@@ -21,5 +23,11 @@ public class UserFollowerComparator implements Comparator<UserEntity>{
         // The larger the number of followers, the higher the compared user will rank
         return o1.getFollowers().size() - o2.getFollowers().size();
 
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Followers";
     }
 }

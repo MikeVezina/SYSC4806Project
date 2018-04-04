@@ -1,4 +1,4 @@
-package com.sysc4806.project.models.comparators;
+package com.sysc4806.project.models.comparators.users;
 
 import com.sysc4806.project.controllers.ControllerUtils;
 import com.sysc4806.project.models.UserEntity;
@@ -41,5 +41,11 @@ public class UserJaccardComparator implements Comparator<UserEntity>{
         // Jaccard distance is the same
         return 0;
 
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Jaccard Distance";
     }
 }
