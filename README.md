@@ -38,7 +38,7 @@ Milestones:
 |----------|------|------------|
 |    1     | Early prototype| The application has a user login, and a registration page for new users to create an account (A user must have an account to login to the application). When logged in, users can see their account information, write reviews on products, and view any previous reviews they have written. They may also view a product page which displays User reviews written about it. |
 |    2     | Alpha Release| The application now uses Flyway db migration tool. Added Diagrams/Drawings to product BACKLOG. Increased number of unit/integration tests run. **Functionality:** The application starts with a user login page that requires a user to create a new Account (Admins already exist). Once logged in, the home page of the application will be displayed showing the top rated products in the application.  Users have the ability to navigate to Product pages and write reviews about the product. Users may also navigate to other User pages to see their account information and can follow the user. Admins of the application may access their private services through /admin. Admin services include generate test objects for the application and Create custom products for the application. (Jaccard distance is implemented into the backend, but not front end yet)
-|    3     | Project complete|
+|    3     | Project complete| Full functionality of application achieved.
 
       
  
